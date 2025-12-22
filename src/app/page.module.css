@@ -82,3 +82,69 @@
   object-fit: cover;
   border-radius: 16px;
 }
+
+/* =========================
+   RESPONSIVO - MOBILE
+   ========================= */
+   @media (max-width: 768px) {
+    .container {
+      padding: 1rem;
+      height: auto;
+      min-height: 100vh;
+    }
+  
+    .content {
+      width: 100%;
+      flex-direction: column;
+      padding: 1.5rem;
+      gap: 2rem;
+      border-radius: 1.5rem;
+    }
+  
+    .left {
+      max-width: 100%;
+      text-align: center;
+    }
+  
+    .left h1 {
+      font-size: 28px;
+      margin-bottom: 16px;
+    }
+  
+    .left p {
+      font-size: 16px;
+      margin-bottom: 24px;
+    }
+  
+    .actions {
+      flex-direction: column;
+      margin-top: 2rem;
+      gap: 12px;
+    }
+  
+    .primaryBtn,
+    .secondaryBtn {
+      width: 100%;
+      text-align: center;
+      padding: 14px;
+    }
+  
+    .right {
+      width: 100%;
+    }
+  
+    .imgHome {
+      width: 100%;
+      height: auto;
+      max-height: 280px;
+      border-radius: 12px;
+    }
+  }
+  
+
+  @media (max-width: 480px) {
+    .right {
+      display: none;
+    }
+  }
+  

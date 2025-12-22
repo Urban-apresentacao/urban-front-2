@@ -180,3 +180,77 @@
   font-size: 12px;
   color: #777;
 }
+
+
+/* =========================
+   RESPONSIVO - MOBILE
+   ========================= */
+   @media (max-width: 768px) {
+    .page {
+      padding: 16px;
+    }
+  
+    .container {
+      padding: 36px 24px;
+      border-radius: 16px;
+    }
+  
+    .brand {
+      margin-bottom: 32px;
+    }
+  
+    .brand h1 {
+      font-size: 22px;
+    }
+  
+    .brand p {
+      font-size: 13px;
+    }
+  
+    .form {
+      gap: 24px;
+    }
+  }
+  
+  /* =========================
+     MOBILE PEQUENO
+     ========================= */
+  @media (max-width: 480px) {
+    .container {
+      padding: 28px 20px;
+    }
+  
+    .logo {
+      width: 46px;
+      height: 46px;
+      font-size: 16px;
+    }
+  
+    .brand h1 {
+      font-size: 20px;
+    }
+  
+    .field input {
+      font-size: 14px;
+      padding: 12px 12px 12px 30px;
+    }
+  
+    .field label {
+      font-size: 13px;
+    }
+  
+    .button {
+      padding: 13px;
+      font-size: 14px;
+    }
+  
+    .backButton {
+      padding: 11px;
+      font-size: 13px;
+    }
+  
+    .footer {
+      font-size: 11px;
+    }
+  }
+  
