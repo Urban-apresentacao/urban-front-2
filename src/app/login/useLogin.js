@@ -8,24 +8,24 @@ export function useLogin() {
   async function handleLogin(email, senha) {
     try {
       const response = await login(email, senha);
-
-      if (response.sucesso) {
-        const usuario = response.dados;
-
-        localStorage.setItem(
-          "user",
-          JSON.stringify({
-            id: usuario.usu_id,
-            nome: usuario.usu_nome,
-            acesso: usuario.usu_acesso,
-          })
-        );
-
+  
+      console.log("LOGIN RESPONSE:", response);
+  
+      if (response.status === "success") {
+        const usuario = response.data;
+  
+        console.log("USUÁRIO:", usuario);
+        console.log("REDIRECT PARA:", usuario.usu_acesso ? "/admin" : "/usuario");
+  
         router.push(
-          usuario.usu_acesso ? "/admin" : "/user"
+          usuario.usu_acesso ? "/admin" : "/usuario"
         );
+      } else {
+        console.log("STATUS DIFERENTE DE SUCCESS");
       }
     } catch (error) {
+      console.error("ERRO LOGIN:", error);
+  
       Swal.fire({
         icon: "error",
         title: "Erro",
