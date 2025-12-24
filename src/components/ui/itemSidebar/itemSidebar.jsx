@@ -8,7 +8,7 @@ import styles from "./itemSidebar.module.css";
 export default function ItemSidebar({ label, icon: Icon, href }) {
     const pathname = usePathname();
 
-     const isActive =
+    const isActive =
     href === "/admin"
       ? pathname === "/admin"
       : pathname === href || pathname.startsWith(href + "/");

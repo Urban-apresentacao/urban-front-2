@@ -3,12 +3,14 @@
 import { useUsers } from "@/hooks/useUsers";
 
 import styles from "./UsersClient.module.css";
+import UsersLoading from "./loading"
 
 export default function UsersClient() {
   const { users, loading } = useUsers();
 
   if (loading) {
-    return <div>Carregando usuários...</div>;
+    // return <div>Carregando usuários...</div>;
+    return UsersLoading();
   }
 
   return (
