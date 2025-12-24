@@ -2,13 +2,11 @@
 
 import { Mail, Lock, Eye, EyeOff } from 'lucide-react'
 import styles from './page.module.css'
+import InputLogin from '@/components/ui/inputLogin/inputLogin' // Ajuste o caminho conforme criou
 
 import { useState } from "react";
-
 import { useLogin } from "./useLogin";
 
-
-import api from '../../services/api'; // Serviço para chamadas à API.
 export default function Login() {
 
     const [email, setEmail] = useState("");
@@ -32,28 +30,26 @@ export default function Login() {
                         e.preventDefault();
                         handleLogin(email, senha);
                     }}>
-                    <div className={styles.field}>
-                        <Mail size={18} className={styles.icon} />
-                        <input
-                            type="email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            required
-                        />
+                    
+                    {/* INPUT EMAIL */}
+                    <InputLogin
+                        label="Email"
+                        icon={Mail}
+                        type="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                    />
 
-                        <label>Email</label>
-                    </div>
-
-                    <div className={styles.field}>
-                        <Lock size={18} className={styles.icon} />
-
-                        <input
-                            type={showPassword ? 'text' : 'password'}
-                            value={senha}
-                            onChange={(e) => setSenha(e.target.value)}
-                            required
-                        />
-
+                    {/* INPUT SENHA */}
+                    <InputLogin
+                        label="Senha"
+                        icon={Lock}
+                        type={showPassword ? 'text' : 'password'}
+                        value={senha}
+                        onChange={(e) => setSenha(e.target.value)}
+                        required
+                    >
                         <button
                             type="button"
                             className={styles.eyeButton}
@@ -61,10 +57,7 @@ export default function Login() {
                         >
                             {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                         </button>
-
-                        <label>Senha</label>
-                    </div>
-
+                    </InputLogin>
 
                     <button className={styles.button}>
                         Entrar
@@ -82,8 +75,6 @@ export default function Login() {
                 <footer className={styles.footer}>
                     <span>© 2025 • Sistema Administrativo</span>
                 </footer>
-
-               
             </div>
         </div>
     )
