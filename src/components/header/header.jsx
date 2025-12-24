@@ -1,25 +1,35 @@
 'use client'
 
 import { useAuth } from '@/hooks/useAuth'
-
-import { LogOut } from "lucide-react";
+import { LogOut, Menu } from "lucide-react"; // Importar Menu
 import styles from "./header.module.css";
 
-export default function Header() {
+// Recebe a função toggleSidebar via props
+export default function Header({ toggleSidebar }) {
 
-const { logout } = useAuth()
+  const { logout } = useAuth()
 
   return (
     <header className={styles.header}>
-      <span className={styles.title}>
-        Painel Administrativo
-      </span>
+      <div className={styles.leftSide}>
+        {/* Botão Hamburger (visível apenas no mobile via CSS) */}
+        <button 
+          className={styles.menuButton} 
+          onClick={toggleSidebar}
+        >
+          <Menu size={24} />
+        </button>
 
-      <button 
-      className={styles.logoutButton}
-      onClick={logout}>
+        <span className={styles.title}>
+          Painel Administrativo
+        </span>
+      </div>
+
+      <button
+        className={styles.logoutButton}
+        onClick={logout}>
         <LogOut size={20} />
-        <span>Sair</span>
+        <span className={styles.logoutText}>Sair</span>
       </button>
     </header>
   );
