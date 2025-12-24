@@ -1,0 +1,237 @@
+/* src/app/register/page.module.css */
+
+/* ===== PAGE ===== */
+.page {
+  height: 100vh; /* Altura fixa da tela inteira */
+  width: 100vw;
+  background-color: #111827; /* Azul Escuro */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0; /* Remove padding da page para usar todo espaço */
+  overflow: hidden; /* REMOVE O SCROLL DA PÁGINA */
+}
+
+/* ===== CONTAINER (CARD) ===== */
+.container {
+  width: 100%;
+  max-width: 700px; /* Um pouco mais largo para acomodar melhor as colunas */
+  max-height: 95vh; /* Ocupa no máximo 95% da altura da tela */
+  background-color: #ffffff;
+  border-radius: 16px;
+  padding: 30px 40px; /* Padding vertical reduzido para caber melhor */
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  
+  /* Se a tela for muito pequena, o scroll aparece SÓ DENTRO do cartão */
+  overflow-y: auto; 
+  /* Estilização da barra de rolagem interna (opcional, para ficar bonito) */
+  scrollbar-width: thin;
+  scrollbar-color: #e5e7eb transparent;
+}
+
+/* ===== BRAND / HEADER ===== */
+.brand {
+  text-align: center;
+  margin-bottom: 20px; /* Reduzido de 32px para 20px */
+}
+
+.logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px; /* Levemente menor */
+  height: 42px;
+  border-radius: 10px;
+  background-color: #2563eb;
+  color: #ffffff;
+  font-weight: 800;
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.brand h1 {
+  color: #111827;
+  font-size: 22px; /* Levemente menor */
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.brand p {
+  color: #6b7280;
+  font-size: 13px;
+}
+
+/* ===== FORM GRID ===== */
+.form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px 20px; /* GAP VERTICAL REDUZIDO PARA 16px (Era 24px) */
+}
+
+.fullWidth {
+  grid-column: span 2;
+}
+
+/* ===== ESTILOS PARA SELECT E INPUTS ===== */
+.selectContainer {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.selectIcon {
+  position: absolute;
+  left: 0;
+  color: #9ca3af;
+  pointer-events: none;
+  z-index: 1; /* Garante que o ícone fique visível */
+}
+
+/* === NOVO: Ícone da seta para baixo customizada === */
+.selectArrow {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #9ca3af;
+  pointer-events: none;
+}
+
+.selectInput {
+  width: 100%;
+  /* Ajustado padding direito para dar espaço à nova seta */
+  padding: 10px 36px 10px 30px; 
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid #e5e7eb;
+  color: #111827;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 0;
+  
+  /* === CORREÇÃO IMPORTANTE === */
+  /* Remove o estilo nativo do select (borda, seta padrão do navegador) */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+.selectInput:focus {
+  outline: none;
+  border-bottom-color: #2563eb;
+}
+
+.selectLabel {
+  position: absolute;
+  left: 30px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #6b7280;
+  font-size: 14px;
+  pointer-events: none;
+  transition: 0.2s ease;
+}
+
+.selectInput:focus ~ .selectLabel,
+.selectInput:valid ~ .selectLabel {
+  top: -3px;
+  font-size: 11px;
+  color: #2563eb;
+  font-weight: 600;
+}
+
+/* ===== BUTTONS ===== */
+.button {
+  grid-column: span 2;
+  margin-top: 8px; /* Margem reduzida */
+  padding: 12px;   /* Padding reduzido */
+  border-radius: 8px;
+  border: none;
+  background-color: #2563eb;
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.button:hover {
+  background-color: #1d4ed8;
+}
+
+.button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.backButton {
+  grid-column: span 2;
+  padding: 10px; /* Reduzido */
+  background: transparent;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  color: #6b7280;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.backButton:hover {
+  border-color: #111827;
+  color: #111827;
+  background-color: #f9fafb;
+}
+
+.eyeButton {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #9ca3af;
+  padding: 4px;
+}
+
+.eyeButton:hover {
+  color: #111827;
+}
+
+.footer {
+  margin-top: 20px; /* Reduzido de 32px */
+  text-align: center;
+  font-size: 11px;
+  color: #9ca3af;
+}
+
+/* ===== RESPONSIVO ===== */
+@media (max-width: 640px) {
+  .page {
+     /* No mobile, permitimos o scroll normal pois o teclado virtual ocupa espaço */
+     height: auto; 
+     min-height: 100vh;
+     overflow: auto;
+     padding: 20px;
+  }
+
+  .container {
+     max-height: none;
+     overflow-y: visible;
+     padding: 24px;
+  }
+
+  .form {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .fullWidth {
+    grid-column: span 1;
+  }
+  
+  .button, .backButton {
+    grid-column: span 1;
+  }
+}
