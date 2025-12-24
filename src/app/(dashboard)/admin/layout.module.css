@@ -2,30 +2,66 @@
 .container {
     display: flex;
     flex-direction: column;
-    height: 100vh; /* Ocupa 100% da altura da janela */
-    overflow: hidden; /* Evita scroll duplo na página inteira */
+    height: 100vh;
+    overflow: hidden;
 }
 
 /* Área do corpo (Sidebar + Main): Organiza em Linha */
 .body {
     display: flex;
-    flex: 1; /* Ocupa todo o espaço que sobrar abaixo do Header */
-    overflow: hidden; /* Garante que o scroll seja interno no main */
+    flex: 1;
+    overflow: hidden;
+    position: relative; /* ADICIONADO: Necessário para o overlay cobrir esta área */
 }
 
-/* Wrapper da Sidebar (Opcional: define largura ou cor de fundo se o componente não tiver) */
+/* Wrapper da Sidebar */
 .sidebarWrapper {
-    /* A largura geralmente é definida dentro do componente Sidebar, 
-       mas você pode forçar aqui se quiser */
-    flex-shrink: 0; /* Impede a sidebar de encolher */
+    flex-shrink: 0;
     height: 100%;
-    border-right: 1px solid #e5e7eb; /* Divisória visual opcional */
+    border-right: 1px solid #e5e7eb;
+    background-color: #111827; /* ADICIONADO: Garante que o fundo não seja transparente ao sobrepor */
+    
+    /* ADICIONADO: Transição suave para quando o menu deslizar */
+    transition: transform 0.3s ease-in-out;
+    z-index: 40; /* Garante que fique acima do conteúdo no mobile */
 }
 
 /* Área de Conteúdo Principal */
 .content {
-    flex: 1; /* Ocupa toda a largura restante */
-    overflow-y: auto; /* Cria scroll APENAS aqui se o conteúdo for longo */
-    padding: 2rem; /* Espaçamento interno */
-    background-color: #f3f4f6; /* Cor de fundo cinza claro (padrão dashboard) */
+    flex: 1;
+    overflow-y: auto;
+    padding: 2rem;
+    background-color: #f3f4f6;
+}
+
+/* --- NOVO: Estilos para o Fundo Escuro (Overlay) --- */
+.overlay {
+    position: fixed;
+    top: 64px; /* Altura do seu Header */
+    left: 0;
+    width: 100%;
+    height: calc(100vh - 64px);
+    background-color: rgba(0, 0, 0, 0.5); /* Preto semitransparente */
+    z-index: 30; /* Fica atrás da sidebar (40) mas na frente do content */
+}
+
+/* --- NOVO: Responsividade para Mobile (Telas menores que 768px) --- */
+@media (max-width: 768px) {
+    
+    .sidebarWrapper {
+        position: fixed; /* Solta a sidebar do fluxo normal */
+        top: 64px;       /* Cola ela logo abaixo do header */
+        left: 0;
+        height: calc(100vh - 64px); /* Ocupa o resto da altura */
+        
+        /* O segredo: Move a sidebar 100% para a esquerda (escondendo-a) */
+        transform: translateX(-100%);
+        border-right: none; /* Remove a borda no mobile se preferir visual limpo */
+    }
+
+    /* Classe que o React vai adicionar quando clicar no botão */
+    .sidebarWrapper.open {
+        transform: translateX(0); /* Traz de volta para a tela */
+        box-shadow: 4px 0 8px rgba(0,0,0,0.2); /* Sombra para destacar */
+    }
 }
