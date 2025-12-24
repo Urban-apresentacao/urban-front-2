@@ -1,3 +1,89 @@
 .li {
     color: #000;
 }
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* Container que segura o Input e o Botão */
+.searchContainer {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+    max-width: 600px;
+}
+
+/* Wrapper apenas do input para posicionar o ícone da lupa */
+.inputWrapper {
+    position: relative;
+    flex: 1;
+}
+
+.searchIcon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #9ca3af; /* Cinza médio, neutro */
+    pointer-events: none; /* Garante que o clique passe para o input */
+}
+
+.searchInput {
+    width: 100%;
+    padding: 10px 10px 10px 40px; /* Espaço para a lupa */
+    height: 42px; 
+    
+    /* --- Estilização Padrão Tabela --- */
+    background-color: #fff;      /* Fundo Branco puro */
+    color: #1f2937;              /* Mesma cor do texto das células (.td) */
+    border: 1px solid #e5e7eb;   /* Mesma borda da tabela */
+    border-radius: 8px;          /* Mesmo raio da tabela (.container) */
+    font-size: 0.875rem;         /* Mesmo tamanho de fonte da tabela */
+    
+    /* Sutil sombra para combinar com o .container da tabela */
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05); 
+    
+    outline: none;
+    transition: all 0.2s ease-in-out;
+}
+
+.searchInput::placeholder {
+    color: #9ca3af; /* Cor suave para o placeholder */
+}
+
+.searchInput:focus {
+    border-color: #2563eb;
+    /* Sombra azul suave no foco */
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1); 
+}
+
+/* Botão de Buscar (Mantido Azul) */
+.searchButton {
+    padding: 0 40px;
+    height: 42px;
+    background-color: #2563eb; 
+    color: white;
+    border: none;
+    
+    /* Ajustado para 8px para combinar com o novo input e a tabela */
+    border-radius: 8px; 
+    
+    font-weight: 600;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    
+    /* Sombra sutil no botão também */
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.searchButton:hover {
+    background-color: #1d4ed8; 
+}
+
+.searchButton:active {
+    transform: scale(0.98); 
+}

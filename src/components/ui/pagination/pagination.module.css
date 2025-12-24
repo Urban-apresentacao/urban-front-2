@@ -1,0 +1,45 @@
+/* Pagination.module.css */
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.info {
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.controls {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  background-color: #fff;
+  color: #374151;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+/* Estado de Hover (só aplica se não estiver desativado) */
+.button:not(:disabled):hover {
+  background-color: #f9fafb;
+  border-color: #d1d5db;
+}
+
+/* Estado Desativado (substitui a lógica condicional inline) */
+.button:disabled {
+  background-color: #f3f4f6;
+  color: #9ca3af;
+  cursor: not-allowed;
+}
