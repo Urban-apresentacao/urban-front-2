@@ -1,0 +1,12 @@
+.sidebar {
+  width: 240px;
+  height: 100vh;
+  background-color: #111827;
+  padding: 1rem;
+}
+
+.sidebar nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}

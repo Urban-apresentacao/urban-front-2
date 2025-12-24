@@ -1,0 +1,31 @@
+/* Container Principal: Ocupa a tela toda e organiza em Coluna */
+.container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh; /* Ocupa 100% da altura da janela */
+    overflow: hidden; /* Evita scroll duplo na página inteira */
+}
+
+/* Área do corpo (Sidebar + Main): Organiza em Linha */
+.body {
+    display: flex;
+    flex: 1; /* Ocupa todo o espaço que sobrar abaixo do Header */
+    overflow: hidden; /* Garante que o scroll seja interno no main */
+}
+
+/* Wrapper da Sidebar (Opcional: define largura ou cor de fundo se o componente não tiver) */
+.sidebarWrapper {
+    /* A largura geralmente é definida dentro do componente Sidebar, 
+       mas você pode forçar aqui se quiser */
+    flex-shrink: 0; /* Impede a sidebar de encolher */
+    height: 100%;
+    border-right: 1px solid #e5e7eb; /* Divisória visual opcional */
+}
+
+/* Área de Conteúdo Principal */
+.content {
+    flex: 1; /* Ocupa toda a largura restante */
+    overflow-y: auto; /* Cria scroll APENAS aqui se o conteúdo for longo */
+    padding: 2rem; /* Espaçamento interno */
+    background-color: #f3f4f6; /* Cor de fundo cinza claro (padrão dashboard) */
+}
