@@ -1,14 +1,12 @@
-.li {
-    color: #000;
-}
-
+/* --- LAYOUT PRINCIPAL --- */
 .wrapper {
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
+    width: 100%;
 }
 
-/* Container que segura o Input e o Botão */
+/* --- PESQUISA --- */
 .searchContainer {
     display: flex;
     gap: 10px;
@@ -16,7 +14,6 @@
     max-width: 600px;
 }
 
-/* Wrapper apenas do input para posicionar o ícone da lupa */
 .inputWrapper {
     position: relative;
     flex: 1;
@@ -27,63 +24,98 @@
     left: 12px;
     top: 50%;
     transform: translateY(-50%);
-    color: #9ca3af; /* Cinza médio, neutro */
-    pointer-events: none; /* Garante que o clique passe para o input */
+    color: #9ca3af;
+    pointer-events: none;
 }
 
 .searchInput {
     width: 100%;
-    padding: 10px 10px 10px 40px; /* Espaço para a lupa */
+    padding: 10px 10px 10px 40px; 
     height: 42px; 
-    
-    /* --- Estilização Padrão Tabela --- */
-    background-color: #fff;      /* Fundo Branco puro */
-    color: #1f2937;              /* Mesma cor do texto das células (.td) */
-    border: 1px solid #e5e7eb;   /* Mesma borda da tabela */
-    border-radius: 8px;          /* Mesmo raio da tabela (.container) */
-    font-size: 0.875rem;         /* Mesmo tamanho de fonte da tabela */
-    
-    /* Sutil sombra para combinar com o .container da tabela */
+    background-color: #fff;
+    color: #1f2937;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 0.875rem;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05); 
-    
     outline: none;
     transition: all 0.2s ease-in-out;
 }
 
-.searchInput::placeholder {
-    color: #9ca3af; /* Cor suave para o placeholder */
+.searchInput::placeholder { 
+    color: #9ca3af; 
 }
 
 .searchInput:focus {
     border-color: #2563eb;
-    /* Sombra azul suave no foco */
     box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1); 
 }
 
-/* Botão de Buscar (Mantido Azul) */
-.searchButton {
-    padding: 0 40px;
-    height: 42px;
-    background-color: #2563eb; 
-    color: white;
-    border: none;
+/* --- CONTAINER DA TABELA (SCROLL E FIX DE LARGURA) --- */
+.tableContainer {
+    width: 100%;
+    overflow-x: auto; 
+    -webkit-overflow-scrolling: touch; /* Rolagem suave no iOS */
     
-    /* Ajustado para 8px para combinar com o novo input e a tabela */
-    border-radius: 8px; 
+    background-color: #fff; 
+    border-radius: 8px;
+    /* Borda externa: se quiser que o azul do header encoste na borda arredondada, use overflow: hidden */
+    border: 1px solid #e5e7eb; 
+    overflow: hidden; 
+
+    /* Estilo da barra de rolagem (Firefox) */
+    scrollbar-width: thin;
+    scrollbar-color: #cbd5e1 transparent;
+}
+
+.tableContainer table {
+    width: 100%;
+    /* Força tamanho mínimo para ativar scroll em telas pequenas */
+    min-width: 900px; 
+    border-collapse: collapse;
+}
+
+/* --- ESTILO DO HEADER (TH) - AZUL --- */
+.tableContainer th {
+    background-color: #1e40af; /* Azul forte */
+    color: #f3f4f6;            /* Texto cinza claro/branco */
     
+    text-align: left;
     font-weight: 600;
-    font-size: 0.875rem;
-    cursor: pointer;
-    transition: background-color 0.2s;
-    
-    /* Sombra sutil no botão também */
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    padding: 1rem;
+    white-space: nowrap;
+    border-bottom: 2px solid #1e3a8a;
 }
 
-.searchButton:hover {
-    background-color: #1d4ed8; 
+/* --- ESTILO DAS CÉLULAS (TD) --- */
+.tableContainer td {
+    padding: 1rem;
+    white-space: nowrap;
+    vertical-align: middle;
+    color: #4b5563;
+    border-bottom: 1px solid #f3f4f6;
 }
 
-.searchButton:active {
-    transform: scale(0.98); 
+/* Estilo da scrollbar para Webkit (Chrome/Safari) */
+.tableContainer::-webkit-scrollbar {
+    height: 8px;
+}
+.tableContainer::-webkit-scrollbar-track {
+    background: transparent;
+}
+.tableContainer::-webkit-scrollbar-thumb {
+    background-color: #cbd5e1; 
+    border-radius: 4px;
+}
+.tableContainer::-webkit-scrollbar-thumb:hover {
+    background-color: #94a3b8; 
+}
+
+/* --- RESPONSIVIDADE FINA PARA TABELA --- */
+@media (max-width: 640px) {
+    /* Reduz levemente o padding interno das células no mobile para caber mais coisa */
+    .tableContainer th, 
+    .tableContainer td {
+        padding: 0.75rem; 
+    }
 }

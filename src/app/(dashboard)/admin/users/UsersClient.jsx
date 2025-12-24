@@ -5,34 +5,26 @@ import { Table } from "@/components/ui/table/table";
 import Link from "next/link";
 import { Edit, Search } from "lucide-react"; 
 import { useState, useEffect } from "react";
-import { Pagination } from "@/components/ui/pagination/pagination"; // Certifique-se do caminho correto
+import { Pagination } from "@/components/ui/pagination/pagination";
 
 import styles from "./UsersClient.module.css"; 
 
 export default function UsersClient() {
-  // 👇 CORREÇÃO: Pegando page e totalPages do hook
   const { users, loading, fetchUsers, page, totalPages } = useUsers();
-
   const [inputValue, setInputValue] = useState("");
 
-  // --- LÓGICA DE BUSCA AUTOMÁTICA (DEBOUNCE) ---
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
-      // Busca o termo na página 1 sempre que digitar
       fetchUsers(inputValue, 1);
     }, 500);
 
     return () => clearTimeout(delayDebounceFn);
-    
   }, [fetchUsers, inputValue]); 
 
-  // Função para mudar de página (Clicar na setinha)
   const handlePageChange = (newPage) => {
-    // Mantém o termo de busca atual e muda só a página
     fetchUsers(inputValue, newPage);
   };
 
-  // Definição das Colunas
   const columns = [
     { header: "ID", accessor: "usu_id" },
     { header: "Nome", accessor: "usu_nome" },
@@ -48,7 +40,8 @@ export default function UsersClient() {
             padding: '4px 8px',
             borderRadius: '12px',
             fontSize: '0.75rem',
-            fontWeight: 'bold'
+            fontWeight: 'bold',
+            whiteSpace: 'nowrap' /* Impede que quebre linha dentro da badge */
         }}>
           {user.usu_acesso ? "Admin" : "Usuário"}
         </span>
@@ -84,19 +77,21 @@ export default function UsersClient() {
         </div>
       </div>
 
-      <Table 
-        columns={columns} 
-        data={users} 
-        isLoading={loading} 
-      />
+      {/* ENVOLVENDO A TABELA PARA SCROLL HORIZONTAL */}
+      <div className={styles.tableContainer}>
+          <Table 
+            columns={columns} 
+            data={users} 
+            isLoading={loading} 
+          />
+      </div>
 
       {/* ÁREA DE PAGINAÇÃO */}
-      {/* Só mostra se não estiver carregando e tiver usuários */}
       {!loading && users.length > 0 && (
          <Pagination 
-            currentPage={page}        // Passa a página atual
-            totalPages={totalPages}   // Passa o total de páginas
-            onPageChange={handlePageChange} // Função de troca
+            currentPage={page} 
+            totalPages={totalPages} 
+            onPageChange={handlePageChange} 
          />
        )}
     </div>

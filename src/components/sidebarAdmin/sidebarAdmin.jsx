@@ -1,44 +1,21 @@
 "use client"
 
 import { House, Users, Car, Wrench, CalendarCheck, History } from "lucide-react"
-
 import ItemSidebar from "@/components/ui/itemSidebar/itemSidebar"
 import styles from "./sidebarAdmin.module.css";
 
+// ... (seu array menuItems continua igual aqui) ...
 const menuItems = [
-    {
-        label: "Dashboard",
-        href: "/admin",
-        icon: House
-    },
-    {
-        label: "Usuários",
-        href: "/admin/users",
-        icon: Users
-    },
-    {
-        label: "Veículos",
-        href: "/admin/vehicles",
-        icon: Car
-    },
-    {
-        label: "Serviços",
-        href: "/admin/services",
-        icon: Wrench
-    },
-    {
-        label: "Agenda",
-        href: "/admin/schedule",
-        icon: CalendarCheck
-    },
-    {
-        label: "Histórico",
-        href: "/admin/history",
-        icon: History
-    }
+    { label: "Dashboard", href: "/admin", icon: House },
+    { label: "Usuários", href: "/admin/users", icon: Users },
+    { label: "Veículos", href: "/admin/vehicles", icon: Car },
+    { label: "Serviços", href: "/admin/services", icon: Wrench },
+    { label: "Agenda", href: "/admin/schedule", icon: CalendarCheck },
+    { label: "Histórico", href: "/admin/history", icon: History }
 ];
 
-export default function SidebarAdmin() {
+// Recebemos a prop closeMobileMenu
+export default function SidebarAdmin({ closeMobileMenu }) {
 
     return (
         <aside className={styles.sidebar}>
@@ -49,6 +26,8 @@ export default function SidebarAdmin() {
                         label={item.label}
                         icon={item.icon}
                         href={item.href}
+                        // AQUI: Passamos a função para o Item
+                        onClick={closeMobileMenu} 
                     />
                 ))}
             </nav>

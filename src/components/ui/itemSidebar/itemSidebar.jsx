@@ -5,18 +5,19 @@ import { usePathname } from "next/navigation";
 
 import styles from "./itemSidebar.module.css";
 
-export default function ItemSidebar({ label, icon: Icon, href }) {
+export default function ItemSidebar({ label, icon: Icon, href, onClick }) {
     const pathname = usePathname();
 
     const isActive =
-    href === "/admin"
-      ? pathname === "/admin"
-      : pathname === href || pathname.startsWith(href + "/");
+        href === "/admin"
+            ? pathname === "/admin"
+            : pathname === href || pathname.startsWith(href + "/");
 
     return (
         <Link
             href={href}
             className={`${styles.item} ${isActive ? styles.active : ""}`}
+            onClick={onClick}
         >
             <Icon size={20} className={styles.icon} />
             <span>{label}</span>
