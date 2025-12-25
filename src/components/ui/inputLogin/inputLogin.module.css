@@ -1,0 +1,58 @@
+.field {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.icon {
+  position: absolute;
+  left: 0;
+  color: #9ca3af; /* Cinza médio */
+  transition: color 0.2s ease;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.field input {
+  width: 100%;
+  padding: 12px 12px 12px 30px;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid #e5e7eb; /* Cinza claro */
+  color: #111827; /* Azul escuro texto */
+  font-size: 15px;
+  border-radius: 0;
+  transition: all 0.2s ease;
+}
+
+.field input:focus {
+  outline: none;
+  border-bottom-color: #2563eb; /* Azul Principal */
+}
+
+.field label {
+  position: absolute;
+  left: 30px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #6b7280; /* Cinza texto */
+  font-size: 14px;
+  pointer-events: none;
+  transition: 0.2s ease;
+}
+
+/* Floating Label Logic */
+.field input:focus ~ label,
+.field input:not(:placeholder-shown) ~ label,
+.filled {
+  top: -8px !important;
+  font-size: 11px !important;
+  color: #2563eb !important;
+  font-weight: 600;
+  transform: none !important;
+}
+
+.field input:focus ~ .icon {
+  color: #2563eb;
+}
