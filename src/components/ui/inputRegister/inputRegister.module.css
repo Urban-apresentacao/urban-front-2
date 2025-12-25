@@ -1,88 +1,82 @@
-/* Container principal que segura Label + Input */
-.container {
-  display: flex;
-  flex-direction: column;
-  gap: 0.375rem; /* ~6px */
-  width: 100%;
-}
-
-/* Estilo da Label */
-.label {
-  font-size: 0.875rem; /* 14px */
-  font-weight: 500;
-  color: #374151; /* Cinza escuro */
-}
-
-/* Wrapper essencial para o "olhinho" funcionar.
-   Ele cria um contexto de posicionamento (relative) 
-   para que o botão (absolute) fique preso aqui dentro.
-*/
-.inputWrapper {
+/* src/components/ui/inputRegister/inputRegister.module.css */
+.field {
   position: relative;
-  width: 100%;
   display: flex;
   align-items: center;
+  width: 100%; /* Garante que ocupe a célula do grid */
 }
 
-/* Estilo do Input */
-.input {
-  width: 100%;
-  height: 42px; /* Altura padrão para alinhar com selects e botões */
-  padding: 0.5rem 0.75rem;
-  
-  /* IMPORTANTE: Espaço na direita para o ícone não cobrir o texto */
-  padding-right: 2.5rem; 
-  
-  font-size: 0.875rem;
-  color: #111827; /* Texto quase preto */
-  background-color: #ffffff;
-  
-  border: 1px solid #d1d5db; /* Borda cinza suave */
-  border-radius: 0.5rem;     /* 8px */
-  
-  outline: none;
-  transition: all 0.2s ease-in-out;
-}
-
-.input::placeholder {
-  color: #9ca3af; /* Placeholder cinza claro */
-}
-
-/* Estado de Foco (Borda Azul e Sombra) */
-.input:focus {
-  border-color: #2563eb; /* Azul */
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15); /* Anel azul suave */
-}
-
-/* Estado Desabilitado */
-.input:disabled {
-  background-color: #f3f4f6;
-  cursor: not-allowed;
-  color: #6b7280;
-}
-
-/* Estilo do Botão do Olho (Toggle) */
-.toggleButton {
+.icon {
   position: absolute;
-  right: 0.75rem; /* Cola na direita */
-  
-  /* Centraliza verticalmente */
-  top: 50%;
-  transform: translateY(-50%);
-  
+  left: 0;
+  color: #9ca3af; /* Cinza médio */
+  transition: color 0.2s ease;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.field input {
+  width: 100%;
+  /* Reduzido padding vertical de 14px para 10px */
+  padding: 10px 12px 10px 30px; 
   background: transparent;
   border: none;
-  cursor: pointer;
-  
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  
-  color: #9ca3af; /* Cor inicial do ícone */
-  padding: 0;
-  transition: color 0.2s;
+  border-bottom: 2px solid #e5e7eb;
+  color: #111827;
+  font-size: 14px; /* Fonte levemente menor */
+  border-radius: 0;
+  transition: all 0.2s ease;
+}
+.field input:focus {
+  outline: none;
+  border-bottom-color: #2563eb; /* Azul Principal */
 }
 
-.toggleButton:hover {
-  color: #2563eb; /* Escurece ao passar o mouse */
+.field label {
+  position: absolute;
+  left: 30px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #6b7280; /* Cinza original */
+  font-size: 14px;
+  pointer-events: none;
+  transition: 0.2s ease;
+  z-index: 10; /* Garante que fique acima do input transparente */
+}
+
+/* === ALTERAÇÃO AQUI === */
+/* Remova a linha: .field input[type="date"] ~ label, */
+/* Deixe apenas estas duas: */
+
+.field input:focus ~ label,
+.filled {
+  top: -8px !important;
+  font-size: 11px !important;
+  color: #2563eb !important; /* Azul */
+  font-weight: 600;
+  transform: none !important;
+}
+
+.field input:focus ~ .icon {
+  color: #2563eb;
+}
+
+/* 1. Por padrão, deixa o texto do input date transparente (invisível) */
+.field input[type="date"] {
+  color: transparent;
+  transition: color 0.1s ease;
+}
+
+/* 2. Se o usuário clicar (foco) OU se já tiver valor (.hasValue), mostra a cor normal */
+.field input[type="date"]:focus,
+.field input[type="date"].hasValue {
+  color: #111827; /* Azul Escuro (sua cor de texto padrão) */
+}
+
+/* 3. Garante que o ícone de calendário nativo do navegador permaneça clicável/visível
+      (Opcional: se quiser esconder o nativo para usar só o seu ícone, use display: none) */
+.field input[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  /* Se o ícone nativo estiver atrapalhando seu ícone customizado, descomente abaixo: */
+  /* opacity: 0; */
 }
