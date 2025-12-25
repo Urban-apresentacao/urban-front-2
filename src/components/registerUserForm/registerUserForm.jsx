@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { InputRegister } from "../ui/inputRegister/inputRegister";
+import { InputRegisterForm } from "../ui/inputRegisterForm/inputRegisterForm";
 import { InputMaskRegister } from "../ui/inputMaskRegister/inputMaskRegister";
 import { SelectRegister } from "../ui/selectRegister/selectRegister";
 import styles from "./registerUserForm.module.css";
@@ -53,7 +53,7 @@ export default function RegisterUserForm({ onSuccess, onCancel, createUserFuncti
     <form onSubmit={handleSubmit} className={styles.form}>
       {/* O Grid vai organizar: Item 1 (Esq) | Item 2 (Dir) */}
 
-      <InputRegister name="usu_nome" label="Nome Completo" value={formData.usu_nome} onChange={handleChange} required />
+      <InputRegisterForm name="usu_nome" label="Nome Completo" value={formData.usu_nome} onChange={handleChange} required />
 
       <InputMaskRegister
         name="usu_cpf"
@@ -64,7 +64,7 @@ export default function RegisterUserForm({ onSuccess, onCancel, createUserFuncti
         required
       />
 
-      <InputRegister name="usu_data_nasc" label="Data Nascimento" type="date" value={formData.usu_data_nasc} onChange={handleChange} required />
+      <InputRegisterForm name="usu_data_nasc" label="Data Nascimento" type="date" value={formData.usu_data_nasc} onChange={handleChange} required />
 
       <SelectRegister
         name="usu_sexo"
@@ -78,7 +78,7 @@ export default function RegisterUserForm({ onSuccess, onCancel, createUserFuncti
         ]}
       />
 
-      <InputRegister name="usu_email" label="E-mail" type="email" value={formData.usu_email} onChange={handleChange} required />
+      <InputRegisterForm name="usu_email" label="E-mail" type="email" value={formData.usu_email} onChange={handleChange} required />
 
       <InputMaskRegister
         name="usu_telefone"
@@ -88,7 +88,7 @@ export default function RegisterUserForm({ onSuccess, onCancel, createUserFuncti
         onAccept={(value) => handleMaskChange(value, "usu_telefone")}
       />
 
-      <InputRegister name="usu_senha" label="Senha" type="password" value={formData.usu_senha} onChange={handleChange} required />
+      <InputRegisterForm name="usu_senha" label="Senha" type="password" value={formData.usu_senha} onChange={handleChange} required />
 
       <SelectRegister
         name="usu_acesso"
@@ -103,7 +103,7 @@ export default function RegisterUserForm({ onSuccess, onCancel, createUserFuncti
 
       {/* Este item ficará na esquerda, e o lado direito ficará vazio (ou você pode adicionar mais um campo futuramente) */}
       <div className={styles.fullWidth}>
-          <InputRegister 
+          <InputRegisterForm 
             name="usu_observ" 
             label="Observações" 
             value={formData.usu_observ} 

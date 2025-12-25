@@ -5,7 +5,7 @@ import {
   ChevronDown
 } from 'lucide-react'
 import styles from './page.module.css'
-import { InputRegister } from '@/components/ui/inputRegister/inputRegister';
+import InputRegister from '@/components/ui/inputRegister/inputRegister';
 
 import { useState } from "react";
 import { useRegister } from "@/hooks/useRegister";
