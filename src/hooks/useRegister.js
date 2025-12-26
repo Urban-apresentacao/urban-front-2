@@ -15,12 +15,11 @@ export function useRegister() {
 
       const response = await registerUser(formData);
 
-      // ✅ SUCESSO
       await Swal.fire({
-        title: "Cadastro realizado",
-        text: "Usuário cadastrado com sucesso!",
+        title: "Sucesso!",
+        text: "Usuário cadastrado com sucesso.",
         icon: "success",
-        confirmButtonColor: "#16a34a", // verde
+        confirmButtonColor: "#16a34a",
         background: "#ffffff",
         color: "#111827"
       });
@@ -29,27 +28,31 @@ export function useRegister() {
       return response;
 
     } catch (error) {
-      console.error("Erro no registro:", error);
+      // 🔍 DEBUG: Isso vai mostrar no F12 o que está chegando de verdade
+      console.log("OBJETO DE ERRO RECEBIDO:", error);
+      console.log("RESPONSE DO ERRO:", error.response);
 
-      const status = error?.response?.status;
-      const message =
-        error?.response?.data?.message ||
-        "Não foi possível concluir o cadastro.";
+      // Tenta pegar o status e a mensagem de vários lugares possíveis
+      const status = error?.response?.status || 500;
+      
+      // Prioridade da mensagem: 
+      // 1. Mensagem vinda do backend (Axios)
+      // 2. Mensagem de erro genérica do JS (Error.message)
+      // 3. Fallback manual
+      const message = 
+        error?.response?.data?.message || 
+        error?.message || 
+        "Ocorreu um erro ao processar sua solicitação.";
 
-      // 🔒 DUPLICIDADE / REGRA DE NEGÓCIO
+      // Se for 400 (Bad Request) ou 409 (Conflict/Duplicado)
       const isBusinessError = status === 409 || status === 400;
 
       Swal.fire({
-        title: isBusinessError
-          ? "Não foi possível concluir o cadastro"
-          : "Erro inesperado",
-
-        text: message,
-
+        // Título mais amigável
+        title: isBusinessError ? "Atenção" : "Erro no Sistema",
+        text: message, // Aqui vai aparecer "CPF inválido" ou "Email já existe"
         icon: isBusinessError ? "warning" : "error",
-
         confirmButtonColor: isBusinessError ? "#f59e0b" : "#dc2626",
-
         background: "#ffffff",
         color: "#111827"
       });

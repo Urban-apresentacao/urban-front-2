@@ -10,7 +10,7 @@ import InputRegister from '@/components/ui/inputRegister/inputRegister';
 import { useState } from "react";
 import { useRegister } from "@/hooks/useRegister";
 import Swal from "sweetalert2";
-import { validateCPF } from "@/app/register/validators"; 
+import { validateCPF, validateEmail } from "@/app/register/validators";
 
 export default function Cadastro() {
   const { handleRegister, loading } = useRegister();
@@ -36,20 +36,33 @@ export default function Cadastro() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // 1. VALIDAÇÃO LOCAL: CPF INVÁLIDO (Matemática)
+    // 1. VALIDAÇÃO LOCAL: CPF
     if (!validateCPF(formData.usu_cpf)) {
-        Swal.fire({
-            title: "CPF Inválido",
-            text: "Por favor, verifique os números digitados.",
-            icon: "warning",
-            confirmButtonColor: "#f59e0b",
-            background: "#ffffff",
-            color: "#111827"
-        });
-        return; 
+      Swal.fire({
+        title: "CPF Inválido",
+        text: "Por favor, verifique os números digitados.",
+        icon: "warning",
+        confirmButtonColor: "#f59e0b",
+        background: "#ffffff",
+        color: "#111827"
+      });
+      return;
     }
 
-    // 2. TENTA ENVIAR (Backend checa duplicidade)
+    // 2. NOVA VALIDAÇÃO: EMAIL
+    if (!validateEmail(formData.usu_email)) {
+      Swal.fire({
+        title: "E-mail Inválido",
+        text: "Por favor, insira um endereço de e-mail válido (ex: nome@dominio.com).",
+        icon: "warning",
+        confirmButtonColor: "#f59e0b",
+        background: "#ffffff",
+        color: "#111827"
+      });
+      return;
+    }
+
+    // 3. TENTA ENVIAR
     try {
       await handleRegister(formData);
     } catch (err) {
