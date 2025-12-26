@@ -10,7 +10,7 @@ import InputRegister from '@/components/ui/inputRegister/inputRegister'
 import { useState } from "react";
 import { useRegister } from "@/hooks/useRegister";
 import Swal from "sweetalert2";
-import { validateCPF, validateEmail } from "@/app/register/validators";
+import { validateCPF, validateEmail } from "@/utils/validators";
 
 export default function Cadastro() {
   const { handleRegister, loading } = useRegister();

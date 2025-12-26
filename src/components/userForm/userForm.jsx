@@ -1,0 +1,379 @@
+"use client";
+import { useState, useEffect } from "react";
+import { Edit, Check, X, EyeOff, Eye } from "lucide-react";
+import { InputRegisterForm } from "../ui/inputRegisterForm/inputRegisterForm";
+import { InputMaskRegister } from "../ui/inputMaskRegister/inputMaskRegister";
+import { SelectRegister } from "../ui/selectRegister/selectRegister";
+import styles from "./userForm.module.css";
+
+import { validateCPF, validateEmail, getPasswordIssues } from "@/utils/validators";
+
+export default function UserForm({ onSuccess, onCancel, saveFunction, initialData, mode = 'edit' }) {
+  const [loading, setLoading] = useState(false);
+
+  // Define se os campos estão editáveis com base no modo inicial
+  const [isEditable, setIsEditable] = useState(mode === 'edit');
+
+  // estado para erros
+  const [errors, setErrors] = useState({});
+
+  // Estado para controlar visualização da senha
+  const [showPassword, setShowPassword] = useState(false);
+
+  // 1. Criamos uma função para formatar os dados ANTES de criar o estado
+  const getInitialState = () => {
+    // Valores padrão (vazio)
+    const defaults = {
+      usu_nome: "",
+      usu_cpf: "",
+      usu_data_nasc: "",
+      usu_sexo: "0",
+      usu_email: "",
+      usu_senha: "",
+      usu_acesso: "false",
+      usu_observ: "",
+      usu_telefone: ""
+    };
+
+    // Se não tiver dados iniciais (criação), retorna o padrão
+    if (!initialData) return defaults;
+
+    // Se tiver dados (edição), mescla e formata
+    return {
+      usu_nome: initialData.usu_nome || "",
+      usu_cpf: initialData.usu_cpf || "",
+      // Formata a data (YYYY-MM-DD)
+      usu_data_nasc: initialData.usu_data_nasc ? initialData.usu_data_nasc.split('T')[0] : "",
+      usu_sexo: String(initialData.usu_sexo ?? "0"), // Garante string para o select
+      usu_email: initialData.usu_email || "",
+      usu_senha: "", // Senha vazia na edição
+      usu_acesso: String(initialData.usu_acesso ?? "false"), // "true" ou "false" string
+      usu_observ: initialData.usu_observ || "",
+      usu_telefone: initialData.usu_telefone || ""
+    };
+  };
+
+  // 2. Inicializamos o state chamando essa função.
+  // Isso roda apenas uma vez na montagem e evita o erro do useEffect.
+  const [formData, setFormData] = useState(getInitialState());
+
+// --- LÓGICA DE FORÇA DA SENHA EM TEMPO REAL ---
+  // Calcula as regras baseadas no que está digitado no formData.usu_senha
+  const passwordRules = {
+    length: formData.usu_senha.length >= 12,
+    capital: /[A-Z]/.test(formData.usu_senha),
+    lower: /[a-z]/.test(formData.usu_senha),
+    number: /\d/.test(formData.usu_senha),
+    special: /[\W_]/.test(formData.usu_senha),
+  };
+  
+  // Verifica se todas as regras foram cumpridas
+  const isPasswordValid = Object.values(passwordRules).every(Boolean);
+
+  // Atualiza o estado de edição se a prop mode mudar (navegação)
+  useEffect(() => {
+    setIsEditable(mode === 'edit');
+    setErrors({}); // Limpa erros ao mudar de modo
+  }, [mode]);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+
+    // Opcional: Limpar o erro do campo assim que o usuário digita
+    if (errors[name]) {
+      setErrors(prev => ({ ...prev, [name]: null }));
+    }
+  };
+
+  const handleMaskChange = (value, name) => {
+    setFormData((prev) => ({ ...prev, [name]: value }));
+
+    if (errors[name]) {
+      setErrors(prev => ({ ...prev, [name]: null }));
+    }
+
+  };
+
+
+  const validateForm = () => {
+    const newErrors = {};
+
+    // 1. Validar CPF
+    if (!initialData && !validateCPF(formData.usu_cpf)) {
+        newErrors.usu_cpf = "CPF inválido.";
+    }
+
+    // 2. Validar Email
+    if (!validateEmail(formData.usu_email)) {
+        newErrors.usu_email = "E-mail inválido.";
+    }
+
+    // 3. Validar Senha (Lógica nova)
+    // Se for NOVO (initialData null) OU se o usuário estiver digitando senha na edição
+    const isTypingPassword = formData.usu_senha.length > 0;
+    const isNewUser = !initialData;
+
+    if (isNewUser || isTypingPassword) {
+        if (!isPasswordValid) {
+            newErrors.usu_senha = "A senha não atende aos requisitos.";
+        }
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!validateForm()) {
+      return;
+    }
+
+    setLoading(true);
+
+    // Tratamento de dados
+    const payload = {
+      ...formData,
+      usu_sexo: Number(formData.usu_sexo),
+      usu_acesso: formData.usu_acesso === "true"
+    };
+
+console.log("DADOS SENDO ENVIADOS (PAYLOAD):", payload);
+
+    // Remove senha se estiver vazia na edição
+    if (initialData && !payload.usu_senha) {
+      delete payload.usu_senha;
+    }
+
+    try {
+    const result = await saveFunction(payload);
+
+    // CORREÇÃO AQUI 👇
+    // Verificamos explicitamente se result.success é verdadeiro
+    if (result && result.success) {
+      onSuccess();
+    } 
+    // Não precisa de 'else { alert... }' aqui, pois o Swal 
+    // já foi disparado dentro da função saveFunction (handleCreateUser)
+
+  } catch (error) {
+    console.error(error);
+    // Removemos o alert daqui também para evitar alertas duplos
+  } finally {
+    setLoading(false);
+  }
+  };
+
+  // Função para lidar com o botão "Cancelar"
+  const handleCancelClick = () => {
+    // Se veio do modo 'view' e clicou em editar, o cancelar apenas bloqueia de novo
+    if (mode === 'view' && isEditable) {
+      setIsEditable(false);
+      setFormData(getInitialState()); // Reseta as alterações
+      setErrors({});
+    } else {
+      // Se veio do modo 'edit' ou cadastro, volta para a tela anterior
+      onCancel();
+    }
+  };
+
+  // Componente auxiliar simples para mostrar erro (caso seus Inputs não tenham prop de erro)
+ const ErrorMessage = ({ message }) => {
+    if (!message) return null;
+    return <span className={styles.errorText}>{message}</span>;
+  };
+
+
+  // Componente interno para cada item da lista de senha
+  const PasswordReqItem = ({ label, met }) => (
+    <div className={`${styles.reqItem} ${met ? styles.success : styles.pending}`}>
+        {met ? <Check size={12} /> : <X size={12} />}
+        <span>{label}</span>
+    </div>
+  );
+  return (
+    <form onSubmit={handleSubmit} className={styles.form}>
+      
+      {/* GRUPO 1: Nome */}
+      <div className={styles.inputGroup}>
+          <InputRegisterForm 
+            name="usu_nome" 
+            label="Nome Completo" 
+            value={formData.usu_nome} 
+            onChange={handleChange} 
+            required 
+            disabled={!isEditable}
+          />
+          {/* Atenção: errors.usu_nome aqui */}
+          <ErrorMessage message={errors.usu_nome} />
+      </div>
+
+      {/* GRUPO 2: CPF */}
+      <div className={styles.inputGroup}>
+        <InputMaskRegister
+            name="usu_cpf"
+            label="CPF"
+            mask="000.000.000-00"
+            value={formData.usu_cpf}
+            onAccept={(value) => handleMaskChange(value, "usu_cpf")}
+            required
+            disabled={!isEditable || !!initialData}
+        />
+        {/* Atenção: errors.usu_cpf aqui */}
+        <ErrorMessage message={errors.usu_cpf} />
+      </div>
+
+      {/* GRUPO 3: Data Nascimento */}
+      <div className={styles.inputGroup}>
+        <InputRegisterForm 
+            name="usu_data_nasc" 
+            label="Data Nascimento" 
+            type="date" 
+            value={formData.usu_data_nasc} 
+            onChange={handleChange} 
+            required 
+            disabled={!isEditable}
+        />
+        <ErrorMessage message={errors.usu_data_nasc} />
+      </div>
+
+      {/* GRUPO 4: Sexo */}
+      <div className={styles.inputGroup}>
+        <SelectRegister
+            name="usu_sexo"
+            label="Sexo"
+            value={formData.usu_sexo}
+            onChange={handleChange}
+            disabled={!isEditable}
+            options={[
+            { value: "0", label: "Masculino" },
+            { value: "1", label: "Feminino" },
+            { value: "2", label: "Outro" }
+            ]}
+        />
+        <ErrorMessage message={errors.usu_sexo} />
+      </div>
+
+      {/* GRUPO 5: Email */}
+      <div className={styles.inputGroup}>
+        <InputRegisterForm 
+            name="usu_email" 
+            label="E-mail" 
+            type="email" 
+            value={formData.usu_email} 
+            onChange={handleChange} 
+            required 
+            disabled={!isEditable}
+        />
+        <ErrorMessage message={errors.usu_email} />
+      </div>
+
+      {/* GRUPO 6: Telefone */}
+      <div className={styles.inputGroup}>
+        <InputMaskRegister
+            name="usu_telefone"
+            label="Telefone"
+            mask="(00) 00000-0000"
+            value={formData.usu_telefone}
+            onAccept={(value) => handleMaskChange(value, "usu_telefone")}
+            disabled={!isEditable}
+        />
+        <ErrorMessage message={errors.usu_telefone} />
+      </div>
+
+      {/* --- CAMPO DE SENHA MODIFICADO --- */}
+      <div className={styles.inputGroup}>
+        {/* Input da senha com botão de olho */}
+        <div style={{ position: 'relative' }}>
+            <InputRegisterForm 
+                name="usu_senha" 
+                label={initialData ? "Nova Senha (deixe em branco para manter)" : "Senha"} 
+                // Alterna entre text e password
+                type={showPassword ? "text" : "password"} 
+                value={formData.usu_senha} 
+                onChange={handleChange} 
+                required={!initialData} 
+                disabled={!isEditable}
+            />
+            
+            {/* Botão de Olho - só mostra se estiver editável */}
+            {isEditable && (
+                <button 
+                    type="button" 
+                    className={styles.eyeButton}
+                    onClick={() => setShowPassword(!showPassword)}
+                >
+                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+            )}
+        </div>
+
+        <ErrorMessage message={errors.usu_senha} />
+
+        {/* LISTA DE REQUISITOS - Só aparece se estiver editável e digitando senha */}
+        {/* 👇 MUDANÇA AQUI: Adicionado !isPasswordValid */}
+            {isEditable && formData.usu_senha.length > 0 && !isPasswordValid && (
+                <div className={styles.passwordRequirements}>
+                    <PasswordReqItem label="Mínimo de 12 caracteres" met={passwordRules.length} />
+                    <PasswordReqItem label="Letra Maiúscula" met={passwordRules.capital} />
+                    <PasswordReqItem label="Letra Minúscula" met={passwordRules.lower} />
+                    <PasswordReqItem label="Número" met={passwordRules.number} />
+                    <PasswordReqItem label="Caractere Especial" met={passwordRules.special} />
+                </div>
+            )}
+      </div>
+
+      {/* GRUPO 8: Acesso */}
+      <div className={styles.inputGroup}>
+        <SelectRegister
+            name="usu_acesso"
+            label="Tipo de Acesso"
+            value={formData.usu_acesso}
+            onChange={handleChange}
+            disabled={!isEditable}
+            options={[
+            { value: "false", label: "Usuário Comum" },
+            { value: "true", label: "Administrador" }
+            ]}
+        />
+         <ErrorMessage message={errors.usu_acesso} />
+      </div>
+
+      {/* GRUPO 9: Observações (Ocupa largura total) */}
+      <div className={`${styles.inputGroup} ${styles.fullWidth}`}>
+          <InputRegisterForm 
+            name="usu_observ" 
+            label="Observações" 
+            value={formData.usu_observ} 
+            onChange={handleChange} 
+            disabled={!isEditable}
+          />
+      </div>
+
+      <div className={styles.actions}>
+        {!isEditable ? (
+             <button 
+                type="button" 
+                className={styles.btnSave} 
+                onClick={() => setIsEditable(true)}
+             >
+                <Edit size={16} style={{marginRight: 5}}/> Editar Dados
+             </button>
+        ) : (
+             <>
+                <button type="button" onClick={handleCancelClick} className={styles.btnCancel} disabled={loading}>
+                  Cancelar
+                </button>
+                <button type="submit" className={styles.btnSave} disabled={loading}>
+                  {loading ? "Salvando..." : "Salvar"}
+                </button>
+             </>
+        )}
+      </div>
+    </form>
+  )
+}
