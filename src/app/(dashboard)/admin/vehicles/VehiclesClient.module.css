@@ -1,0 +1,199 @@
+/* --- LAYOUT PRINCIPAL --- */
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    width: 100%;
+}
+
+/* --- BARRA DE AÇÕES (BUSCA + BOTÃO) --- */
+.actionsBar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* O Segredo: Separa os itens nas pontas */
+    gap: 1rem;
+    width: 100%;
+}
+
+/* Wrapper da Busca (limita a largura da busca) */
+.searchWrapper {
+    position: relative; /* Para o ícone absoluto funcionar */
+    width: 100%;
+    max-width: 400px; /* A busca não cresce mais que isso */
+}
+
+.searchIcon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #9ca3af;
+    pointer-events: none;
+}
+
+.searchInput {
+    width: 100%;
+    padding: 10px 10px 10px 40px; 
+    height: 42px; 
+    background-color: #fff;
+    color: #1f2937;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05); 
+    outline: none;
+    transition: all 0.2s ease-in-out;
+}
+
+.searchInput::placeholder { color: #9ca3af; }
+
+.searchInput:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1); 
+}
+
+/* --- BOTÃO NOVO (ESTILIZADO) --- */
+.newButton {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    
+    background-color: #16a34a; /* Verde (green-600) */
+    color: #ffffff;
+    
+    padding: 0 2rem;
+    height: 42px; /* Mesma altura do input */
+    border-radius: 8px;
+    
+    text-decoration: none; /* Remove sublinhado do Link */
+    font-weight: 600;
+    font-size: 0.875rem;
+    
+    transition: background-color 0.2s;
+    white-space: nowrap; /* Garante que o texto não quebre */
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.newButton:hover {
+    background-color: #15803d; /* Verde mais escuro (green-700) */
+}
+
+/* --- CONTAINER DA TABELA --- */
+.tableContainer {
+    width: 100%;
+    overflow-x: auto; 
+    -webkit-overflow-scrolling: touch;
+    background-color: #fff; 
+    border-radius: 8px;
+    border: 1px solid #e5e7eb; 
+    overflow: hidden; 
+    scrollbar-width: thin;
+    scrollbar-color: #cbd5e1 transparent;
+}
+
+.tableContainer table {
+    width: 100%;
+    min-width: 900px; 
+    border-collapse: collapse;
+}
+
+.tableContainer th {
+    background-color: #2563eb; 
+    color: #f3f4f6;            
+    text-align: left;
+    font-weight: 600;
+    padding: 1rem;
+    white-space: nowrap;
+    border-bottom: 2px solid #1e3a8a;
+}
+
+.tableContainer td {
+    padding: 1rem;
+    white-space: nowrap;
+    vertical-align: middle;
+    color: #4b5563;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+/* VehiclesClient.module.css */
+
+/* ... seus outros estilos ... */
+
+.selectContainer {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  max-width: 180px;
+}
+
+.selectNative {
+  /* Remove o estilo padrão (seta do navegador) */
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
+  width: 100%;
+  padding: 8px 32px 8px 10px; /* Padding direito maior para caber o ícone */
+  
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  color: #333;
+  font-size: 0.9rem;
+  cursor: pointer;
+  outline: none;
+  
+  /* Garante que o select fique "por cima" visualmente, mas transparente no fundo */
+  z-index: 1; 
+}
+
+.selectNative:focus {
+  border-color: #000; /* Cor da borda ao focar */
+}
+
+/* O Ícone da Lucide */
+.selectIcon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%); /* Centraliza verticalmente */
+  color: #666;
+  pointer-events: none; /* Importante: deixa o clique passar para o select */
+  z-index: 2;
+}
+
+.emptyText {
+  color: #999;
+  font-style: italic;
+  font-size: 0.9rem;
+}
+
+.singleOwner {
+  color: #333;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+/* ... scrollbars ... */
+
+/* --- RESPONSIVIDADE --- */
+@media (max-width: 640px) {
+    /* No celular, empilha a busca e o botão */
+    .actionsBar {
+        flex-direction: column-reverse; /* Botão em cima ou embaixo? (column normal = busca em cima) */
+        align-items: stretch; /* Estica para ocupar a largura total */
+    }
+    
+    .searchWrapper {
+        max-width: 100%; /* Busca ocupa tudo no mobile */
+    }
+
+    .newButton {
+        justify-content: center; /* Centraliza o texto no botão */
+    }
+
+    .tableContainer th, 
+    .tableContainer td {
+        padding: 0.75rem; 
+    }
+}
