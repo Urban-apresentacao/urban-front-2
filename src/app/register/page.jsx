@@ -2,10 +2,10 @@
 
 import {
   User, CreditCard, Calendar, Phone, Mail, Lock, Eye, EyeOff, FileText, Users,
-  ChevronDown
+  ChevronDown, Check, X
 } from 'lucide-react'
 import styles from './page.module.css'
-import InputRegister from '@/components/ui/inputRegister/inputRegister';
+import InputRegister from '@/components/ui/inputRegister/inputRegister'
 
 import { useState } from "react";
 import { useRegister } from "@/hooks/useRegister";
@@ -24,7 +24,6 @@ export default function Cadastro() {
     usu_telefone: "",
     usu_email: "",
     usu_acesso: false,
-    usu_observ: "",
     usu_senha: ""
   });
 
@@ -33,43 +32,62 @@ export default function Cadastro() {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
+  // --- LÓGICA DE FORÇA DA SENHA EM TEMPO REAL ---
+  const passwordRules = {
+    length: formData.usu_senha.length >= 12,
+    capital: /[A-Z]/.test(formData.usu_senha),
+    lower: /[a-z]/.test(formData.usu_senha),
+    number: /\d/.test(formData.usu_senha),
+    special: /[\W_]/.test(formData.usu_senha),
+  };
+
+  // Verifica se TODAS as regras são verdadeiras
+  const isPasswordValid = Object.values(passwordRules).every(Boolean);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // 1. VALIDAÇÃO LOCAL: CPF
+    // 1. CPF
     if (!validateCPF(formData.usu_cpf)) {
-      Swal.fire({
-        title: "CPF Inválido",
-        text: "Por favor, verifique os números digitados.",
-        icon: "warning",
-        confirmButtonColor: "#f59e0b",
-        background: "#ffffff",
-        color: "#111827"
-      });
-      return;
+        Swal.fire({
+            title: "CPF Inválido",
+            text: "Por favor, verifique os números digitados.",
+            icon: "warning",
+            confirmButtonColor: "#f59e0b"
+        });
+        return; 
     }
 
-    // 2. NOVA VALIDAÇÃO: EMAIL
+    // 2. Email
     if (!validateEmail(formData.usu_email)) {
-      Swal.fire({
-        title: "E-mail Inválido",
-        text: "Por favor, insira um endereço de e-mail válido (ex: nome@dominio.com).",
-        icon: "warning",
-        confirmButtonColor: "#f59e0b",
-        background: "#ffffff",
-        color: "#111827"
-      });
-      return;
+        Swal.fire({
+            title: "E-mail Inválido",
+            text: "Por favor, insira um endereço válido.",
+            icon: "warning",
+            confirmButtonColor: "#f59e0b"
+        });
+        return; 
     }
 
-    // 3. TENTA ENVIAR
+    // 3. SENHA (Validação simples, pois o usuário já está vendo o checklist)
+    if (!isPasswordValid) {
+        Swal.fire({
+            title: "Senha Incompleta",
+            text: "Por favor, atenda a todos os requisitos de senha exibidos na tela.",
+            icon: "warning",
+            confirmButtonColor: "#f59e0b"
+        });
+        return; 
+    }
+
+    // 4. Tenta Enviar
     try {
       await handleRegister(formData);
     } catch (err) {
-      // Erro tratado no hook
+      // Hook trata
     }
   };
-
+  
   return (
     <div className={styles.page}>
       <div className={styles.container}>
@@ -148,6 +166,7 @@ export default function Cadastro() {
             />
           </div>
 
+          {/* --- BLOCO DE SENHA COM FEEDBACK VISUAL --- */}
           <div className={styles.fullWidth}>
             <InputRegister
               label="Senha"
@@ -166,9 +185,20 @@ export default function Cadastro() {
                 {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
               </button>
             </InputRegister>
+
+            {/* Renderiza o box apenas se o usuário começou a digitar */}
+            {formData.usu_senha.length > 0 && (
+              <div className={styles.passwordRequirements}>
+                <PasswordRequirement label="Mínimo de 12 caracteres" met={passwordRules.length} />
+                <PasswordRequirement label="Pelo menos uma letra maiúscula" met={passwordRules.capital} />
+                <PasswordRequirement label="Pelo menos uma letra minúscula" met={passwordRules.lower} />
+                <PasswordRequirement label="Pelo menos um número" met={passwordRules.number} />
+                <PasswordRequirement label="Pelo menos um caractere especial" met={passwordRules.special} />
+              </div>
+            )}
           </div>
 
-          <div className={styles.fullWidth}>
+          {/* <div className={styles.fullWidth}>
             <InputRegister
               label="Observação"
               icon={FileText}
@@ -176,7 +206,7 @@ export default function Cadastro() {
               value={formData.usu_observ}
               onChange={handleChange}
             />
-          </div>
+          </div> */}
 
           <button className={styles.button} disabled={loading}>
             {loading ? "Salvando..." : "Cadastrar"}
@@ -197,4 +227,14 @@ export default function Cadastro() {
       </div>
     </div>
   )
+}
+
+// --- SUB-COMPONENTE AUXILIAR PARA O ITEM DA LISTA ---
+function PasswordRequirement({ label, met }) {
+  return (
+    <div className={`${styles.reqItem} ${met ? styles.success : styles.pending}`}>
+      {met ? <Check className={styles.reqIcon} /> : <X className={styles.reqIcon} />}
+      <span>{label}</span>
+    </div>
+  );
 }

@@ -1,30 +1,25 @@
-/* src/app/register/page.module.css */
-
 /* ===== PAGE ===== */
 .page {
-  height: 100vh; /* Altura fixa da tela inteira */
+  height: 100vh;
   width: 100vw;
-  background-color: #111827; /* Azul Escuro */
+  background-color: #111827;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0; /* Remove padding da page para usar todo espaço */
-  overflow: hidden; /* REMOVE O SCROLL DA PÁGINA */
+  padding: 0;
+  overflow: hidden;
 }
 
 /* ===== CONTAINER (CARD) ===== */
 .container {
   width: 100%;
-  max-width: 700px; /* Um pouco mais largo para acomodar melhor as colunas */
-  max-height: 95vh; /* Ocupa no máximo 95% da altura da tela */
+  max-width: 700px;
+  max-height: 98vh;
   background-color: #ffffff;
   border-radius: 16px;
-  padding: 30px 40px; /* Padding vertical reduzido para caber melhor */
+  padding: 20px 40px; 
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-  
-  /* Se a tela for muito pequena, o scroll aparece SÓ DENTRO do cartão */
-  overflow-y: auto; 
-  /* Estilização da barra de rolagem interna (opcional, para ficar bonito) */
+  overflow-y: auto;
   scrollbar-width: thin;
   scrollbar-color: #e5e7eb transparent;
 }
@@ -32,14 +27,14 @@
 /* ===== BRAND / HEADER ===== */
 .brand {
   text-align: center;
-  margin-bottom: 20px; /* Reduzido de 32px para 20px */
+  margin-bottom: 10px; 
 }
 
 .logo {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 42px; /* Levemente menor */
+  width: 42px;
   height: 42px;
   border-radius: 10px;
   background-color: #2563eb;
@@ -51,7 +46,7 @@
 
 .brand h1 {
   color: #111827;
-  font-size: 22px; /* Levemente menor */
+  font-size: 22px;
   font-weight: 700;
   margin-bottom: 4px;
 }
@@ -65,7 +60,7 @@
 .form {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 16px 20px; /* GAP VERTICAL REDUZIDO PARA 16px (Era 24px) */
+  gap: 16px 20px;
 }
 
 .fullWidth {
@@ -85,10 +80,9 @@
   left: 0;
   color: #9ca3af;
   pointer-events: none;
-  z-index: 1; /* Garante que o ícone fique visível */
+  z-index: 1;
 }
 
-/* === NOVO: Ícone da seta para baixo customizada === */
 .selectArrow {
   position: absolute;
   right: 12px;
@@ -100,7 +94,6 @@
 
 .selectInput {
   width: 100%;
-  /* Ajustado padding direito para dar espaço à nova seta */
   padding: 10px 36px 10px 30px; 
   background: transparent;
   border: none;
@@ -109,9 +102,6 @@
   font-size: 14px;
   cursor: pointer;
   border-radius: 0;
-  
-  /* === CORREÇÃO IMPORTANTE === */
-  /* Remove o estilo nativo do select (borda, seta padrão do navegador) */
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
@@ -144,8 +134,8 @@
 /* ===== BUTTONS ===== */
 .button {
   grid-column: span 2;
-  margin-top: 8px; /* Margem reduzida */
-  padding: 12px;   /* Padding reduzido */
+  margin-top: 8px;
+  padding: 12px;
   border-radius: 8px;
   border: none;
   background-color: #2563eb;
@@ -167,7 +157,7 @@
 
 .backButton {
   grid-column: span 2;
-  padding: 10px; /* Reduzido */
+  padding: 10px;
   background: transparent;
   border: 1px solid #e5e7eb;
   border-radius: 8px;
@@ -200,37 +190,81 @@
 }
 
 .footer {
-  margin-top: 20px; /* Reduzido de 32px */
+  margin-top: 15px;
   text-align: center;
   font-size: 11px;
   color: #9ca3af;
 }
 
+/* Acessa o ícone interno do calendário nos navegadores Chrome/Edge/Opera */
+.form input[type="date"]::-webkit-calendar-picker-indicator {
+  /* Se o ícone está branco (100%), invertendo ele vira preto (0%) */
+  filter: invert(1); 
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+}
+
+.form input[type="date"]::-webkit-calendar-picker-indicator:hover {
+  opacity: 1;
+}
+
+.passwordRequirements {
+  background-color: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 12px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  transition: all 0.3s ease;
+}
+
+.reqItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: #6b7280;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.reqItem.success {
+  color: #16a34a;
+}
+
+.reqItem.pending {
+  color: #9ca3af;
+}
+
+.reqIcon {
+  width: 14px;
+  height: 14px;
+}
+
 /* ===== RESPONSIVO ===== */
 @media (max-width: 640px) {
   .page {
-     /* No mobile, permitimos o scroll normal pois o teclado virtual ocupa espaço */
      height: auto; 
      min-height: 100vh;
      overflow: auto;
      padding: 20px;
   }
-
   .container {
      max-height: none;
      overflow-y: visible;
      padding: 24px;
   }
-
   .form {
     grid-template-columns: 1fr;
     gap: 20px;
   }
-  
   .fullWidth {
     grid-column: span 1;
   }
-  
   .button, .backButton {
     grid-column: span 1;
   }
