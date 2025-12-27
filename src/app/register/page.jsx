@@ -10,7 +10,7 @@ import InputRegister from '@/components/ui/inputRegister/inputRegister'
 import { useState } from "react";
 import { useRegister } from "@/hooks/useRegister";
 import Swal from "sweetalert2";
-import { validateCPF, validateEmail } from "@/utils/validators";
+import { validateCPF, validateEmail, getBirthDateError } from "@/utils/validators";
 
 export default function Cadastro() {
   const { handleRegister, loading } = useRegister();
@@ -78,6 +78,21 @@ export default function Cadastro() {
             confirmButtonColor: "#f59e0b"
         });
         return; 
+    }
+
+    // 4. Data de Nascimento
+    if (formData.usu_data_nasc) {
+        const dateError = getBirthDateError(formData.usu_data_nasc);
+        
+        if (dateError) {
+            Swal.fire({
+                title: "Data Inválida",
+                text: dateError,
+                icon: "warning",
+                confirmButtonColor: "#f59e0b"
+            });
+            return;
+        }
     }
 
     // 4. Tenta Enviar

@@ -5,60 +5,37 @@ import { InputRegisterForm } from "../ui/inputRegisterForm/inputRegisterForm";
 import { InputMaskRegister } from "../ui/inputMaskRegister/inputMaskRegister";
 import { SelectRegister } from "../ui/selectRegister/selectRegister";
 import styles from "./userForm.module.css";
-
-import { validateCPF, validateEmail, getPasswordIssues } from "@/utils/validators";
+import { validateCPF, validateEmail, getBirthDateError } from "@/utils/validators";
 
 export default function UserForm({ onSuccess, onCancel, saveFunction, initialData, mode = 'edit' }) {
   const [loading, setLoading] = useState(false);
-
-  // Define se os campos estão editáveis com base no modo inicial
   const [isEditable, setIsEditable] = useState(mode === 'edit');
-
-  // estado para erros
   const [errors, setErrors] = useState({});
-
-  // Estado para controlar visualização da senha
   const [showPassword, setShowPassword] = useState(false);
 
-  // 1. Criamos uma função para formatar os dados ANTES de criar o estado
   const getInitialState = () => {
-    // Valores padrão (vazio)
     const defaults = {
-      usu_nome: "",
-      usu_cpf: "",
-      usu_data_nasc: "",
-      usu_sexo: "0",
-      usu_email: "",
-      usu_senha: "",
-      usu_acesso: "false",
-      usu_observ: "",
-      usu_telefone: ""
+      usu_nome: "", usu_cpf: "", usu_data_nasc: "", usu_sexo: "0",
+      usu_email: "", usu_senha: "", usu_acesso: "false", usu_observ: "", usu_telefone: ""
     };
 
-    // Se não tiver dados iniciais (criação), retorna o padrão
     if (!initialData) return defaults;
 
-    // Se tiver dados (edição), mescla e formata
     return {
       usu_nome: initialData.usu_nome || "",
       usu_cpf: initialData.usu_cpf || "",
-      // Formata a data (YYYY-MM-DD)
       usu_data_nasc: initialData.usu_data_nasc ? initialData.usu_data_nasc.split('T')[0] : "",
-      usu_sexo: String(initialData.usu_sexo ?? "0"), // Garante string para o select
+      usu_sexo: String(initialData.usu_sexo ?? "0"),
       usu_email: initialData.usu_email || "",
-      usu_senha: "", // Senha vazia na edição
-      usu_acesso: String(initialData.usu_acesso ?? "false"), // "true" ou "false" string
+      usu_senha: "",
+      usu_acesso: String(initialData.usu_acesso ?? "false"),
       usu_observ: initialData.usu_observ || "",
       usu_telefone: initialData.usu_telefone || ""
     };
   };
 
-  // 2. Inicializamos o state chamando essa função.
-  // Isso roda apenas uma vez na montagem e evita o erro do useEffect.
   const [formData, setFormData] = useState(getInitialState());
 
-// --- LÓGICA DE FORÇA DA SENHA EM TEMPO REAL ---
-  // Calcula as regras baseadas no que está digitado no formData.usu_senha
   const passwordRules = {
     length: formData.usu_senha.length >= 12,
     capital: /[A-Z]/.test(formData.usu_senha),
@@ -67,35 +44,25 @@ export default function UserForm({ onSuccess, onCancel, saveFunction, initialDat
     special: /[\W_]/.test(formData.usu_senha),
   };
   
-  // Verifica se todas as regras foram cumpridas
   const isPasswordValid = Object.values(passwordRules).every(Boolean);
 
-  // Atualiza o estado de edição se a prop mode mudar (navegação)
   useEffect(() => {
     setIsEditable(mode === 'edit');
-    setErrors({}); // Limpa erros ao mudar de modo
+    setErrors({});
   }, [mode]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-
-    // Opcional: Limpar o erro do campo assim que o usuário digita
-    if (errors[name]) {
-      setErrors(prev => ({ ...prev, [name]: null }));
-    }
+    if (errors[name]) setErrors(prev => ({ ...prev, [name]: null }));
   };
 
   const handleMaskChange = (value, name) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
-
-    if (errors[name]) {
-      setErrors(prev => ({ ...prev, [name]: null }));
-    }
-
+    if (errors[name]) setErrors(prev => ({ ...prev, [name]: null }));
   };
 
-
+  // --- VALIDAÇÃO DO FORMULÁRIO ---
   const validateForm = () => {
     const newErrors = {};
 
@@ -109,8 +76,7 @@ export default function UserForm({ onSuccess, onCancel, saveFunction, initialDat
         newErrors.usu_email = "E-mail inválido.";
     }
 
-    // 3. Validar Senha (Lógica nova)
-    // Se for NOVO (initialData null) OU se o usuário estiver digitando senha na edição
+    // 3. Validar Senha
     const isTypingPassword = formData.usu_senha.length > 0;
     const isNewUser = !initialData;
 
@@ -120,11 +86,17 @@ export default function UserForm({ onSuccess, onCancel, saveFunction, initialDat
         }
     }
 
+    // 4. VALIDAÇÃO: DATA DE NASCIMENTO
+    if (formData.usu_data_nasc) {
+        const dateError = getBirthDateError(formData.usu_data_nasc);
+        if (dateError) {
+            newErrors.usu_data_nasc = dateError;
+        }
+    }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
-
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -135,66 +107,50 @@ export default function UserForm({ onSuccess, onCancel, saveFunction, initialDat
 
     setLoading(true);
 
-    // Tratamento de dados
     const payload = {
       ...formData,
       usu_sexo: Number(formData.usu_sexo),
       usu_acesso: formData.usu_acesso === "true"
     };
 
-console.log("DADOS SENDO ENVIADOS (PAYLOAD):", payload);
-
-    // Remove senha se estiver vazia na edição
     if (initialData && !payload.usu_senha) {
       delete payload.usu_senha;
     }
 
     try {
-    const result = await saveFunction(payload);
-
-    // CORREÇÃO AQUI 👇
-    // Verificamos explicitamente se result.success é verdadeiro
-    if (result && result.success) {
-      onSuccess();
-    } 
-    // Não precisa de 'else { alert... }' aqui, pois o Swal 
-    // já foi disparado dentro da função saveFunction (handleCreateUser)
-
-  } catch (error) {
-    console.error(error);
-    // Removemos o alert daqui também para evitar alertas duplos
-  } finally {
-    setLoading(false);
-  }
+      const result = await saveFunction(payload);
+      if (result && result.success) {
+        onSuccess();
+      } 
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  // Função para lidar com o botão "Cancelar"
   const handleCancelClick = () => {
-    // Se veio do modo 'view' e clicou em editar, o cancelar apenas bloqueia de novo
     if (mode === 'view' && isEditable) {
       setIsEditable(false);
-      setFormData(getInitialState()); // Reseta as alterações
+      setFormData(getInitialState());
       setErrors({});
     } else {
-      // Se veio do modo 'edit' ou cadastro, volta para a tela anterior
       onCancel();
     }
   };
 
-  // Componente auxiliar simples para mostrar erro (caso seus Inputs não tenham prop de erro)
- const ErrorMessage = ({ message }) => {
+  const ErrorMessage = ({ message }) => {
     if (!message) return null;
     return <span className={styles.errorText}>{message}</span>;
   };
 
-
-  // Componente interno para cada item da lista de senha
   const PasswordReqItem = ({ label, met }) => (
     <div className={`${styles.reqItem} ${met ? styles.success : styles.pending}`}>
         {met ? <Check size={12} /> : <X size={12} />}
         <span>{label}</span>
     </div>
   );
+
   return (
     <form onSubmit={handleSubmit} className={styles.form}>
       
@@ -208,7 +164,6 @@ console.log("DADOS SENDO ENVIADOS (PAYLOAD):", payload);
             required 
             disabled={!isEditable}
           />
-          {/* Atenção: errors.usu_nome aqui */}
           <ErrorMessage message={errors.usu_nome} />
       </div>
 
@@ -223,7 +178,6 @@ console.log("DADOS SENDO ENVIADOS (PAYLOAD):", payload);
             required
             disabled={!isEditable || !!initialData}
         />
-        {/* Atenção: errors.usu_cpf aqui */}
         <ErrorMessage message={errors.usu_cpf} />
       </div>
 
@@ -238,6 +192,7 @@ console.log("DADOS SENDO ENVIADOS (PAYLOAD):", payload);
             required 
             disabled={!isEditable}
         />
+        {/*"Precisa ter 18 anos" ou "Ano inválido" */}
         <ErrorMessage message={errors.usu_data_nasc} />
       </div>
 
@@ -285,22 +240,18 @@ console.log("DADOS SENDO ENVIADOS (PAYLOAD):", payload);
         <ErrorMessage message={errors.usu_telefone} />
       </div>
 
-      {/* --- CAMPO DE SENHA MODIFICADO --- */}
+      {/* GRUPO 7: Senha */}
       <div className={styles.inputGroup}>
-        {/* Input da senha com botão de olho */}
         <div style={{ position: 'relative' }}>
             <InputRegisterForm 
                 name="usu_senha" 
                 label={initialData ? "Nova Senha (deixe em branco para manter)" : "Senha"} 
-                // Alterna entre text e password
                 type={showPassword ? "text" : "password"} 
                 value={formData.usu_senha} 
                 onChange={handleChange} 
                 required={!initialData} 
                 disabled={!isEditable}
             />
-            
-            {/* Botão de Olho - só mostra se estiver editável */}
             {isEditable && (
                 <button 
                     type="button" 
@@ -314,8 +265,7 @@ console.log("DADOS SENDO ENVIADOS (PAYLOAD):", payload);
 
         <ErrorMessage message={errors.usu_senha} />
 
-        {/* LISTA DE REQUISITOS - Só aparece se estiver editável e digitando senha */}
-        {/* 👇 MUDANÇA AQUI: Adicionado !isPasswordValid */}
+        {/* Feedback visual da senha */}
             {isEditable && formData.usu_senha.length > 0 && !isPasswordValid && (
                 <div className={styles.passwordRequirements}>
                     <PasswordReqItem label="Mínimo de 12 caracteres" met={passwordRules.length} />
@@ -343,7 +293,7 @@ console.log("DADOS SENDO ENVIADOS (PAYLOAD):", payload);
          <ErrorMessage message={errors.usu_acesso} />
       </div>
 
-      {/* GRUPO 9: Observações (Ocupa largura total) */}
+      {/* GRUPO 9: Observações */}
       <div className={`${styles.inputGroup} ${styles.fullWidth}`}>
           <InputRegisterForm 
             name="usu_observ" 

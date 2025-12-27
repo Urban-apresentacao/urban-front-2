@@ -77,3 +77,34 @@ export const getPasswordIssues = (password) => {
 
   return issues;
 };
+
+// --- NOVA VALIDAÇÃO DE DATA ---
+export const getBirthDateError = (dateString) => {
+  if (!dateString) return null; // Se estiver vazio, deixa o 'required' do HTML tratar ou retorna erro se preferir
+
+  // Converte a string "YYYY-MM-DD" para números para evitar problemas de fuso horário
+  const [year, month, day] = dateString.split('-').map(Number);
+  const birthDate = new Date(year, month - 1, day);
+  const today = new Date();
+
+  // 1. Validação de Ano Absurdo (Sanidade)
+  // Ninguém nasceu antes de 1900 e ninguém nasceu no futuro
+  if (year < 1900 || year > today.getFullYear()) {
+    return "Ano de nascimento inválido. Insira um ano realista.";
+  }
+
+  // 2. Validação de Maioridade (18 anos)
+  let age = today.getFullYear() - year;
+  const monthDiff = today.getMonth() - (month - 1);
+
+  // Se ainda não chegou o mês do aniversário, ou é o mês mas não chegou o dia
+  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < day)) {
+    age--;
+  }
+
+  if (age < 18) {
+    return "É necessário ter pelo menos 18 anos para se cadastrar.";
+  }
+
+  return null;
+};
