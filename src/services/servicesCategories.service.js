@@ -6,3 +6,13 @@ export async function getServiceCategories() {
     const { data } = await api.get("/service-categories");
     return data;
 }
+
+export async function createServiceCategory(payload) {
+    const { data } = await api.post("/service-categories", payload);
+    return data;
+}
+
+export async function updateServiceCategory(id, payload) {
+    const { data } = await api.put(`/service-categories/${id}`, payload);
+    return data;
+}

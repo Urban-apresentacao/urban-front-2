@@ -165,6 +165,56 @@
     color: #10b981; /* Verde */
 }
 
+/* Wrapper dos botões ao lado do select */
+.categoryActions {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 2px; /* Alinha visualmente com a base do input */
+}
+
+/* Estilo base do botão quadrado */
+.btnIcon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;  /* Largura fixa igual altura */
+    height: 42px; /* Altura igual ao input padrão */
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+/* Botão Adicionar (Azul para diferenciar do verde "Salvar" geral, ou Verde também) */
+.btnAddCat {
+    background-color: #2563eb; /* Azul Royal */
+    color: white;
+}
+.btnAddCat:hover {
+    background-color: #1d4ed8;
+    transform: translateY(-1px);
+}
+
+/* Botão Editar (Cinza ou Laranja) */
+.btnEditCat {
+    background-color: #f3f4f6; /* Fundo Cinza Claro */
+    color: #4b5563; /* Ícone Cinza Escuro */
+    border: 1px solid #e5e7eb;
+}
+.btnEditCat:hover:not(:disabled) {
+    background-color: #e5e7eb;
+    color: #111827;
+    border-color: #d1d5db;
+}
+
+/* Estado Desabilitado (para o Editar quando nada selecionado) */
+.btnEditCat:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background-color: #f9fafb;
+}
+
 /* --- Responsividade --- */
 @media (max-width: 768px) {
     .form {

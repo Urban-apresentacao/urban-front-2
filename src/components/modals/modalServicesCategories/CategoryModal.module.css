@@ -1,0 +1,243 @@
+/* Fundo escuro com desfoque (Blur) */
+.overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: rgba(17, 24, 39, 0.6); /* Cinza escuro transparente */
+    backdrop-filter: blur(4px); /* Efeito de vidro fosco */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+/* O Cartão do Modal */
+.modal {
+    background: #ffffff;
+    width: 90%;
+    max-width: 450px; /* Largura confortável */
+    border-radius: 16px; /* Bordas bem arredondadas */
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    overflow: hidden;
+    animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1); /* Animação suave */
+}
+
+@keyframes slideUp {
+    from { transform: translateY(20px) scale(0.95); opacity: 0; }
+    to { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+/* Cabeçalho */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem;
+    border-bottom: 1px solid #f3f4f6;
+    background-color: #ffffff;
+}
+
+.header h3 {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #111827;
+}
+
+.closeBtn {
+    background: transparent;
+    border: none;
+    color: #9ca3af;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 6px;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.closeBtn:hover {
+    background-color: #f3f4f6;
+    color: #ef4444; /* Vermelho ao passar o mouse */
+}
+
+/* Corpo do Modal */
+.body {
+    padding: 2rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.fieldGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.fieldGroup label {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #374151;
+}
+
+.input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 1rem;
+    color: #1f2937;
+    outline: none;
+    transition: all 0.2s;
+    background-color: #f9fafb;
+}
+
+.input:focus {
+    background-color: #fff;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+/* --- TOGGLE SWITCH (Estilo iPhone) --- */
+.toggleWrapper {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background-color: #f9fafb;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #f3f4f6;
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 28px;
+    flex-shrink: 0;
+}
+
+.switch input { 
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: #e5e7eb; /* Cinza desligado */
+    transition: .3s;
+    border-radius: 34px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 20px;
+    width: 20px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .3s;
+    border-radius: 50%;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+
+/* Estado Ativo (Verde) */
+input:checked + .slider {
+    background-color: #16a34a; 
+}
+
+input:checked + .slider:before {
+    transform: translateX(22px);
+}
+
+.statusLabel {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #4b5563;
+}
+
+/* Rodapé */
+.footer {
+    padding: 1.5rem;
+    background-color: #f9fafb;
+    border-top: 1px solid #f3f4f6;
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+.cancelBtn {
+    padding: 0.6rem 1.2rem;
+    background: #ffffff;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    color: #374151;
+    transition: background 0.2s;
+}
+
+.cancelBtn:hover {
+    background-color: #f3f4f6;
+}
+
+.saveBtn {
+    padding: 0.6rem 1.5rem;
+    background: #16a34a; /* Verde Principal */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background 0.2s;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.saveBtn:hover {
+    background: #15803d;
+}
+
+.saveBtn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+/* --- ESTILIZAÇÃO DA BARRA DE ROLAGEM (SCROLLBAR) --- */
+
+/* Para Firefox */
+.body {
+    scrollbar-width: thin; /* Deixa fininha */
+    scrollbar-color: #cbd5e1 transparent; /* Cor da barra (cinza) e fundo (transparente) */
+}
+
+/* Para Chrome, Edge, Safari e Opera */
+.body::-webkit-scrollbar {
+    width: 6px; /* Largura da barra vertical */
+}
+
+.body::-webkit-scrollbar-track {
+    background: transparent; /* Fundo do trilho invisível */
+    margin: 4px 0; /* Um respiro nas pontas */
+}
+
+.body::-webkit-scrollbar-thumb {
+    background-color: #d1d5db; /* Cor da barra (Gray-300) */
+    border-radius: 10px;       /* Bordas bem redondas */
+}
+
+.body::-webkit-scrollbar-thumb:hover {
+    background-color: #9ca3af; /* Escurece ao passar o mouse (Gray-400) */
+}
+
+/* Responsividade Mobile */
+@media (max-width: 640px) {
+    .modal {
+        width: 95%;
+        margin: 10px;
+    }
+}
