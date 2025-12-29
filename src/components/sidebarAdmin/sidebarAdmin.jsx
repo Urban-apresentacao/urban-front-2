@@ -11,7 +11,7 @@ const menuItems = [
     { label: "Veículos", href: "/admin/vehicles", icon: Car },
     { label: "Serviços", href: "/admin/services", icon: Wrench },
     { label: "Agendamentos", href: "/admin/appointments", icon: CalendarCheck },
-    { label: "Histórico", href: "/admin/history", icon: History }
+    { label: "Calendário", href: "/admin/schedule", icon: History }
 ];
 
 // Recebemos a prop closeMobileMenu
