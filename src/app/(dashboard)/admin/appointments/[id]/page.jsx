@@ -31,7 +31,7 @@ export default function AppointmentDetailsPage() {
         }
     }, [id, router]);
 
-    const handleSave = async (data) => {
+   const handleSave = async (data) => {
         try {
             await updateAppointment(id, data);
             Swal.fire({
@@ -41,11 +41,21 @@ export default function AppointmentDetailsPage() {
                 timer: 1500,
                 showConfirmButton: false
             });
-            // Volta para visualização
             router.push("/admin/appointments");
         } catch (error) {
             console.error(error);
-            Swal.fire("Erro", "Falha ao atualizar agendamento.", "error");
+
+            // Tratamento específico
+            const errorMsg = error.response?.data?.message || 'Falha ao atualizar agendamento.';
+            const isConflict = error.response?.status === 400 || errorMsg.includes("Conflito");
+
+            Swal.fire({
+                icon: isConflict ? 'warning' : 'error',
+                title: isConflict ? 'Choque de Horário!' : 'Erro',
+                text: errorMsg,
+                confirmButtonColor: isConflict ? '#f59e0b' : '#ef4444',
+                confirmButtonText: 'Voltar e Corrigir'
+            });
         }
     };
 

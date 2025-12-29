@@ -1,0 +1,69 @@
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    height: calc(100vh - 100px);
+    background: #fff;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+/* Customização do React Big Calendar */
+.calendarContainer {
+    height: 100%;
+    width: 100%;
+}
+
+.calendarContainer :global(.rbc-calendar) {
+    font-family: inherit;
+}
+
+/* Cabeçalho dos dias */
+.calendarContainer :global(.rbc-header) {
+    padding: 10px;
+    font-weight: 600;
+    color: #374151;
+    background-color: #f9fafb;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+/* Eventos */
+.calendarContainer :global(.rbc-event) {
+    border-radius: 6px;
+    padding: 2px 5px;
+    font-size: 0.85rem;
+    border: none;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+/* Dia atual */
+.calendarContainer :global(.rbc-today) {
+    background-color: #eff6ff;
+}
+
+/* Toolbar */
+.calendarContainer :global(.rbc-toolbar button) {
+    color: #374151;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+}
+
+.calendarContainer :global(.rbc-toolbar button:hover) {
+    background-color: #f3f4f6;
+}
+
+.calendarContainer :global(.rbc-toolbar button.rbc-active) {
+    background-color: #2563eb;
+    color: white;
+    border-color: #2563eb;
+}
+
+.calendarContainer :global(.rbc-toolbar-label) {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #111827;
+}
