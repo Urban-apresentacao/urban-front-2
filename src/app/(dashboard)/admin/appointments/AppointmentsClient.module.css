@@ -1,0 +1,112 @@
+/* --- LAYOUT PRINCIPAL --- */
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+}
+
+/* --- BARRA DE FILTROS --- */
+.actionsBar {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  flex-wrap: wrap; 
+}
+
+/* --- WRAPPERS --- */
+
+/* AQUI ESTÁ A MUDANÇA PRINCIPAL: */
+.searchWrapper {
+  position: relative;
+  
+  /* 1. Define o tamanho padrão (igual Serviços) */
+  width: 100%;
+  max-width: 400px; 
+
+  /* 2. O Pulo do Gato: Empurra os vizinhos (Data/Status) para a direita */
+  margin-right: auto; 
+}
+
+/* Data e Status com largura fixa */
+.dateWrapper {
+  flex: 0 0 160px;
+}
+
+.statusWrapper {
+  flex: 0 0 180px; 
+}
+
+/* Ícone da Lupa */
+.searchIcon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #9ca3af;
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* --- ESTILIZAÇÃO UNIFICADA (Igual Serviços) --- */
+.searchInput, 
+.filterInput, 
+.filterSelect {
+  width: 100%;
+  height: 42px; 
+  background-color: #fff;
+  color: #1f2937;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px; 
+  font-size: 0.875rem;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05); 
+  outline: none;
+  transition: all 0.2s ease-in-out;
+  padding: 0 12px;
+}
+
+/* Ajuste para o input de busca (espaço para o ícone) */
+.searchInput {
+  padding-left: 40px; 
+}
+
+.searchInput::placeholder,
+.filterInput::placeholder { 
+  color: #9ca3af; 
+}
+
+.searchInput:focus,
+.filterInput:focus,
+.filterSelect:focus {
+  border-color: #2563eb; 
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1); 
+}
+
+/* --- CONTAINER DA TABELA --- */
+.tableContainer {
+  width: 100%;
+  overflow-x: auto; 
+  background-color: #fff; 
+  border-radius: 8px;
+  border: 1px solid #e5e7eb; 
+  overflow: hidden; 
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+/* --- RESPONSIVIDADE --- */
+@media (max-width: 768px) {
+  .actionsBar {
+    flex-direction: column;
+    align-items: stretch; /* No mobile, volta a esticar tudo */
+  }
+  
+  .searchWrapper {
+    max-width: 100%; /* No mobile, ocupa a tela toda */
+    margin-right: 0;
+  }
+
+  .dateWrapper, .statusWrapper {
+    flex: auto;
+  }
+}

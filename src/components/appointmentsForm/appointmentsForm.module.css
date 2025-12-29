@@ -1,0 +1,195 @@
+/* Container Principal do Formulário */
+.form {
+    background-color: #ffffff;
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    max-width: 100%;
+}
+
+/* Cabeçalho (Título + Badge) */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.header h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #111827;
+    margin: 0;
+}
+
+/* Títulos das Seções (Dados do Cliente, Serviços...) */
+.sectionTitle {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #374151; /* Cinza Escuro */
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    border-left: 4px solid #2563eb; /* Barrinha azul lateral */
+    padding-left: 10px;
+}
+
+/* Linha (Row) para colocar inputs lado a lado */
+.row {
+    display: flex;
+    gap: 1.5rem;
+    width: 100%;
+}
+
+/* Grupo de Input (Label + Campo) */
+.inputGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    flex: 1; /* Faz ocupar espaço igual na linha */
+}
+
+.inputGroup label {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #374151;
+}
+
+/* Wrapper para Ícone dentro do Input */
+.inputIconWrapper {
+    position: relative;
+    width: 100%;
+}
+
+.inputIcon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #9ca3af; /* Cinza ícone */
+    pointer-events: none;
+    z-index: 2;
+}
+
+/* Estilo dos Inputs (Texto, Select, Date, Time) */
+.input {
+    width: 100%;
+    height: 42px; /* Altura padrão do sistema */
+    padding: 0 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    color: #111827; /* Texto Preto */
+    background-color: #ffffff; /* Fundo Branco (importante!) */
+    outline: none;
+    transition: all 0.2s;
+}
+
+/* Quando o input está desabilitado (modo visualização) */
+.input:disabled {
+    background-color: #f9fafb;
+    color: #4b5563;
+    cursor: not-allowed;
+    border-color: #e5e7eb;
+}
+
+.input:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+/* Área de Texto (Observações) */
+textarea.input {
+    height: auto; /* Permite altura customizada */
+    min-height: 80px;
+    padding: 12px;
+    line-height: 1.5;
+    resize: vertical;
+}
+
+/* Container da Lista de Serviços (Scroll) */
+.servicesContainer {
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    padding: 0.5rem;
+    max-height: 250px;
+    overflow-y: auto;
+    background-color: #ffffff;
+    
+    /* Scrollbar Bonita */
+    scrollbar-width: thin;
+    scrollbar-color: #cbd5e1 transparent;
+}
+
+.servicesContainer::-webkit-scrollbar {
+    width: 6px;
+}
+.servicesContainer::-webkit-scrollbar-thumb {
+    background-color: #d1d5db;
+    border-radius: 10px;
+}
+
+/* Botões de Ação (Rodapé) */
+.actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #f3f4f6;
+}
+
+.btnCancel {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0.6rem 1.2rem;
+    background-color: #ffffff;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    color: #374151;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btnCancel:hover {
+    background-color: #f3f4f6;
+    border-color: #9ca3af;
+}
+
+.btnSave {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0.6rem 1.5rem;
+    background-color: #16a34a; /* Verde Salvar */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.btnSave:hover {
+    background-color: #15803d;
+}
+
+.btnSave:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+/* Responsividade Mobile */
+@media (max-width: 768px) {
+    .row {
+        flex-direction: column; /* Empilha os inputs no celular */
+        gap: 1rem;
+    }
+}

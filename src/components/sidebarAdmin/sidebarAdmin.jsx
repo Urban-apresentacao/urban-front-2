@@ -10,7 +10,7 @@ const menuItems = [
     { label: "Usuários", href: "/admin/users", icon: Users },
     { label: "Veículos", href: "/admin/vehicles", icon: Car },
     { label: "Serviços", href: "/admin/services", icon: Wrench },
-    { label: "Agenda", href: "/admin/schedule", icon: CalendarCheck },
+    { label: "Agendamentos", href: "/admin/appointments", icon: CalendarCheck },
     { label: "Histórico", href: "/admin/history", icon: History }
 ];
 

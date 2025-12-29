@@ -11,6 +11,17 @@ export async function getAllServices(termo = "", page = 1) {
   return data;
 }
 
+export async function getServicesList() {
+    // Pedimos um limite alto (ex: 100) para trazer todos de uma vez
+    const { data } = await api.get("/services", { 
+        params: { limit: 100 } 
+    });
+    
+    // O backend retorna { status: 'success', data: [...], meta: ... }
+    // Queremos retornar apenas o array que está em data.data
+    return data.data; 
+}
+
 export async function getServiceById(id) {
     const { data } = await api.get(`/services/${id}`);
     return data;

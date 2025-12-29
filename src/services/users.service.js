@@ -29,3 +29,15 @@ export async function getUserById(id) {
   const { data } = await api.get(`/users/${id}`);
   return data;
 }
+
+// Lista simplificada para o Select de Clientes
+export async function getUsersList() {
+    const { data } = await api.get("/users?limit=1000"); // Traz todos para o select (ideal seria um select async)
+    return data.data; 
+}
+
+// Busca veículos de um usuário específico
+export async function getUserVehicles(userId) {
+    const { data } = await api.get(`/users/${userId}/vehicles`);
+    return data;
+}
