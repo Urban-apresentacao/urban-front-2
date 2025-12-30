@@ -34,26 +34,19 @@ export default function AppointmentDetailsPage() {
    const handleSave = async (data) => {
         try {
             await updateAppointment(id, data);
-            Swal.fire({
-                icon: 'success',
-                title: 'Sucesso!',
-                text: 'Agendamento atualizado.',
-                timer: 1500,
-                showConfirmButton: false
-            });
+            Swal.fire({ icon: 'success', title: 'Sucesso!', text: 'Agendamento atualizado.', timer: 1500, showConfirmButton: false });
             router.push("/admin/appointments");
         } catch (error) {
             console.error(error);
 
-            // Tratamento específico
-            const errorMsg = error.response?.data?.message || 'Falha ao atualizar agendamento.';
-            const isConflict = error.response?.status === 400 || errorMsg.includes("Conflito");
+            const errorMsg = error.response?.data?.message || 'Falha ao atualizar.';
+            const isBusinessRule = error.response?.status === 400;
 
             Swal.fire({
-                icon: isConflict ? 'warning' : 'error',
-                title: isConflict ? 'Choque de Horário!' : 'Erro',
+                icon: isBusinessRule ? 'warning' : 'error',
+                title: isBusinessRule ? 'Atenção!' : 'Erro',
                 text: errorMsg,
-                confirmButtonColor: isConflict ? '#f59e0b' : '#ef4444',
+                confirmButtonColor: isBusinessRule ? '#f59e0b' : '#ef4444',
                 confirmButtonText: 'Voltar e Corrigir'
             });
         }

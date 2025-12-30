@@ -186,6 +186,116 @@ textarea.input {
     cursor: not-allowed;
 }
 
+/* --- ESTILIZAÇÃO DA LISTA DE SERVIÇOS --- */
+
+.serviceItem {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px;
+    border-bottom: 1px solid #f3f4f6;
+    transition: background-color 0.2s;
+}
+
+/* Efeito hover apenas se for editável */
+.serviceItem:not(.readonly):hover {
+    background-color: #f9fafb;
+    cursor: pointer;
+}
+
+.serviceItem.readonly {
+    cursor: default;
+    opacity: 1 !important; /* Força opacidade total */
+}
+
+/* O Checkbox em si */
+.serviceCheckbox {
+    transform: scale(1.2);
+    accent-color: #2563eb; /* Azul Padrão */
+    cursor: pointer;
+}
+
+/* O "Pulo do Gato" para o checkbox desabilitado */
+.serviceCheckbox:disabled {
+    cursor: default;
+    filter: none;          /* Remove filtro cinza do navegador */
+    opacity: 1 !important; /* Remove transparência */
+    accent-color: #2563eb; /* Mantém o azul vibrante */
+}
+
+/* Texto do Serviço */
+.serviceName {
+    font-weight: 600;
+    color: #374151; /* Cinza Escuro Padrão */
+    flex: 1;
+}
+
+/* Texto quando em modo leitura (Visualização) */
+.serviceItem.readonly .serviceName {
+    color: #111827; /* Preto quase total para facilitar leitura */
+}
+
+.servicePrice {
+    float: right;
+    color: #6b7280;
+    font-size: 0.9rem;
+}
+
+/* Preço no modo leitura fica mais escuro também */
+.serviceItem.readonly .servicePrice {
+    color: #4b5563;
+}
+
+.servicesReadOnly {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.serviceRow {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 16px;
+    border-bottom: 1px solid #f3f4f6;
+    background-color: #fff;
+}
+
+/* Efeito Zebrado (linhas alternadas ficam cinza clarinho) */
+.serviceRow:nth-child(even) {
+    background-color: #f9fafb;
+}
+
+.serviceNameRO {
+    color: #1f2937;
+    font-weight: 500;
+}
+
+.servicePriceRO {
+    color: #4b5563;
+    font-weight: 600;
+}
+
+/* LINHA DE TOTAL */
+.totalRow {
+    display: flex;
+    justify-content: space-between;
+    padding: 16px;
+    background-color: #f3f4f6; /* Fundo cinza destaque */
+    border-top: 2px solid #e5e7eb;
+    font-size: 1.1rem;
+    color: #111827;
+    font-weight: 800; /* Negrito forte */
+}
+
+.noServices {
+    padding: 20px;
+    text-align: center;
+    color: #9ca3af;
+    font-style: italic;
+}
+
 /* Responsividade Mobile */
 @media (max-width: 768px) {
     .row {
