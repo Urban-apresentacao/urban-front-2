@@ -8,16 +8,16 @@ export function useServices() {
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
 
-    const fetchServices = useCallback(async (termo = "", paginaDesejada = 1) => {
+    const fetchServices = useCallback(async (termo = "", paginaDesejada = 1, status = "all") => {
         try {
             setLoading(true);
-            const response = await getAllServices(termo, paginaDesejada);
+            
+            const response = await getAllServices(termo, paginaDesejada, status);
             
             const lista = response.data || [];
             const meta = response.meta || {};
 
             setServices(lista);
-            
             setTotalPages(meta.totalPages || 1);
             setPage(parseInt(paginaDesejada));
             

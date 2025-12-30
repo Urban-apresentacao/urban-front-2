@@ -1,15 +1,21 @@
-import api from "./api"; // Seu arquivo axios configurado
+import api from "./api";
 
-export async function getAllServices(termo = "", page = 1) {
-  const { data } = await api.get("/services", {
-    params: {
-      search: termo,
-      page: page,
-      limit: 10
+export const getAllServices = async (search = "", page = 1, status = "all") => {
+    try {
+        const response = await api.get('/services', {
+            params: { 
+                search, 
+                page, 
+                limit: 10,
+                status 
+            }
+        });
+        return response.data;
+    } catch (error) {
+        console.error("Erro ao buscar serviços:", error);
+        throw error;
     }
-  });
-  return data;
-}
+};
 
 export async function getServicesList() {
     // Pedimos um limite alto (ex: 100) para trazer todos de uma vez
