@@ -1,16 +1,19 @@
+import { useState } from "react";
 import { login } from "@/services/auth.service";
 import Swal from "sweetalert2";
-import Cookies from "js-cookie"; // Importação necessária
+import Cookies from "js-cookie";
 
 export function useLogin() {
+  // Adicionei estado de loading para feedback visual no botão
+  const [loading, setLoading] = useState(false);
 
   async function handleLogin(email, senha) {
+    setLoading(true); // Começa a carregar
+
     try {
       const response = await login(email, senha);
 
-      console.log("LOGIN RESPONSE:", response);
-
-      // Verificação de sucesso baseada no seu controller
+      // Se o axios não lançar erro, mas o status vier diferente de success
       if (response.status !== "success") {
         throw new Error("Login inválido");
       }
@@ -18,15 +21,11 @@ export function useLogin() {
       const usuario = response.data;
       const userRole = usuario.usu_acesso ? "admin" : "user";
 
-      console.log("USUÁRIO:", usuario);
-
-      // 1. SALVAR NO COOKIE (Para o Middleware ler)
-      // Definimos o cookie no domínio atual (Vercel)
-      // expires: 1 significa que o cookie dura 1 dia
+      // 1. SALVAR COOKIES
       Cookies.set("logged", "true", { expires: 1, path: "/" });
       Cookies.set("role", userRole, { expires: 1, path: "/" });
 
-      // 2. SALVAR NO LOCALSTORAGE (Para persistência de dados do perfil)
+      // 2. SALVAR LOCALSTORAGE
       localStorage.setItem(
         "user",
         JSON.stringify({
@@ -36,25 +35,49 @@ export function useLogin() {
         })
       );
 
-      // 3. REDIRECIONAMENTO
-      // ATENÇÃO: Verifique se a rota é "/user" ou "/usuario" para bater com o Middleware
+      // 3. REDIRECIONAR
       const redirectPath = userRole === "admin" ? "/admin" : "/user";
-
-      console.log("REDIRECT PARA:", redirectPath);
-
-      // Usar window.location.href garante que o middleware intercepte a nova requisição com os cookies frescos
       window.location.href = redirectPath;
 
     } catch (error) {
       console.error("ERRO LOGIN:", error);
 
+      // --- TRATAMENTO DE ERRO MELHORADO ---
+      
+      // 1. Pega a mensagem que veio do Backend (se existir)
+      const msg = error.response?.data?.message || "Erro ao conectar com o servidor.";
+      
+      // 2. Verifica o status do erro
+      const status = error.response?.status;
+
+      // 3. Configuração do Alerta
+      let title = "Erro no Login";
+      let icon = "error";
+      let confirmColor = "#d33"; // Vermelho
+
+      // Se for 403, é o erro de USUÁRIO INATIVO (Aviso Amarelo)
+      if (status === 403) {
+        title = "Acesso Negado";
+        icon = "warning";
+        confirmColor = "#f59e0b"; // Amarelo/Laranja
+      } 
+      // Se for 401, é senha incorreta (Aviso Vermelho)
+      else if (status === 401) {
+        title = "Credenciais Inválidas";
+      }
+
       Swal.fire({
-        icon: "error",
-        title: "Erro",
-        text: "E-mail ou senha inválidos ou erro na conexão com o servidor.",
+        icon: icon,
+        title: title,
+        text: msg, // Aqui vai aparecer: "Seu usuário está inativo..."
+        confirmButtonColor: confirmColor
       });
+
+    } finally {
+      setLoading(false); // Para de carregar (seja sucesso ou erro)
     }
   }
 
-  return { handleLogin };
+  // Retornamos também o loading
+  return { handleLogin, loading };
 }

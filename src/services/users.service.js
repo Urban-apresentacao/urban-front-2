@@ -16,7 +16,7 @@ export async function getAllUsers(termo = "", page = 1) {
 // ATUALIZAR (PACTH)
 export async function updateUser(id, userData) {
   try {
-    const { data } = await api.patch(`/users/${id}`, userData);
+    const { data } = await api.put(`/users/${id}`, userData);
     return data;
   } catch (error) {
     console.error("Erro ao atualizar usuário:", error);
@@ -41,3 +41,15 @@ export async function getUserVehicles(userId) {
     const { data } = await api.get(`/users/${userId}/vehicles`);
     return data;
 }
+
+export const toggleUserStatus = async (id, status) => {
+    try {
+        // Envia o novo status (true = ativo, false = inativo)
+        // O Backend precisa ter uma rota PATCH ou PUT para isso
+        const response = await api.patch(`/users/${id}/status`, { usu_situacao: status });
+        return response.data;
+    } catch (error) {
+        console.error("Erro ao alterar status do usuário:", error);
+        throw error;
+    }
+};

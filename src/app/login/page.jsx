@@ -1,8 +1,8 @@
 'use client'
 
-import { Mail, Lock, Eye, EyeOff } from 'lucide-react'
+import { Mail, Lock, Eye, EyeOff, Loader2 } from 'lucide-react' // Importei Loader2 para animação
 import styles from './page.module.css'
-import InputLogin from '@/components/ui/inputLogin/inputLogin' // Ajuste o caminho conforme criou
+import InputLogin from '@/components/ui/inputLogin/inputLogin' 
 
 import { useState } from "react";
 import { useLogin } from "./useLogin";
@@ -13,7 +13,8 @@ export default function Login() {
     const [senha, setSenha] = useState("");
     const [showPassword, setShowPassword] = useState(false);
 
-    const { handleLogin } = useLogin();
+    // Agora desestruturamos o loading também
+    const { handleLogin, loading } = useLogin();
 
     return (
         <div className={styles.page}>
@@ -39,6 +40,7 @@ export default function Login() {
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         required
+                        disabled={loading} // Bloqueia enquanto carrega
                     />
 
                     {/* INPUT SENHA */}
@@ -49,24 +51,39 @@ export default function Login() {
                         value={senha}
                         onChange={(e) => setSenha(e.target.value)}
                         required
+                        disabled={loading} // Bloqueia enquanto carrega
                     >
                         <button
                             type="button"
                             className={styles.eyeButton}
                             onClick={() => setShowPassword(prev => !prev)}
+                            disabled={loading}
                         >
                             {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                         </button>
                     </InputLogin>
 
-                    <button className={styles.button}>
-                        Entrar
+                    {/* BOTÃO DE ENTRAR COM LOADING */}
+                    <button 
+                        className={styles.button} 
+                        disabled={loading}
+                        style={{ opacity: loading ? 0.7 : 1, cursor: loading ? 'not-allowed' : 'pointer' }}
+                    >
+                        {loading ? (
+                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+                                <Loader2 size={20} className={styles.spin} /> 
+                                <span>Entrando...</span>
+                            </div>
+                        ) : (
+                            "Entrar"
+                        )}
                     </button>
 
                     <button
                         type="button"
                         className={styles.backButton}
                         onClick={() => window.history.back()}
+                        disabled={loading}
                     >
                         Voltar
                     </button>

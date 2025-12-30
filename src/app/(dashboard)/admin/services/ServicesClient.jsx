@@ -3,8 +3,7 @@
 import { useServices } from "@/hooks/useServices";
 import { Table } from "@/components/ui/table/table";
 import Link from "next/link";
-// 1. ADICIONEI O RotateCcw AQUI (Ícone de restaurar)
-import { Edit, Plus, Eye, Search, Trash2, RotateCcw } from "lucide-react"; 
+import { Edit, Plus, Eye, Search, Trash2, RotateCcw, Filter } from "lucide-react"; 
 import { useState, useEffect, useRef } from "react";
 import { Pagination } from "@/components/ui/pagination/pagination";
 import Swal from "sweetalert2";
@@ -13,37 +12,47 @@ import styles from "./ServicesClient.module.css";
 
 export default function ServicesClient() {
   const { services, loading, fetchServices, page, totalPages } = useServices();
+  
+  // ESTADOS
   const [inputValue, setInputValue] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all"); // all, active, inactive
+
   const isMounted = useRef(false);
 
+  // Busca Inicial
   useEffect(() => {
-    fetchServices("", 1);
+    fetchServices("", 1, "all");
   }, [fetchServices]);
 
+  // Debounce (Busca + Filtro)
   useEffect(() => {
     if (!isMounted.current) {
       isMounted.current = true;
       return;
     }
     const delayDebounceFn = setTimeout(() => {
-      fetchServices(inputValue, 1);
+      fetchServices(inputValue, 1, statusFilter);
     }, 500);
 
     return () => clearTimeout(delayDebounceFn);
-  }, [inputValue, fetchServices]);
+  }, [inputValue, statusFilter, fetchServices]);
 
   const handlePageChange = (newPage) => {
-    fetchServices(inputValue, newPage);
+    fetchServices(inputValue, newPage, statusFilter);
   };
 
-  // --- FUNÇÃO 1: OCULTAR (Desativar) ---
+  const handleStatusChange = (e) => {
+    setStatusFilter(e.target.value);
+  };
+
+  // --- FUNÇÕES DE STATUS (Mantidas iguais) ---
   const handleArchiveService = async (id, nome) => {
     const result = await Swal.fire({
       title: 'Ocultar Serviço?',
-      text: `O serviço "${nome}" ficará inativo e não aparecerá para novos agendamentos.`,
+      text: `O serviço "${nome}" ficará inativo.`,
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#ef4444', // Vermelho
+      confirmButtonColor: '#ef4444',
       cancelButtonColor: '#6b7280',
       confirmButtonText: 'Sim, ocultar!',
       cancelButtonText: 'Cancelar'
@@ -51,21 +60,20 @@ export default function ServicesClient() {
 
     if (result.isConfirmed) {
       try {
-        await toggleServiceStatus(id, false); // Manda FALSE
+        await toggleServiceStatus(id, false); 
         await Swal.fire('Ocultado!', 'Serviço desativado.', 'success');
-        fetchServices(inputValue, page);
+        fetchServices(inputValue, page, statusFilter);
       } catch (error) {
         console.error(error);
-        Swal.fire('Erro', 'Não foi possível ocultar.', 'error');
+        Swal.fire('Erro', 'Erro ao ocultar.', 'error');
       }
     }
   };
 
-  // --- FUNÇÃO 2: REATIVAR (Ativar) ---
   const handleReactivateService = async (id, nome) => {
     const result = await Swal.fire({
       title: 'Reativar Serviço?',
-      text: `O serviço "${nome}" voltará a ficar visível no sistema.`,
+      text: `O serviço "${nome}" voltará a ficar visível.`,
       icon: 'question',
       showCancelButton: true,
       confirmButtonColor: '#16a34a',
@@ -76,12 +84,12 @@ export default function ServicesClient() {
 
     if (result.isConfirmed) {
       try {
-        await toggleServiceStatus(id, true); // Manda TRUE
-        await Swal.fire('Ativado!', 'Serviço reativado com sucesso.', 'success');
-        fetchServices(inputValue, page);
+        await toggleServiceStatus(id, true);
+        await Swal.fire('Ativado!', 'Serviço reativado.', 'success');
+        fetchServices(inputValue, page, statusFilter);
       } catch (error) {
         console.error(error);
-        Swal.fire('Erro', 'Não foi possível reativar.', 'error');
+        Swal.fire('Erro', 'Erro ao reativar.', 'error');
       }
     }
   };
@@ -105,7 +113,8 @@ export default function ServicesClient() {
           padding: '4px 8px',
           borderRadius: '12px',
           fontSize: '0.75rem',
-          fontWeight: 'bold'
+          fontWeight: 'bold',
+          border: item.serv_situacao ? '1px solid #bbf7d0' : '1px solid #fecaca'
         }}>
           {item.serv_situacao ? "Ativo" : "Inativo"}
         </span>
@@ -131,29 +140,18 @@ export default function ServicesClient() {
             <Edit size={16} />
           </Link>
           
-          {/* LÓGICA DO BOTÃO DE STATUS */}
           {service.serv_situacao ? (
-            // SE ESTIVER ATIVO: Mostra botão de Lixeira (Vermelho)
             <button
               onClick={() => handleArchiveService(service.serv_id, service.serv_nome)}
-              style={{
-                display: 'flex', alignItems: 'center', gap: '5px',
-                color: '#ef4444', // Vermelho
-                background: 'none', border: 'none', cursor: 'pointer'
-              }}
+              style={{ display: 'flex', alignItems: 'center', gap: '5px', color: '#ef4444', background: 'none', border: 'none', cursor: 'pointer' }}
               title="Ocultar (Inativar)"
             >
               <Trash2 size={16} />
             </button>
           ) : (
-            // SE ESTIVER INATIVO: Mostra botão de Restaurar (Verde)
             <button
               onClick={() => handleReactivateService(service.serv_id, service.serv_nome)}
-              style={{
-                display: 'flex', alignItems: 'center', gap: '5px',
-                color: '#16a34a', // Verde
-                background: 'none', border: 'none', cursor: 'pointer'
-              }}
+              style={{ display: 'flex', alignItems: 'center', gap: '5px', color: '#16a34a', background: 'none', border: 'none', cursor: 'pointer' }}
               title="Reativar Serviço"
             >
               <RotateCcw size={16} />
@@ -168,16 +166,34 @@ export default function ServicesClient() {
   return (
     <div className={styles.wrapper}>
       <div className={styles.actionsBar}>
-        <div className={styles.searchWrapper}>
-          <Search size={20} className={styles.searchIcon} />
-          <input
-            type="text"
-            placeholder="Pesquisar serviços..."
-            className={styles.searchInput}
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-          />
+        
+        {/* GRUPO DE FILTROS */}
+        <div className={styles.filtersGroup}>
+            <div className={styles.searchWrapper}>
+                <Search size={20} className={styles.searchIcon} />
+                <input
+                    type="text"
+                    placeholder="Pesquisar serviços..."
+                    className={styles.searchInput}
+                    value={inputValue}
+                    onChange={(e) => setInputValue(e.target.value)}
+                />
+            </div>
+
+            <div className={styles.selectWrapper}>
+                <Filter size={16} className={styles.filterIcon} />
+                <select 
+                    className={styles.statusSelect}
+                    value={statusFilter}
+                    onChange={handleStatusChange}
+                >
+                    <option value="all">Todos</option>
+                    <option value="active">Ativos</option>
+                    <option value="inactive">Inativos</option>
+                </select>
+            </div>
         </div>
+
         <Link href="/admin/services/register" className={styles.newButton}>
           <Plus size={20} />
           <span>Novo Serviço</span>
