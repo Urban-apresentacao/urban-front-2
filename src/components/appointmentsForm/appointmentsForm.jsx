@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Edit, Ban, Save, ArrowLeft, Calendar, Clock, User, Car } from "lucide-react";
+import { Edit, Ban, Save, ArrowLeft, Calendar, Clock, User, Car, CheckSquare, Square } from "lucide-react";
 import Swal from "sweetalert2";
 
 // Services
@@ -265,36 +265,83 @@ export default function AppointmentForm({
                 </div>
             </div>
 
-            {/* --- SEÇÃO 3: SERVIÇOS (CHECKLIST) --- */}
-            <div className={styles.sectionTitle}>Serviços Solicitados</div>
-            <div className={styles.servicesContainer} style={{ 
-                border: '1px solid #e5e7eb', borderRadius: '8px', padding: '1rem', 
-                maxHeight: '200px', overflowY: 'auto', backgroundColor: isEditable ? '#fff' : '#f9fafb' 
-            }}>
-                {servicesList.map(service => {
-                    const isSelected = formData.services.includes(service.serv_id);
-                    return (
-                        <label key={service.serv_id} style={{ 
-                            display: 'flex', alignItems: 'center', gap: '10px', 
-                            padding: '8px', borderBottom: '1px solid #f3f4f6', cursor: isEditable ? 'pointer' : 'default'
-                        }}>
-                            <input 
-                                type="checkbox" 
-                                checked={isSelected}
-                                onChange={() => handleServiceToggle(service.serv_id)}
-                                disabled={!isEditable}
-                                style={{ transform: 'scale(1.2)', accentColor: '#2563eb' }}
-                            />
-                            <div style={{ flex: 1 }}>
-                                <span style={{ fontWeight: '600', color: '#374151' }}>{service.serv_nome}</span>
-                                <span style={{ float: 'right', color: '#6b7280', fontSize: '0.9rem' }}>
-                                    {Number(service.serv_preco).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+            <div className={styles.sectionTitle}>
+                {!isEditable ? "Extrato de Serviços Realizados" : "Selecione os Serviços"}
+            </div>
+
+            {!isEditable ? (
+                // --- MODO LEITURA: EXTRATO LIMPO (Sua ideia!) ---
+                <div className={styles.servicesReadOnly}>
+                    {formData.services && formData.services.length > 0 ? (
+                        <>
+                            {/* 1. Lista apenas os selecionados */}
+                            {servicesList
+                                .filter(s => formData.services.includes(s.serv_id))
+                                .map(service => (
+                                    <div key={service.serv_id} className={styles.serviceRow}>
+                                        <span className={styles.serviceNameRO}>{service.serv_nome}</span>
+                                        <span className={styles.servicePriceRO}>
+                                            {Number(service.serv_preco).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+                                        </span>
+                                    </div>
+                                ))
+                            }
+                            
+                            {/* 2. Cálculo do Total Automático */}
+                            <div className={styles.totalRow}>
+                                <span>TOTAL ESTIMADO</span>
+                                <span>
+                                    {servicesList
+                                        .filter(s => formData.services.includes(s.serv_id))
+                                        .reduce((acc, curr) => acc + Number(curr.serv_preco), 0)
+                                        .toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
+                                    }
                                 </span>
                             </div>
-                        </label>
-                    );
-                })}
-            </div>
+                        </>
+                    ) : (
+                        <div className={styles.noServices}>Nenhum serviço lançado neste agendamento.</div>
+                    )}
+                </div>
+
+            ) : (
+                // --- MODO EDIÇÃO: CHECKLIST COMPLETO (Para marcar/desmarcar) ---
+                <div className={styles.servicesContainer}>
+                    {servicesList.map(service => {
+                        const isSelected = formData.services.includes(service.serv_id);
+                        return (
+                            <label 
+                                key={service.serv_id} 
+                                className={styles.serviceItem}
+                                style={{ 
+                                    backgroundColor: isSelected ? '#eff6ff' : 'transparent',
+                                    borderBottom: '1px solid #f3f4f6'
+                                }}
+                            >
+                                {/* Checkbox Normal para Edição */}
+                                <input 
+                                    type="checkbox" 
+                                    className={styles.serviceCheckbox}
+                                    checked={isSelected}
+                                    onChange={() => handleServiceToggle(service.serv_id)}
+                                />
+                                
+                                <div style={{ flex: 1, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                    <span className={styles.serviceName} style={{ 
+                                        color: isSelected ? '#1f2937' : '#6b7280',
+                                        fontWeight: isSelected ? '600' : '400'
+                                    }}>
+                                        {service.serv_nome}
+                                    </span>
+                                    <span className={styles.servicePrice}>
+                                        {Number(service.serv_preco).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+                                    </span>
+                                </div>
+                            </label>
+                        );
+                    })}
+                </div>
+            )}
 
             {/* --- SEÇÃO 4: OBSERVAÇÕES --- */}
             <div className={styles.inputGroup} style={{ marginTop: '1rem' }}>
@@ -312,23 +359,54 @@ export default function AppointmentForm({
 
             {/* --- AÇÕES --- */}
             <div className={styles.actions} style={{ marginTop: '2rem', borderTop: '1px solid #e5e7eb', paddingTop: '1rem' }}>
+                {/* MODO VISUALIZAÇÃO (Travado) */}
                 {mode === 'view' && !isEditable ? (
                     <>
-                        <button type="button" onClick={onCancel} className={styles.btnCancel}>
+                        <button 
+                            type="button"  /* <--- OBRIGATÓRIO: type="button" para não salvar */
+                            onClick={onCancel} 
+                            className={styles.btnCancel}
+                        >
                             <ArrowLeft size={18} /> Voltar
                         </button>
+                        
+                        {/* Só mostra botão de editar se não estiver cancelado */}
                         {formData.agend_situacao != 0 && (
-                            <button type="button" onClick={() => setIsEditable(true)} className={styles.btnSave}>
+                            <button 
+                                type="button" /* <--- O CULPADO ERA A FALTA DISSO AQUI */
+                                onClick={(e) => {
+                                    e.preventDefault(); // Garante duplamente que não vai salvar
+                                    setIsEditable(true);
+                                }} 
+                                className={styles.btnSave}
+                            >
                                 <Edit size={18} /> Editar Agendamento
                             </button>
                         )}
                     </>
                 ) : (
+                    /* MODO EDIÇÃO OU CRIAÇÃO (Destravado) */
                     <>
-                         <button type="button" onClick={onCancel} className={styles.btnCancel}>
-                            Cancelar Edição
+                         <button 
+                            type="button" /* <--- OBRIGATÓRIO */
+                            onClick={(e) => {
+                                e.preventDefault();
+                                if (mode === 'create') {
+                                    onCancel(); // Se for novo, cancela e sai
+                                } else {
+                                    setIsEditable(false); // Se for edição, só bloqueia os campos de volta
+                                }
+                            }} 
+                            className={styles.btnCancel}
+                        >
+                            Cancelar
                         </button>
-                        <button type="submit" className={styles.btnSave} disabled={loading}>
+                        
+                        <button 
+                            type="submit" /* <--- APENAS ESTE BOTÃO PODE SER SUBMIT */
+                            className={styles.btnSave} 
+                            disabled={loading}
+                        >
                             <Save size={18} /> {loading ? "Salvando..." : "Salvar Alterações"}
                         </button>
                     </>
