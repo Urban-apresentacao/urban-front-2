@@ -1,6 +1,6 @@
 "use client"
 
-import { House, Users, Car, Wrench, CalendarCheck, History } from "lucide-react"
+import { House, Users, Car, Wrench, CalendarCheck, History, CalendarDays } from "lucide-react"
 import ItemSidebar from "@/components/ui/itemSidebar/itemSidebar"
 import styles from "./sidebarAdmin.module.css";
 
@@ -10,7 +10,7 @@ const menuItems = [
     { label: "Veículos", href: "/admin/vehicles", icon: Car },
     { label: "Serviços", href: "/admin/services", icon: Wrench },
     { label: "Agendamentos", href: "/admin/appointments", icon: CalendarCheck },
-    { label: "Calendário", href: "/admin/schedule", icon: History }
+    { label: "Calendário", href: "/admin/schedule", icon: CalendarDays }
 ];
 
 export default function SidebarAdmin({ closeMobileMenu }) {

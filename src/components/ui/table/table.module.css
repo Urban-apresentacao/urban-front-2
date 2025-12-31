@@ -33,6 +33,39 @@
     animation: pulse 1.5s ease-in-out infinite;
 }
 
+/* Header Ordenável */
+.sortableTh {
+    cursor: pointer;
+    user-select: none; /* Impede selecionar o texto ao clicar rápido */
+    transition: all 0.2s ease; /* Adiciona uma animação suave */
+    position: relative; /* Para garantir que o hover fique contido */
+}
+
+/* HOVER: Fundo azul clarinho + Texto azul escuro */
+.sortableTh:hover {
+    background-color: #eff6ff; /* Azul bem suave (blue-50) */
+    color: #1e40af;           /* Azul escuro (blue-800) */
+}
+
+/* Opcional: Quando passar o mouse, a setinha também fica azul forte */
+.sortableTh:hover .sortIcon {
+    color: #2563eb; /* Azul vibrante */
+    opacity: 1 !important; /* Garante que ela apareça se estiver transparente */
+}
+
+/* Conteúdo do Header Flex */
+.thContent {
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Espaço entre texto e setinha */
+}
+
+.sortIcon {
+    display: flex;
+    align-items: center;
+    color: #fbfbfb;
+}
+
 @keyframes pulse {
     0% { opacity: 1; }
     50% { opacity: 0.4; }

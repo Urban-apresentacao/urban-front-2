@@ -3,7 +3,7 @@
 import { useUsers } from "@/hooks/useUsers";
 import { Table } from "@/components/ui/table/table";
 import Link from "next/link";
-import { Edit, Plus, Eye, Search, Trash2, RotateCcw, Filter } from "lucide-react"; 
+import { Edit, Plus, Eye, Search, Trash2, RotateCcw, Filter } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { Pagination } from "@/components/ui/pagination/pagination";
 import Swal from "sweetalert2";
@@ -11,10 +11,11 @@ import { toggleUserStatus } from "@/services/users.service";
 import styles from "./UsersClient.module.css";
 
 export default function UsersClient() {
-  // Hook customizado que busca os dados
-  const { users, loading, fetchUsers, page, totalPages } = useUsers();
-  
-  // Estados dos Filtros
+  const {
+    users, loading, fetchUsers, page, totalPages,
+    sortColumn, sortDirection, handleSort
+  } = useUsers();
+
   const [inputValue, setInputValue] = useState("");
   const [statusFilter, setStatusFilter] = useState("all"); // 'all', 'active', 'inactive'
 
@@ -36,11 +37,11 @@ export default function UsersClient() {
     // Espera o usuário parar de digitar para buscar
     const delayDebounceFn = setTimeout(() => {
       // Passamos o texto (inputValue) e o status (statusFilter)
-      fetchUsers(inputValue, 1, statusFilter);
-    }, 500);
+      fetchUsers(inputValue, 1, statusFilter, sortColumn, sortDirection);
+    }, [inputValue, statusFilter, sortColumn, sortDirection, fetchUsers]);
 
     return () => clearTimeout(delayDebounceFn);
-  }, [inputValue, statusFilter, fetchUsers]); 
+  }, [inputValue, statusFilter, fetchUsers]);
 
   // Função de Paginação
   const handlePageChange = (newPage) => {
@@ -114,7 +115,7 @@ export default function UsersClient() {
       accessor: "usu_acesso",
       render: (item) => (
         <span style={{
-          backgroundColor: item.usu_acesso ? '#dcfce7' : '#dbeafe', 
+          backgroundColor: item.usu_acesso ? '#dcfce7' : '#dbeafe',
           color: item.usu_acesso ? '#166534' : '#1e40af',
           padding: '4px 8px',
           borderRadius: '12px',
@@ -126,21 +127,21 @@ export default function UsersClient() {
       ),
     },
     {
-        header: "Status",
-        accessor: "usu_situacao",
-        render: (item) => (
-          <span style={{
-            backgroundColor: item.usu_situacao ? '#dcfce7' : '#fee2e2', // Cinza (Ativo) ou Vermelho Claro (Inativo)
-            color: item.usu_situacao ? '#166534' : '#991b1b',
-            padding: '4px 8px',
-            borderRadius: '12px',
-            fontSize: '0.75rem',
-            fontWeight: 'bold',
-            border: item.usu_situacao ? '1px solid #e5e7eb' : '1px solid #fecaca'
-          }}>
-            {item.usu_situacao ? "Ativo" : "Inativo"}
-          </span>
-        ),
+      header: "Status",
+      accessor: "usu_situacao",
+      render: (item) => (
+        <span style={{
+          backgroundColor: item.usu_situacao ? '#dcfce7' : '#fee2e2', // Cinza (Ativo) ou Vermelho Claro (Inativo)
+          color: item.usu_situacao ? '#166534' : '#991b1b',
+          padding: '4px 8px',
+          borderRadius: '12px',
+          fontSize: '0.75rem',
+          fontWeight: 'bold',
+          border: item.usu_situacao ? '1px solid #e5e7eb' : '1px solid #fecaca'
+        }}>
+          {item.usu_situacao ? "Ativo" : "Inativo"}
+        </span>
+      ),
     },
     {
       header: "Ações",
@@ -165,19 +166,19 @@ export default function UsersClient() {
           {/* Lógica do Botão Status (Lixeira vs Restaurar) */}
           {user.usu_situacao ? (
             <button
-                onClick={() => handleArchiveUser(user.usu_id, user.usu_nome)}
-                style={{ display: 'flex', alignItems: 'center', gap: '5px', color: '#ef4444', background: 'none', border: 'none', cursor: 'pointer' }}
-                title="Inativar Usuário"
+              onClick={() => handleArchiveUser(user.usu_id, user.usu_nome)}
+              style={{ display: 'flex', alignItems: 'center', gap: '5px', color: '#ef4444', background: 'none', border: 'none', cursor: 'pointer' }}
+              title="Inativar Usuário"
             >
-                <Trash2 size={16} />
+              <Trash2 size={16} />
             </button>
           ) : (
             <button
-                onClick={() => handleReactivateUser(user.usu_id, user.usu_nome)}
-                style={{ display: 'flex', alignItems: 'center', gap: '5px', color: '#16a34a', background: 'none', border: 'none', cursor: 'pointer' }}
-                title="Reativar Acesso"
+              onClick={() => handleReactivateUser(user.usu_id, user.usu_nome)}
+              style={{ display: 'flex', alignItems: 'center', gap: '5px', color: '#16a34a', background: 'none', border: 'none', cursor: 'pointer' }}
+              title="Reativar Acesso"
             >
-                <RotateCcw size={16} />
+              <RotateCcw size={16} />
             </button>
           )}
         </div>
@@ -188,35 +189,35 @@ export default function UsersClient() {
   return (
     <div className={styles.wrapper}>
       <div className={styles.actionsBar}>
-        
+
         {/* GRUPO DE FILTROS (Busca + Select) */}
         <div className={styles.filtersGroup}>
-            
-            {/* Input de Busca */}
-            <div className={styles.searchWrapper}>
-                <Search size={20} className={styles.searchIcon} />
-                <input
-                    type="text"
-                    placeholder="Pesquisar usuários..."
-                    className={styles.searchInput}
-                    value={inputValue}
-                    onChange={(e) => setInputValue(e.target.value)}
-                />
-            </div>
 
-            {/* Select de Status */}
-            <div className={styles.selectWrapper}>
-                <Filter size={16} className={styles.filterIcon} />
-                <select 
-                    className={styles.statusSelect}
-                    value={statusFilter}
-                    onChange={handleStatusChange}
-                >
-                    <option value="all">Todos</option>
-                    <option value="active">Apenas Ativos</option>
-                    <option value="inactive">Apenas Inativos</option>
-                </select>
-            </div>
+          {/* Input de Busca */}
+          <div className={styles.searchWrapper}>
+            <Search size={20} className={styles.searchIcon} />
+            <input
+              type="text"
+              placeholder="Pesquisar usuários..."
+              className={styles.searchInput}
+              value={inputValue}
+              onChange={(e) => setInputValue(e.target.value)}
+            />
+          </div>
+
+          {/* Select de Status */}
+          <div className={styles.selectWrapper}>
+            <Filter size={16} className={styles.filterIcon} />
+            <select
+              className={styles.statusSelect}
+              value={statusFilter}
+              onChange={handleStatusChange}
+            >
+              <option value="all">Todos</option>
+              <option value="active">Apenas Ativos</option>
+              <option value="inactive">Apenas Inativos</option>
+            </select>
+          </div>
         </div>
 
         {/* Botão Novo Usuário */}
@@ -227,7 +228,14 @@ export default function UsersClient() {
       </div>
 
       <div className={styles.tableContainer}>
-        <Table columns={columns} data={users} isLoading={loading} />
+        <Table
+          columns={columns}
+          data={users}
+          isLoading={loading}
+          onSort={handleSort}
+          sortColumn={sortColumn}
+          sortDirection={sortDirection}
+        />
       </div>
 
       {!loading && users.length > 0 && (

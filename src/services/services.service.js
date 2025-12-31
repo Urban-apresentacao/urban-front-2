@@ -1,13 +1,15 @@
 import api from "./api";
 
-export const getAllServices = async (search = "", page = 1, status = "all") => {
+export const getAllServices = async (search = "", page = 1, status = "all", orderBy = "serv_id", orderDirection = "DESC") => {
     try {
         const response = await api.get('/services', {
             params: { 
-                search, 
-                page, 
+                search,
+                page,
                 limit: 10,
-                status 
+                status,
+                orderBy,
+                orderDirection
             }
         });
         return response.data;

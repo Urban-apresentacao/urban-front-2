@@ -1,16 +1,16 @@
-/* Container Principal do Formulário */
+/* Container Principal */
 .form {
     background-color: #ffffff;
     border-radius: 12px;
     padding: 2rem;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
     max-width: 100%;
 }
 
-/* Cabeçalho (Título + Badge) */
+/* Cabeçalho */
 .header {
     display: flex;
     justify-content: space-between;
@@ -27,30 +27,38 @@
     margin: 0;
 }
 
-/* Títulos das Seções (Dados do Cliente, Serviços...) */
+/* Badge de Status */
+.badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+/* Títulos das Seções */
 .sectionTitle {
     font-size: 1rem;
     font-weight: 600;
-    color: #374151; /* Cinza Escuro */
-    margin-top: 0.5rem;
-    margin-bottom: 0.5rem;
-    border-left: 4px solid #2563eb; /* Barrinha azul lateral */
+    color: #374151;
+    margin: 0.5rem 0;
+    border-left: 4px solid #2563eb;
     padding-left: 10px;
 }
 
-/* Linha (Row) para colocar inputs lado a lado */
+/* Layout de Linha */
 .row {
     display: flex;
     gap: 1.5rem;
     width: 100%;
 }
 
-/* Grupo de Input (Label + Campo) */
+/* Inputs */
 .inputGroup {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
-    flex: 1; /* Faz ocupar espaço igual na linha */
+    flex: 1;
 }
 
 .inputGroup label {
@@ -59,7 +67,6 @@
     color: #374151;
 }
 
-/* Wrapper para Ícone dentro do Input */
 .inputIconWrapper {
     position: relative;
     width: 100%;
@@ -70,31 +77,22 @@
     left: 12px;
     top: 50%;
     transform: translateY(-50%);
-    color: #9ca3af; /* Cinza ícone */
+    color: #9ca3af;
     pointer-events: none;
     z-index: 2;
 }
 
-/* Estilo dos Inputs (Texto, Select, Date, Time) */
 .input {
     width: 100%;
-    height: 42px; /* Altura padrão do sistema */
+    height: 42px;
     padding: 0 12px;
     border: 1px solid #d1d5db;
     border-radius: 8px;
     font-size: 0.95rem;
-    color: #111827; /* Texto Preto */
-    background-color: #ffffff; /* Fundo Branco (importante!) */
+    color: #111827;
+    background-color: #ffffff;
     outline: none;
     transition: all 0.2s;
-}
-
-/* Quando o input está desabilitado (modo visualização) */
-.input:disabled {
-    background-color: #f9fafb;
-    color: #4b5563;
-    cursor: not-allowed;
-    border-color: #e5e7eb;
 }
 
 .input:focus {
@@ -102,16 +100,22 @@
     box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
 }
 
-/* Área de Texto (Observações) */
+.input:disabled {
+    background-color: #f9fafb;
+    color: #4b5563;
+    cursor: not-allowed;
+    border-color: #e5e7eb;
+}
+
 textarea.input {
-    height: auto; /* Permite altura customizada */
+    height: auto;
     min-height: 80px;
     padding: 12px;
     line-height: 1.5;
     resize: vertical;
 }
 
-/* Container da Lista de Serviços (Scroll) */
+/* Container de Serviços */
 .servicesContainer {
     border: 1px solid #d1d5db;
     border-radius: 8px;
@@ -119,74 +123,8 @@ textarea.input {
     max-height: 250px;
     overflow-y: auto;
     background-color: #ffffff;
-    
-    /* Scrollbar Bonita */
     scrollbar-width: thin;
-    scrollbar-color: #cbd5e1 transparent;
 }
-
-.servicesContainer::-webkit-scrollbar {
-    width: 6px;
-}
-.servicesContainer::-webkit-scrollbar-thumb {
-    background-color: #d1d5db;
-    border-radius: 10px;
-}
-
-/* Botões de Ação (Rodapé) */
-.actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 1rem;
-    margin-top: 2rem;
-    padding-top: 1.5rem;
-    border-top: 1px solid #f3f4f6;
-}
-
-.btnCancel {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 0.6rem 1.2rem;
-    background-color: #ffffff;
-    border: 1px solid #d1d5db;
-    border-radius: 8px;
-    color: #374151;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-
-.btnCancel:hover {
-    background-color: #f3f4f6;
-    border-color: #9ca3af;
-}
-
-.btnSave {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 0.6rem 1.5rem;
-    background-color: #16a34a; /* Verde Salvar */
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.2s;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-}
-
-.btnSave:hover {
-    background-color: #15803d;
-}
-
-.btnSave:disabled {
-    opacity: 0.7;
-    cursor: not-allowed;
-}
-
-/* --- ESTILIZAÇÃO DA LISTA DE SERVIÇOS --- */
 
 .serviceItem {
     display: flex;
@@ -197,42 +135,21 @@ textarea.input {
     transition: background-color 0.2s;
 }
 
-/* Efeito hover apenas se for editável */
-.serviceItem:not(.readonly):hover {
+.serviceItem:hover {
     background-color: #f9fafb;
     cursor: pointer;
 }
 
-.serviceItem.readonly {
-    cursor: default;
-    opacity: 1 !important; /* Força opacidade total */
-}
-
-/* O Checkbox em si */
 .serviceCheckbox {
     transform: scale(1.2);
-    accent-color: #2563eb; /* Azul Padrão */
+    accent-color: #2563eb;
     cursor: pointer;
 }
 
-/* O "Pulo do Gato" para o checkbox desabilitado */
-.serviceCheckbox:disabled {
-    cursor: default;
-    filter: none;          /* Remove filtro cinza do navegador */
-    opacity: 1 !important; /* Remove transparência */
-    accent-color: #2563eb; /* Mantém o azul vibrante */
-}
-
-/* Texto do Serviço */
 .serviceName {
     font-weight: 600;
-    color: #374151; /* Cinza Escuro Padrão */
+    color: #374151;
     flex: 1;
-}
-
-/* Texto quando em modo leitura (Visualização) */
-.serviceItem.readonly .serviceName {
-    color: #111827; /* Preto quase total para facilitar leitura */
 }
 
 .servicePrice {
@@ -241,14 +158,9 @@ textarea.input {
     font-size: 0.9rem;
 }
 
-/* Preço no modo leitura fica mais escuro também */
-.serviceItem.readonly .servicePrice {
-    color: #4b5563;
-}
-
+/* Modo Leitura de Serviços */
 .servicesReadOnly {
-    display: flex;
-    flex-direction: column;
+    background-color: #f9fafb;
     border: 1px solid #e5e7eb;
     border-radius: 8px;
     overflow: hidden;
@@ -262,31 +174,19 @@ textarea.input {
     background-color: #fff;
 }
 
-/* Efeito Zebrado (linhas alternadas ficam cinza clarinho) */
 .serviceRow:nth-child(even) {
     background-color: #f9fafb;
 }
 
-.serviceNameRO {
-    color: #1f2937;
-    font-weight: 500;
-}
-
-.servicePriceRO {
-    color: #4b5563;
-    font-weight: 600;
-}
-
-/* LINHA DE TOTAL */
 .totalRow {
     display: flex;
     justify-content: space-between;
     padding: 16px;
-    background-color: #f3f4f6; /* Fundo cinza destaque */
+    background-color: #f3f4f6;
     border-top: 2px solid #e5e7eb;
     font-size: 1.1rem;
     color: #111827;
-    font-weight: 800; /* Negrito forte */
+    font-weight: 800;
 }
 
 .noServices {
@@ -296,10 +196,106 @@ textarea.input {
     font-style: italic;
 }
 
-/* Responsividade Mobile */
+/* --- RODAPÉ DE AÇÕES (NOVO LAYOUT) --- */
+.actionsFooter {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #f3f4f6;
+    display: flex;
+    justify-content: space-between; /* Separa Esquerda e Direita */
+    align-items: center;
+    width: 100%;
+}
+
+
+
+.rightActions {
+    display: flex;
+    gap: 1rem; /* Espaço entre Voltar e Salvar */
+}
+
+/* Classes de Botões (Substituindo Inline Styles) */
+.btnBase {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0.6rem 1.2rem;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    border: 1px solid transparent;
+}
+
+/* Botão Secundário (Voltar/Cancelar Edição) */
+.btnSecondary {
+    background-color: #ffffff;
+    border-color: #d1d5db;
+    color: #374151;
+}
+
+.btnSecondary:hover {
+    background-color: #f3f4f6;
+    border-color: #9ca3af;
+    color: #111827;
+}
+
+/* Botão Primário (Salvar/Editar) */
+.btnPrimary {
+    background-color: #16a34a; /* Verde */
+    color: white;
+    border: none;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.btnPrimary:hover {
+    background-color: #15803d;
+}
+
+/* Botão de Edição (Azul) - Opcional se quiser diferenciar do Salvar */
+.btnEdit {
+    background-color: #2563eb;
+    color: white;
+}
+.btnEdit:hover {
+    background-color: #1d4ed8;
+}
+
+.btnPrimary:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+/* Botão Perigo (Cancelar Agendamento) */
+.btnDanger {
+    background-color: #fee2e2;
+    color: #991b1b;
+    border-color: #fecaca;
+}
+
+.btnDanger:hover {
+    background-color: #fca5a5;
+    color: #7f1d1d;
+    border-color: #f87171;
+}
+
+/* Responsividade */
 @media (max-width: 768px) {
     .row {
-        flex-direction: column; /* Empilha os inputs no celular */
+        flex-direction: column;
         gap: 1rem;
+    }
+    .actionsFooter {
+        flex-direction: column-reverse; /* Botões principais em cima no mobile */
+        gap: 1rem;
+        align-items: stretch;
+    }
+    .rightActions, .leftAction {
+        flex-direction: column;
+        width: 100%;
+    }
+    .btnBase {
+        justify-content: center;
     }
 }

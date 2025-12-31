@@ -8,11 +8,15 @@ export function useServices() {
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
 
-    const fetchServices = useCallback(async (termo = "", paginaDesejada = 1, status = "all") => {
+    // Estado de Ordenação (Padrão: ID Decrescente)
+    const [sortColumn, setSortColumn] = useState("serv_id");
+    const [sortDirection, setSortDirection] = useState("DESC");
+
+    const fetchServices = useCallback(async (termo = "", paginaDesejada = 1, status = "all", col = sortColumn, dir = sortDirection) => {
         try {
             setLoading(true);
             
-            const response = await getAllServices(termo, paginaDesejada, status);
+            const response = await getAllServices(termo, paginaDesejada, status, col, dir);
             
             const lista = response.data || [];
             const meta = response.meta || {};
@@ -27,13 +31,30 @@ export function useServices() {
         } finally {
             setLoading(false);
         }
-    }, []);
+    }, [sortColumn, sortDirection]); // Adicionei as dependências aqui
+
+    // Função de Clique no Header da Tabela
+    const handleSort = (columnAccessor) => {
+        // Ignora colunas que não devem ser ordenadas
+        if (!columnAccessor || columnAccessor === 'actions' || columnAccessor === 'cat_serv_nome') return;
+
+        // Inverte a direção se clicar na mesma coluna
+        const isAsc = sortColumn === columnAccessor && sortDirection === "ASC";
+        const newDirection = isAsc ? "DESC" : "ASC";
+        
+        setSortColumn(columnAccessor);
+        setSortDirection(newDirection);
+        // O useEffect na tela vai disparar a busca automaticamente
+    };
 
     return {
         services,
         loading,
         page,
         totalPages,
-        fetchServices
+        fetchServices,
+        sortColumn,
+        sortDirection,
+        handleSort
     };
 }

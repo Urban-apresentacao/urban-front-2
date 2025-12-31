@@ -10,7 +10,6 @@ import Swal from "sweetalert2";
 import { cancelAppointment } from "@/services/appointments.service";
 import styles from "./AppointmentsClient.module.css";
 
-// MAPA DE STATUS
 const STATUS_MAP = {
   1: { label: "Pendente", color: "#f59e0b", bg: "#fef3c7" },    
   2: { label: "Em Andamento", color: "#3b82f6", bg: "#dbeafe" }, 
@@ -19,7 +18,16 @@ const STATUS_MAP = {
 };
 
 export default function AppointmentsClient() {
-  const { appointments, loading, fetchAppointments, page, totalPages } = useAppointments();
+  const { 
+    appointments,
+    loading,
+    fetchAppointments,
+    page,
+    totalPages,
+    sortColumn,
+    sortDirection,
+    handleSort
+  } = useAppointments();
   
   const [filters, setFilters] = useState({
     search: "",
@@ -29,30 +37,27 @@ export default function AppointmentsClient() {
 
   const isMounted = useRef(false);
 
-  const loadData = (pageNum = 1) => {
-    fetchAppointments(filters, pageNum);
-  };
-
+  // Busca inicial
   useEffect(() => {
-    loadData(1);
+    fetchAppointments(filters, 1, "agend_data", "DESC");
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fetchAppointments]); 
 
-  // Debounce para busca e filtros
+  // Debounce para TUDO (Filtros + Ordenação)
   useEffect(() => {
     if (!isMounted.current) {
       isMounted.current = true;
       return;
     }
     const delayDebounceFn = setTimeout(() => {
-      fetchAppointments(filters, 1);
+      fetchAppointments(filters, 1, sortColumn, sortDirection);
     }, 500);
 
     return () => clearTimeout(delayDebounceFn);
-  }, [filters.search, filters.date, filters.status, fetchAppointments]);
+  }, [filters.search, filters.date, filters.status, sortColumn, sortDirection, fetchAppointments]);
 
   const handlePageChange = (newPage) => {
-    fetchAppointments(filters, newPage);
+    fetchAppointments(filters, newPage, sortColumn, sortDirection);
   };
 
   const handleFilterChange = (e) => {
@@ -76,7 +81,7 @@ export default function AppointmentsClient() {
       try {
         await cancelAppointment(id);
         await Swal.fire('Cancelado!', 'O agendamento foi cancelado.', 'success');
-        loadData(page);
+        fetchAppointments(filters, page, sortColumn, sortDirection);
       } catch (error) {
         console.error(error);
         Swal.fire('Erro', 'Não foi possível cancelar.', 'error');
@@ -97,15 +102,17 @@ export default function AppointmentsClient() {
     },
     { 
       header: "Data", 
+      accessor: "agend_data", // Necessário accessor para o handleSort funcionar
       render: (item) => new Date(item.agend_data).toLocaleDateString('pt-BR')
     },
     { 
       header: "Horário", 
+      accessor: "agend_horario",
       render: (item) => item.agend_horario ? item.agend_horario.substring(0, 5) : '--:--'
     },
     { 
       header: "Serviço(s)", 
-      accessor: "lista_servicos",
+      accessor: "lista_servicos", // Não ordenável no Backend
       render: (item) => {
           const servicos = item.lista_servicos || "Nenhum";
           return (
@@ -138,30 +145,19 @@ export default function AppointmentsClient() {
     },
     {
       header: "Ações",
+      accessor: "actions",
       render: (item) => (
         <div style={{ display: 'flex', gap: '10px' }}>
-          <Link
-            href={`/admin/appointments/${item.agend_id}?mode=view`}
-            title="Visualizar Detalhes"
-            style={{ color: '#2563eb' }}
-          >
+          <Link href={`/admin/appointments/${item.agend_id}?mode=view`} title="Visualizar Detalhes" style={{ color: '#2563eb' }}>
             <Eye size={18} />
           </Link>
           
           {item.agend_situacao !== 0 && (
             <>
-              <Link
-                href={`/admin/appointments/${item.agend_id}?mode=edit`}
-                title="Editar"
-                style={{ color: '#2563eb' }}
-              >
+              <Link href={`/admin/appointments/${item.agend_id}?mode=edit`} title="Editar" style={{ color: '#2563eb' }}>
                 <Edit size={18} />
               </Link>
-              <button
-                onClick={() => handleCancel(item.agend_id, item.usu_nome)}
-                title="Cancelar Agendamento"
-                style={{ color: '#ef4444', background: 'none', border: 'none', cursor: 'pointer' }}
-              >
+              <button onClick={() => handleCancel(item.agend_id, item.usu_nome)} title="Cancelar" style={{ color: '#ef4444', background: 'none', border: 'none', cursor: 'pointer' }}>
                 <Ban size={18} />
               </button>
             </>
@@ -173,11 +169,9 @@ export default function AppointmentsClient() {
 
   return (
     <div className={styles.wrapper}>
-      
-      {/* BARRA DE FILTROS ALINHADA */}
       <div className={styles.actionsBar}>
         
-        {/* 1. Busca Texto (Cresce) */}
+        {/* 1. Busca Texto */}
         <div className={styles.searchWrapper}>
           <Search size={20} className={styles.searchIcon} />
           <input
@@ -190,7 +184,7 @@ export default function AppointmentsClient() {
           />
         </div>
 
-        {/* 2. Filtro Data (Tamanho Fixo) */}
+        {/* 2. Filtro Data */}
         <div className={styles.dateWrapper}>
             <input 
                 name="date"
@@ -202,7 +196,7 @@ export default function AppointmentsClient() {
             />
         </div>
 
-        {/* 3. Filtro Status (Tamanho Fixo) */}
+        {/* 3. Filtro Status */}
         <div className={styles.statusWrapper}>
             <select 
                 name="status" 
@@ -210,7 +204,7 @@ export default function AppointmentsClient() {
                 value={filters.status}
                 onChange={handleFilterChange}
             >
-                <option value="">Todos</option>
+                <option value="">Status: Todos</option>
                 <option value="1">Pendente</option>
                 <option value="2">Em Andamento</option>
                 <option value="3">Concluído</option>
@@ -221,7 +215,14 @@ export default function AppointmentsClient() {
       </div>
 
       <div className={styles.tableContainer}>
-        <Table columns={columns} data={appointments} isLoading={loading} />
+        <Table 
+            columns={columns} 
+            data={appointments} 
+            isLoading={loading}
+            onSort={handleSort}           // Função
+            sortColumn={sortColumn}       // Estado
+            sortDirection={sortDirection} // Estado
+        />
       </div>
 
       {!loading && appointments.length > 0 && (

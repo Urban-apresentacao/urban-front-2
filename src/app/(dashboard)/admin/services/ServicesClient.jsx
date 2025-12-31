@@ -11,45 +11,63 @@ import { toggleServiceStatus } from "@/services/services.service";
 import styles from "./ServicesClient.module.css";
 
 export default function ServicesClient() {
-  const { services, loading, fetchServices, page, totalPages } = useServices();
+  // Desestruturando os dados e funções do Hook, incluindo a Ordenação
+  const { 
+    services, 
+    loading, 
+    fetchServices, 
+    page, 
+    totalPages,
+    sortColumn,      // Coluna atual
+    sortDirection,   // Direção atual (ASC/DESC)
+    handleSort       // Função para trocar a ordem
+  } = useServices();
   
-  // ESTADOS
+  // Estados Locais (Busca e Filtro)
   const [inputValue, setInputValue] = useState("");
-  const [statusFilter, setStatusFilter] = useState("all"); // all, active, inactive
+  const [statusFilter, setStatusFilter] = useState("all"); 
 
   const isMounted = useRef(false);
 
-  // Busca Inicial
+  // 1. Busca Inicial (Ao carregar a página)
   useEffect(() => {
-    fetchServices("", 1, "all");
+    // Busca inicial padrão: sem busca, pág 1, todos, ordenado por ID DESC
+    fetchServices("", 1, "all", "serv_id", "DESC");
   }, [fetchServices]);
 
-  // Debounce (Busca + Filtro)
+  // 2. Monitoramento de Mudanças (Debounce)
+  // Qualquer alteração em Busca, Filtro ou Ordenação dispara isso aqui
   useEffect(() => {
     if (!isMounted.current) {
       isMounted.current = true;
       return;
     }
+    
     const delayDebounceFn = setTimeout(() => {
-      fetchServices(inputValue, 1, statusFilter);
+      // Passamos TODOS os parâmetros atuais para manter a consistência
+      fetchServices(inputValue, 1, statusFilter, sortColumn, sortDirection);
     }, 500);
 
     return () => clearTimeout(delayDebounceFn);
-  }, [inputValue, statusFilter, fetchServices]);
+  }, [inputValue, statusFilter, sortColumn, sortDirection, fetchServices]); 
+
+  // --- HANDLERS ---
 
   const handlePageChange = (newPage) => {
-    fetchServices(inputValue, newPage, statusFilter);
+    fetchServices(inputValue, newPage, statusFilter, sortColumn, sortDirection);
   };
 
   const handleStatusChange = (e) => {
     setStatusFilter(e.target.value);
+    // O useEffect acima vai detectar a mudança e buscar automaticamente
   };
 
-  // --- FUNÇÕES DE STATUS (Mantidas iguais) ---
+  // --- AÇÕES DE STATUS (Lixeira / Restaurar) ---
+
   const handleArchiveService = async (id, nome) => {
     const result = await Swal.fire({
       title: 'Ocultar Serviço?',
-      text: `O serviço "${nome}" ficará inativo.`,
+      text: `O serviço "${nome}" ficará inativo e não aparecerá para novos agendamentos.`,
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#ef4444',
@@ -60,12 +78,13 @@ export default function ServicesClient() {
 
     if (result.isConfirmed) {
       try {
-        await toggleServiceStatus(id, false); 
+        await toggleServiceStatus(id, false); // false = Inativo
         await Swal.fire('Ocultado!', 'Serviço desativado.', 'success');
-        fetchServices(inputValue, page, statusFilter);
+        // Recarrega a lista mantendo todos os filtros e ordenação atuais
+        fetchServices(inputValue, page, statusFilter, sortColumn, sortDirection);
       } catch (error) {
         console.error(error);
-        Swal.fire('Erro', 'Erro ao ocultar.', 'error');
+        Swal.fire('Erro', 'Não foi possível ocultar.', 'error');
       }
     }
   };
@@ -73,7 +92,7 @@ export default function ServicesClient() {
   const handleReactivateService = async (id, nome) => {
     const result = await Swal.fire({
       title: 'Reativar Serviço?',
-      text: `O serviço "${nome}" voltará a ficar visível.`,
+      text: `O serviço "${nome}" voltará a ficar visível no sistema.`,
       icon: 'question',
       showCancelButton: true,
       confirmButtonColor: '#16a34a',
@@ -84,16 +103,17 @@ export default function ServicesClient() {
 
     if (result.isConfirmed) {
       try {
-        await toggleServiceStatus(id, true);
-        await Swal.fire('Ativado!', 'Serviço reativado.', 'success');
-        fetchServices(inputValue, page, statusFilter);
+        await toggleServiceStatus(id, true); // true = Ativo
+        await Swal.fire('Ativado!', 'Serviço reativado com sucesso.', 'success');
+        fetchServices(inputValue, page, statusFilter, sortColumn, sortDirection);
       } catch (error) {
         console.error(error);
-        Swal.fire('Erro', 'Erro ao reativar.', 'error');
+        Swal.fire('Erro', 'Não foi possível reativar.', 'error');
       }
     }
   };
 
+  // --- DEFINIÇÃO DAS COLUNAS ---
   const columns = [
     { header: "ID", accessor: "serv_id" },
     { header: "Nome", accessor: "serv_nome" },
@@ -140,10 +160,14 @@ export default function ServicesClient() {
             <Edit size={16} />
           </Link>
           
+          {/* Lógica do Botão de Status */}
           {service.serv_situacao ? (
             <button
               onClick={() => handleArchiveService(service.serv_id, service.serv_nome)}
-              style={{ display: 'flex', alignItems: 'center', gap: '5px', color: '#ef4444', background: 'none', border: 'none', cursor: 'pointer' }}
+              style={{
+                display: 'flex', alignItems: 'center', gap: '5px',
+                color: '#ef4444', background: 'none', border: 'none', cursor: 'pointer'
+              }}
               title="Ocultar (Inativar)"
             >
               <Trash2 size={16} />
@@ -151,7 +175,10 @@ export default function ServicesClient() {
           ) : (
             <button
               onClick={() => handleReactivateService(service.serv_id, service.serv_nome)}
-              style={{ display: 'flex', alignItems: 'center', gap: '5px', color: '#16a34a', background: 'none', border: 'none', cursor: 'pointer' }}
+              style={{
+                display: 'flex', alignItems: 'center', gap: '5px',
+                color: '#16a34a', background: 'none', border: 'none', cursor: 'pointer'
+              }}
               title="Reativar Serviço"
             >
               <RotateCcw size={16} />
@@ -167,7 +194,7 @@ export default function ServicesClient() {
     <div className={styles.wrapper}>
       <div className={styles.actionsBar}>
         
-        {/* GRUPO DE FILTROS */}
+        {/* GRUPO DE FILTROS (Busca + Select) */}
         <div className={styles.filtersGroup}>
             <div className={styles.searchWrapper}>
                 <Search size={20} className={styles.searchIcon} />
@@ -187,7 +214,7 @@ export default function ServicesClient() {
                     value={statusFilter}
                     onChange={handleStatusChange}
                 >
-                    <option value="all">Todos</option>
+                    <option value="all">Status: Todos</option>
                     <option value="active">Ativos</option>
                     <option value="inactive">Inativos</option>
                 </select>
@@ -201,7 +228,15 @@ export default function ServicesClient() {
       </div>
 
       <div className={styles.tableContainer}>
-        <Table columns={columns} data={services} isLoading={loading} />
+        {/* Passamos as props de ordenação para a Tabela */}
+        <Table 
+            columns={columns} 
+            data={services} 
+            isLoading={loading}
+            onSort={handleSort}           // Função de clique
+            sortColumn={sortColumn}       // Coluna atual
+            sortDirection={sortDirection} // Direção atual
+        />
       </div>
 
       {!loading && services.length > 0 && (

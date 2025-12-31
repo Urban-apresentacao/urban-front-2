@@ -8,16 +8,22 @@ export function useAppointments() {
   const [totalPages, setTotalPages] = useState(1);
   const [totalItems, setTotalItems] = useState(0);
 
-  // Agora aceita um objeto filters: { search, date, status }
-  const fetchAppointments = useCallback(async (filters = {}, pageNum = 1) => {
+  // Estados de Ordenação (Padrão: Data Decrescente)
+  const [sortColumn, setSortColumn] = useState("agend_data");
+  const [sortDirection, setSortDirection] = useState("DESC");
+
+  // Agora aceita filters, page e ordenação opcional
+  const fetchAppointments = useCallback(async (filters = {}, pageNum = 1, col = sortColumn, dir = sortDirection) => {
     setLoading(true);
     try {
       const params = {
         page: pageNum,
         limit: 10,
         search: filters.search || "",
-        date: filters.date || "",     // Novo
-        status: filters.status || ""  // Novo
+        date: filters.date || "",
+        status: filters.status || "",
+        orderBy: col,       
+        orderDirection: dir 
       };
 
       const response = await getAppointments(params);
@@ -29,12 +35,25 @@ export function useAppointments() {
       setTotalPages(meta.totalPages || 1);
       setTotalItems(meta.totalItems || 0);
       setPage(pageNum);
+      
     } catch (error) {
       console.error("Erro ao buscar agendamentos:", error);
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [sortColumn, sortDirection]);
+
+  // Função para clicar no cabeçalho
+  const handleSort = (columnAccessor) => {
+      // Ignora colunas que não devem ordenar (como lista de serviços ou ações)
+      if (!columnAccessor || columnAccessor === 'actions' || columnAccessor === 'lista_servicos') return;
+
+      const isAsc = sortColumn === columnAccessor && sortDirection === "ASC";
+      const newDirection = isAsc ? "DESC" : "ASC";
+      
+      setSortColumn(columnAccessor);
+      setSortDirection(newDirection);
+  };
 
   return {
     appointments,
@@ -42,6 +61,9 @@ export function useAppointments() {
     fetchAppointments,
     page,
     totalPages,
-    totalItems
+    totalItems,
+    sortColumn,
+    sortDirection,
+    handleSort
   };
 }

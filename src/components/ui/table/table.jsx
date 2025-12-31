@@ -1,8 +1,16 @@
 'use client';
 
 import styles from './table.module.css';
+import { ArrowUp, ArrowDown, ArrowUpDown } from 'lucide-react'; // Ícones de ordenação
 
-export function Table({ columns, data, isLoading }) {
+export function Table({ 
+    columns, 
+    data, 
+    isLoading, 
+    onSort, 
+    sortColumn, 
+    sortDirection 
+}) {
   const skeletonRows = Array.from({ length: 5 });
 
   return (
@@ -10,11 +18,34 @@ export function Table({ columns, data, isLoading }) {
       <table className={styles.table}>
         <thead className={styles.thead}>
           <tr>
-            {columns.map((col, index) => (
-              <th key={index} className={styles.th}>
-                {col.header}
-              </th>
-            ))}
+            {columns.map((col, index) => {
+                // Verifica se a coluna é ordenável (tem accessor e não é 'actions')
+                const isSortable = !!col.accessor && col.accessor !== 'actions';
+                const isActive = sortColumn === col.accessor;
+
+                return (
+                  <th 
+                    key={index} 
+                    className={`${styles.th} ${isSortable ? styles.sortableTh : ''}`}
+                    onClick={() => isSortable && onSort && onSort(col.accessor)}
+                  >
+                    <div className={styles.thContent}>
+                        {col.header}
+                        
+                        {/* Ícone de Ordenação */}
+                        {isSortable && (
+                            <span className={styles.sortIcon}>
+                                {isActive ? (
+                                    sortDirection === 'ASC' ? <ArrowUp size={14} /> : <ArrowDown size={14} />
+                                ) : (
+                                    <ArrowUpDown size={14} style={{ opacity: 0.3 }} />
+                                )}
+                            </span>
+                        )}
+                    </div>
+                  </th>
+                );
+            })}
           </tr>
         </thead>
         <tbody>

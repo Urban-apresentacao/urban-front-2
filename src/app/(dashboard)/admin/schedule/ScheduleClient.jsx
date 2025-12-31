@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { Calendar, dateFnsLocalizer } from 'react-big-calendar';
 import format from 'date-fns/format';
 import parse from 'date-fns/parse';
@@ -8,7 +8,15 @@ import getDay from 'date-fns/getDay';
 import ptBR from 'date-fns/locale/pt-BR';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 
-import { getAppointments, createAppointment, updateAppointment } from "@/services/appointments.service";
+// IMPORTS ATUALIZADOS
+import { 
+    getAppointments, 
+    createAppointment, 
+    updateAppointment,
+    getAppointmentById, // Necessário para buscar detalhes completos
+    cancelAppointment   // Necessário para o botão vermelho
+} from "@/services/appointments.service";
+
 import AppointmentForm from "@/components/appointmentsForm/appointmentsForm";
 import ModalCalendar from "@/components/modals/modalCalendar/ModalCalendar";
 import Swal from "sweetalert2";
@@ -39,8 +47,8 @@ const messages = {
 export default function ScheduleClient() {
     const [events, setEvents] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [selectedEvent, setSelectedEvent] = useState(null); // Se null = Criar, Se obj = Editar
-    const [selectedDate, setSelectedDate] = useState(null); // Data clicada para criar novo
+    const [selectedEvent, setSelectedEvent] = useState(null); // Dados COMPLETOS para o form
+    const [selectedDate, setSelectedDate] = useState(null); 
 
     // 1. Buscar Agendamentos (Fetch Schedule)
     const fetchSchedule = useCallback(async () => {
@@ -48,12 +56,8 @@ export default function ScheduleClient() {
             // Buscamos 1000 itens para garantir que preencha o mês/ano
             const { data } = await getAppointments({ limit: 1000 });
             
-            // Mapear dados do banco para o formato do React Big Calendar
             const mappedEvents = data.map(item => {
                 const startDateTime = new Date(`${item.agend_data.split('T')[0]}T${item.agend_horario}`);
-                
-                // Calculamos o fim baseando na duração real se tivermos essa info no futuro,
-                // por enquanto usamos 1h padrão para visualização no calendário
                 const endDateTime = new Date(startDateTime.getTime() + (60 * 60 * 1000)); 
 
                 return {
@@ -61,8 +65,8 @@ export default function ScheduleClient() {
                     title: `${item.veic_placa} - ${item.usu_nome}`,
                     start: startDateTime,
                     end: endDateTime,
-                    resource: item, // Guardamos o objeto original completo aqui
-                    status: item.agend_situacao // Para usar na cor
+                    resource: item, // Item resumido da lista
+                    status: item.agend_situacao 
                 };
             });
 
@@ -78,11 +82,10 @@ export default function ScheduleClient() {
 
     // 2. Estilização dos Eventos (Cores por Status)
     const eventPropGetter = (event) => {
-        let backgroundColor = '#3b82f6'; // Azul (Padrão/Em andamento)
-        
-        if (event.status === 1) backgroundColor = '#f59e0b'; // Amarelo (Pendente)
-        if (event.status === 3) backgroundColor = '#16a34a'; // Verde (Concluído)
-        if (event.status === 0) backgroundColor = '#ef4444'; // Vermelho (Cancelado)
+        let backgroundColor = '#3b82f6'; 
+        if (event.status === 1) backgroundColor = '#f59e0b'; // Pendente
+        if (event.status === 3) backgroundColor = '#16a34a'; // Concluído
+        if (event.status === 0) backgroundColor = '#ef4444'; // Cancelado
 
         return { style: { backgroundColor, border: 'none' } };
     };
@@ -91,51 +94,60 @@ export default function ScheduleClient() {
 
     // Clicar em um slot vazio (Criar Novo)
     const handleSelectSlot = ({ start }) => {
-        setSelectedEvent(null); // Modo Criação
-        setSelectedDate(start); // Guarda a data clicada
+        setSelectedEvent(null); 
+        setSelectedDate(start); 
         setIsModalOpen(true);
     };
 
-    // Clicar em um evento existente (Editar/Ver)
-    const handleSelectEvent = (event) => {
-        setSelectedEvent(event.resource); 
-        setIsModalOpen(true);
+    // Clicar em um evento existente (Editar)
+    const handleSelectEvent = async (event) => {
+        try {
+            // Busca os dados COMPLETOS pelo ID (corrige veículo undefined e serviços vazios)
+            const response = await getAppointmentById(event.id);
+            const fullData = response.data;
+            
+            // Tratamento para montar o nome do veículo corretamente se necessário
+            if (fullData.veic_modelo && fullData.veic_placa) {
+                 fullData.veiculoLabel = `${fullData.veic_modelo} - ${fullData.veic_placa}`;
+            }
+            
+            setSelectedEvent(fullData); 
+            setIsModalOpen(true);
+
+        } catch (error) {
+            console.error("Erro ao buscar detalhes:", error);
+            Swal.fire("Erro", "Não foi possível carregar os detalhes do agendamento.", "error");
+        }
     };
 
-    // 4. Salvar Formulário (Com tratamento de erro inteligente)
+    // 4. Salvar Formulário (Create/Update)
     const handleSave = async (formData) => {
         try {
+            // CORREÇÃO: Converte lista de objetos de serviços para lista de IDs
+            // Isso evita o erro 400/500 no backend
+            const payload = {
+                ...formData,
+                services: formData.services?.map(s => s.serv_id || s) || []
+            };
+
             if (selectedEvent) {
-                // Atualizar
-                await updateAppointment(selectedEvent.agend_id, formData);
+                await updateAppointment(selectedEvent.agend_id, payload);
                 Swal.fire({
-                    icon: 'success',
-                    title: 'Atualizado!',
-                    text: 'Agendamento atualizado com sucesso.',
-                    timer: 1500,
-                    showConfirmButton: false
+                    icon: 'success', title: 'Atualizado!', text: 'Agendamento atualizado com sucesso.',
+                    timer: 1500, showConfirmButton: false
                 });
             } else {
-                // Criar
-                await createAppointment(formData);
+                await createAppointment(payload);
                 Swal.fire({
-                    icon: 'success',
-                    title: 'Agendado!',
-                    text: 'Novo agendamento criado com sucesso.',
-                    timer: 1500,
-                    showConfirmButton: false
+                    icon: 'success', title: 'Agendado!', text: 'Novo agendamento criado com sucesso.',
+                    timer: 1500, showConfirmButton: false
                 });
             }
             setIsModalOpen(false);
             fetchSchedule(); // Recarrega calendário
         } catch (error) {
             console.error(error);
-            
-            // Tratamento específico para mensagem do Backend
             const errorMsg = error.response?.data?.message || 'Ocorreu um erro inesperado.';
-            
-            // Se for Status 400 (Bad Request), é Regra de Negócio -> Aviso Amarelo
-            // Se for 500 ou outro, é Erro Técnico -> Erro Vermelho
             const isBusinessRule = error.response?.status === 400;
 
             Swal.fire({
@@ -143,18 +155,47 @@ export default function ScheduleClient() {
                 title: isBusinessRule ? 'Atenção!' : 'Erro no Servidor',
                 text: errorMsg,
                 confirmButtonColor: isBusinessRule ? '#f59e0b' : '#ef4444',
-                confirmButtonText: isBusinessRule ? 'Entendi, vou corrigir' : 'Fechar'
             });
+        }
+    };
+
+    // 5. Cancelar Agendamento (Botão Vermelho)
+    const handleCancelEvent = async () => {
+        if (!selectedEvent) return;
+
+        const result = await Swal.fire({
+            title: 'Cancelar Agendamento?',
+            text: `Tem certeza que deseja cancelar este agendamento?`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#ef4444',
+            cancelButtonColor: '#6b7280',
+            confirmButtonText: 'Sim, cancelar',
+            cancelButtonText: 'Não, manter'
+        });
+
+        if (result.isConfirmed) {
+            try {
+                await cancelAppointment(selectedEvent.agend_id);
+                await Swal.fire({
+                    icon: 'success', title: 'Cancelado!', text: 'Agendamento cancelado com sucesso.',
+                    timer: 1500, showConfirmButton: false
+                });
+                setIsModalOpen(false);
+                fetchSchedule();
+            } catch (error) {
+                console.error(error);
+                Swal.fire('Erro', 'Não foi possível cancelar o agendamento.', 'error');
+            }
         }
     };
 
     // Preparar dados iniciais para o Form
     const getInitialData = () => {
         if (selectedEvent) {
-            return selectedEvent; // Dados do evento clicado
+            return selectedEvent; // Objeto completo vindo do getAppointmentById
         }
         if (selectedDate) {
-            // Se clicou numa data vazia, pré-preenche a data
             return {
                 agend_data: format(selectedDate, 'yyyy-MM-dd'),
                 agend_horario: format(selectedDate, 'HH:mm'),
@@ -163,6 +204,20 @@ export default function ScheduleClient() {
         }
         return null;
     };
+
+    // --- NOVA CONFIGURAÇÃO DE HORÁRIOS VISÍVEIS ---
+    const { minTime, maxTime } = useMemo(() => {
+        // Criamos uma data base (hoje) e setamos as horas
+        const base = new Date();
+        
+        // Define o início da visualização: 07:00
+        const min = new Date(base.getFullYear(), base.getMonth(), base.getDate(), 7, 0, 0);
+        
+        // Define o fim da visualização: 18:00 (O calendário mostra até o final dessa hora)
+        const max = new Date(base.getFullYear(), base.getMonth(), base.getDate(), 18, 0, 0);
+
+        return { minTime: min, maxTime: max };
+    }, []);
 
     return (
         <div className={styles.wrapper}>
@@ -181,10 +236,11 @@ export default function ScheduleClient() {
                     selectable
                     defaultView="month"
                     views={['month', 'week', 'day', 'agenda']}
+                    min={minTime} // Começa a mostrar as 07:00
+                    max={maxTime} // Termina de mostrar as 18:00
                 />
             </div>
 
-            {/* Modal com o Formulário */}
             <ModalCalendar 
                 isOpen={isModalOpen} 
                 onClose={() => setIsModalOpen(false)}
@@ -195,6 +251,7 @@ export default function ScheduleClient() {
                     mode={selectedEvent ? 'edit' : 'create'}
                     onCancel={() => setIsModalOpen(false)}
                     saveFunction={handleSave}
+                    onCancelAppointment={handleCancelEvent} // Passando a nova função
                 />
             </ModalCalendar>
         </div>
