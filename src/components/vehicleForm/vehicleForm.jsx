@@ -22,9 +22,9 @@ export default function VehicleForm({ onSuccess, onCancel, saveFunction, initial
   const getInitialState = () => {
     // Valores padrão
     const defaults = {
-      categoryId: '',
-      brandId: '',
-      modelId: '',        
+      cat_id: '',
+      mar_id: '',
+      mod_id: '',        
       veic_placa: '',       
       veic_ano: '',         
       veic_cor: '',         
@@ -37,9 +37,9 @@ export default function VehicleForm({ onSuccess, onCancel, saveFunction, initial
 
     // Se tiver initialData (Edição), preenche
     return {
-      categoryId: initialData.categoryId || '', // Se o back não mandar isso direto, talvez precise buscar a partir do modelo
-      brandId: initialData.brandId || '',
-      modelId: initialData.mod_id || initialData.modelId || '',
+      cat_id: initialData.cat_id || '', // Se o back não mandar isso direto, talvez precise buscar a partir do modelo
+      mar_id: initialData.mar_id || '',
+      mod_id: initialData.mod_id || '',
       veic_placa: initialData.veic_placa || '',
       veic_ano: initialData.veic_ano || '',
       veic_cor: initialData.veic_cor || '',
@@ -53,10 +53,9 @@ export default function VehicleForm({ onSuccess, onCancel, saveFunction, initial
 
   // Hooks para carregar os selects em cascata
   const { categories } = useCategories();
-  const { brands, loading: loadingBrands } = useBrands(formData.categoryId);
-  const { models, loading: loadingModels } = useModels(formData.categoryId, formData.brandId);
+  const { brands, loading: loadingBrands } = useBrands(formData.cat_id);
+  const { models, loading: loadingModels } = useModels(formData.cat_id, formData.mar_id);
 
-  console.log("Retorno do useModels:", models);
 
   useEffect(() => {
     setIsEditable(mode === 'edit');
@@ -69,8 +68,8 @@ export default function VehicleForm({ onSuccess, onCancel, saveFunction, initial
     setFormData((prev) => {
       const newData = { ...prev, [name]: value };
       // Limpa os filhos se o pai mudar
-      if (name === 'categoryId') { newData.brandId = ""; newData.modelId = ""; }
-      if (name === 'brandId') { newData.modelId = ""; }
+      if (name === 'cat_id') { newData.mar_id = ""; newData.mod_id = ""; }
+      if (name === 'mar_id') { newData.mod_id = ""; }
       return newData;
     });
 
@@ -87,11 +86,32 @@ export default function VehicleForm({ onSuccess, onCancel, saveFunction, initial
 
   const validateForm = () => {
     const newErrors = {};
-    if (!formData.categoryId) newErrors.categoryId = "Selecione uma categoria";
-    if (!formData.brandId) newErrors.brandId = "Selecione uma marca";
-    if (!formData.modelId) newErrors.modelId = "Selecione um modelo";
+
+// 1. Calcula o limite de ano
+    const currentYear = new Date().getFullYear();
+    const maxYear = currentYear + 1;
+    const minYear = 1900; // Opcional: para evitar anos como "0" ou "1"
+
+
+    if (!formData.cat_id) newErrors.cat_id = "Selecione uma categoria";
+    if (!formData.mar_id) newErrors.mar_id = "Selecione uma marca";
+    if (!formData.mod_id) newErrors.mod_id = "Selecione um modelo";
     if (!formData.veic_placa) newErrors.veic_placa = "Informe a placa"; // Corrigido nome da chave
     if (!formData.veic_ano) newErrors.veic_ano = "Informe o ano";
+
+
+// 2. Lógica de validação do Ano
+    if (!formData.veic_ano) {
+      newErrors.veic_ano = "Informe o ano";
+    } else {
+      const anoDigitado = Number(formData.veic_ano);
+      
+      if (anoDigitado > maxYear) {
+        newErrors.veic_ano = `Máximo permitido: ${maxYear}`;
+      } else if (anoDigitado < minYear) {
+        newErrors.veic_ano = `Ano inválido`;
+      }
+    }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -105,7 +125,7 @@ export default function VehicleForm({ onSuccess, onCancel, saveFunction, initial
     try {
       // Prepara payload para o Backend
       const payload = {
-        mod_id: formData.modelId,
+        mod_id: formData.mod_id,
         veic_placa: formData.veic_placa,
         veic_ano: Number(formData.veic_ano),
         veic_cor: formData.veic_cor,
@@ -183,11 +203,12 @@ export default function VehicleForm({ onSuccess, onCancel, saveFunction, initial
 
       <div className={styles.inputGroup}>
         <SelectRegister
-          name="categoryId"
+          name="cat_id"
           label="Categoria"
-          value={formData.categoryId}
+          value={formData.cat_id}
           onChange={handleChange}
-          disabled={!isEditable}
+          // disabled={!isEditable}
+          disabled={!isEditable || !!initialData}
           options={categories?.data?.map(cat => ({ value: cat.cat_id, label: cat.cat_nome })) || []}
         />
         <ErrorMessage message={errors.categoryId} />
@@ -195,26 +216,30 @@ export default function VehicleForm({ onSuccess, onCancel, saveFunction, initial
 
       <div className={styles.inputGroup}>
         <SelectRegister
-          name="brandId"
+          name="mar_id"
           label={loadingBrands ? "Carregando..." : "Marca"}
-          value={formData.brandId}
+          value={formData.mar_id}
           onChange={handleChange}
-          disabled={!isEditable || !formData.categoryId}
-          options={toOptions(brands, 'mar_id', 'mar_nome')}
+          // disabled={!isEditable || !formData.cat_id}
+          disabled={!isEditable || !!initialData || !formData.cat_id}
+          // options={toOptions(brands, 'mar_id', 'mar_nome')}
+          options={loadingBrands ? [{ value: "", label: "Carregando marcas..." }] : toOptions(brands, 'mar_id', 'mar_nome')}
         />
-        <ErrorMessage message={errors.brandId} />
+        <ErrorMessage message={errors.mar_id} />
       </div>
 
       <div className={styles.inputGroup}>
         <SelectRegister
-          name="modelId"
+          name="mod_id"
           label={loadingModels ? "Carregando..." : "Modelo"}
-          value={formData.modelId}
+          value={formData.mod_id}
           onChange={handleChange}
-          disabled={!isEditable || !formData.brandId}
-          options={toOptions(models, 'mod_id', 'mod_nome')}
+          disabled={!isEditable || (!formData.mar_id && !initialData)}
+        
+
+          options={toOptions(models?.dados || [], 'mod_id', 'mod_nome')}
         />
-        <ErrorMessage message={errors.modelId} />
+        <ErrorMessage message={errors.mod_id} />
       </div>
 
       <div className={styles.inputGroup}>
@@ -242,6 +267,8 @@ export default function VehicleForm({ onSuccess, onCancel, saveFunction, initial
           value={formData.veic_ano}
           onChange={handleChange}
           disabled={!isEditable}
+          min="1900" 
+          max={new Date().getFullYear() + 1}
         />
         <ErrorMessage message={errors.veic_ano} />
       </div>
