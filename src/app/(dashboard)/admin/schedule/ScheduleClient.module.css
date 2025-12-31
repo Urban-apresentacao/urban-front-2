@@ -73,10 +73,8 @@
 /* Deixa o texto da hora mais escuro e visível */
 .calendarContainer :global(.rbc-time-gutter .rbc-timeslot-group),
 .calendarContainer :global(.rbc-time-gutter .rbc-label) {
-    color: #374151 !important;
-    /* Cinza Escuro */
+    color: #eff2f7 !important;
     font-weight: 600;
-    /* Negrito */
     font-size: 0.85rem;
 }
 
@@ -113,6 +111,21 @@
     border: 3px solid #ffffff; /* Borda grossa branca cria efeito de que a barra é mais fina */
 }
 
+.calendarContainer :global(.rbc-agenda-date-cell){
+    background-color: white;
+    color: black;
+    font-weight: bold;
+}
+
+.calendarContainer :global(.rbc-events-container) {
+    margin: 0;
+}
+
+.calendarContainer :global(.rbc-event){
+    border-radius: 0;
+}
+
+
 /* Ao passar o mouse, ela fica um pouquinho mais visível */
 .calendarContainer :global(.rbc-time-content)::-webkit-scrollbar-thumb:hover {
     background-color: #d1d5db; /* Cinza médio (Gray-300) */
@@ -124,13 +137,9 @@
 .calendarContainer :global(.rbc-date-cell > a),
 .calendarContainer :global(.rbc-date-cell > button) {
     color: #374151 !important;
-    /* Cor Escura (Gray-700) */
     font-weight: 700 !important;
-    /* Negrito */
     font-size: 0.95rem;
-    /* Levemente maior */
     opacity: 1 !important;
-    /* Remove transparência original */
     text-decoration: none;
     padding: 4px 8px;
 }
@@ -139,7 +148,6 @@
 .calendarContainer :global(.rbc-off-range .rbc-date-cell),
 .calendarContainer :global(.rbc-off-range .rbc-date-cell > a) {
     color: #9ca3af !important;
-    /* Gray-400 */
     font-weight: 400 !important;
 }
 
@@ -156,6 +164,42 @@
 }
 
 .calendarContainer :global(.rbc-show-more:hover) {
-    color: #2563eb; /* Fica azul apenas ao passar o mouse */
+    color: #2563eb;
     text-decoration: none;
+}
+
+/* 1. Ajuste na Tabela para aceitar espaçamentos melhores */
+.calendarContainer :global(.rbc-agenda-view table) {
+    border-collapse: separate; 
+    border-spacing: 0;
+    /* Remove a borda padrão externa se quiser um visual mais limpo */
+    border: none; 
+}
+
+/* 2. O PULO DO GATO: Separador de Dias */
+/* Seleciona qualquer linha (tr) que POSSUA (.has) a célula de data (.rbc-agenda-date-cell).
+   Isso afeta apenas a PRIMEIRA linha de cada novo dia. */
+.calendarContainer :global(.rbc-agenda-view tbody tr:has(.rbc-agenda-date-cell) td) {
+    /* Cria uma "borda" invisível (branca) no topo para simular margem */
+    border-top: 20px solid #ffffff; 
+    
+    /* Opcional: Adiciona uma borda sutil cinza acima do espaço branco para delimitar */
+    position: relative;
+}
+
+/* 3. Limpeza visual das células */
+.calendarContainer :global(.rbc-agenda-view td) {
+    border-left: none;  /* Remove bordas verticais para ficar mais "clean" */
+    border-right: none;
+    padding: 10px;      /* Mais respiro interno */
+    vertical-align: middle;
+}
+
+/* 4. Destaque para a Data (Coluna Esquerda) */
+.calendarContainer :global(.rbc-agenda-date-cell) {
+    font-weight: bold;
+    color: #374151;
+    text-transform: capitalize; /* "terça dez 30" -> "Terça Dez 30" */
+    background-color: #f9fafb;  /* Fundo cinza claro na data */
+    border-radius: 8px 0 0 8px; /* Arredonda canto esquerdo */
 }
