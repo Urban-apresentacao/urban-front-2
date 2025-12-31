@@ -18,9 +18,9 @@ export default function ServicesClient() {
     fetchServices, 
     page, 
     totalPages,
-    sortColumn,      // Coluna atual
-    sortDirection,   // Direção atual (ASC/DESC)
-    handleSort       // Função para trocar a ordem
+    sortColumn,
+    sortDirection,
+    handleSort
   } = useServices();
   
   // Estados Locais (Busca e Filtro)
@@ -214,7 +214,7 @@ export default function ServicesClient() {
                     value={statusFilter}
                     onChange={handleStatusChange}
                 >
-                    <option value="all">Status: Todos</option>
+                    <option value="all">Todos</option>
                     <option value="active">Ativos</option>
                     <option value="inactive">Inativos</option>
                 </select>
@@ -228,14 +228,13 @@ export default function ServicesClient() {
       </div>
 
       <div className={styles.tableContainer}>
-        {/* Passamos as props de ordenação para a Tabela */}
         <Table 
             columns={columns} 
             data={services} 
             isLoading={loading}
-            onSort={handleSort}           // Função de clique
-            sortColumn={sortColumn}       // Coluna atual
-            sortDirection={sortDirection} // Direção atual
+            onSort={handleSort}
+            sortColumn={sortColumn}
+            sortDirection={sortDirection}
         />
       </div>
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react"; // Adicionado useCallback
+import { useState, useEffect, useRef } from "react";
 import { useVehicles } from "@/hooks/useVehicles";
 import { Table } from "@/components/ui/table/table";
 import Link from "next/link";
@@ -12,48 +12,65 @@ import Swal from "sweetalert2";
 import styles from "./VehiclesClient.module.css";
 
 export default function VehiclesClient() {
-    const { vehicles, loading, fetchVehicles, page, totalPages } = useVehicles();
+    const { 
+        vehicles, 
+        loading, 
+        fetchVehicles, 
+        page, 
+        totalPages,
+        sortColumn, 
+        sortDirection, 
+        handleSort 
+    } = useVehicles();
+    
     const [inputValue, setInputValue] = useState("");
+    const [statusFilter, setStatusFilter] = useState("all"); 
 
-    const [statusFilter, setStatusFilter] = useState("all"); // all, active, 
-
-    // Ref para impedir que a busca da digitação rode na montagem inicial   
     const isMounted = useRef(false);
 
-    // --- EFEITO 1: Roda APENAS UMA VEZ ao abrir a tela (Mount) ---
+    // 1. BUSCA INICIAL (Roda apenas 1 vez na montagem da tela)
+    // O array vazio [] garante que não repita desnecessariamente
     useEffect(() => {
-        fetchVehicles("", 1, statusFilter);
-    }, []);
+        fetchVehicles("", 1, "all", "veic_id", "DESC");
+    }, []); 
 
-    // --- EFEITO 2: Roda APENAS quando o input muda (Update) ---
+    // 2. EFEITO INSTANTÂNEO (Filtro de Status e Ordenação)
+    // Quando você clica no header ou muda o select, atualiza na hora sem delay
     useEffect(() => {
-        // Se o componente ainda não montou completamente, não faz nada
+        if (!isMounted.current) return;
+        
+        // Passamos o inputValue atual para não perder a busca se houver
+        fetchVehicles(inputValue, 1, statusFilter, sortColumn, sortDirection);
+        
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [statusFilter, sortColumn, sortDirection]); // Removido inputValue daqui para não conflitar
+
+    // 3. EFEITO DEBOUNCE (Apenas para Digitação no Input)
+    // Só espera 500ms se for texto sendo digitado, para não travar a UI
+    useEffect(() => {
         if (!isMounted.current) {
             isMounted.current = true;
             return;
         }
-
-        // Debounce: Espera o usuário parar de digitar
+        
         const delayDebounceFn = setTimeout(() => {
-            fetchVehicles(inputValue, 1, statusFilter);
+            fetchVehicles(inputValue, 1, statusFilter, sortColumn, sortDirection);
         }, 500);
 
         return () => clearTimeout(delayDebounceFn);
-    }, [inputValue, statusFilter, fetchVehicles]);
+    }, [inputValue]); // Só monitora o input
+
+    // --- HANDLERS ---
 
     const handlePageChange = (newPage) => {
-        fetchVehicles(inputValue, newPage, statusFilter);
+        fetchVehicles(inputValue, newPage, statusFilter, sortColumn, sortDirection);
     };
-
 
     const handleStatusChange = (e) => {
         setStatusFilter(e.target.value);
     };
 
-
-    console.log("statusFilter:", statusFilter);
-
-    // --- FUNÇÕES DE STATUS (Mantidas iguais) ---
+    // --- FUNÇÕES DE STATUS (Inativar/Reativar) ---
     const handleArchiveVehicle = async (id, nome) => {
         const result = await Swal.fire({
             title: 'Ocultar Veículo?',
@@ -70,7 +87,7 @@ export default function VehiclesClient() {
             try {
                 await toggleVehicleStatus(id, false);
                 await Swal.fire('Ocultado!', 'Veículo desativado.', 'success');
-                fetchVehicles(inputValue, page, statusFilter);
+                fetchVehicles(inputValue, page, statusFilter, sortColumn, sortDirection);
             } catch (error) {
                 console.error(error);
                 Swal.fire('Erro', 'Erro ao ocultar.', 'error');
@@ -94,7 +111,7 @@ export default function VehiclesClient() {
             try {
                 await toggleVehicleStatus(id, true);
                 await Swal.fire('Ativado!', 'Veículo reativado.', 'success');
-                fetchVehicles(inputValue, page, statusFilter);
+                fetchVehicles(inputValue, page, statusFilter, sortColumn, sortDirection);
             } catch (error) {
                 console.error(error);
                 Swal.fire('Erro', 'Erro ao reativar.', 'error');
@@ -102,45 +119,34 @@ export default function VehiclesClient() {
         }
     };
 
+    // --- DEFINIÇÃO DAS COLUNAS ---
     const columns = [
         { header: "ID", accessor: "veic_id" },
-        { header: "Modelo", accessor: "modelo" },
-        { header: "Marca", accessor: "marca" },
+        { header: "Modelo", accessor: "modelo" }, // Backend mapeia para 'mo.mod_nome'
+        { header: "Marca", accessor: "marca" },   // Backend mapeia para 'm.mar_nome'
         { header: "Placa", accessor: "veic_placa" },
         {
             header: "Proprietários",
-            accessor: "proprietarios",
+            accessor: "proprietarios", // Não ordenável via backend (complexo)
             render: (vehicle) => {
-                // Caso 1: Sem proprietário
-                if (!vehicle.proprietarios) {
-                    return <span className={styles.emptyText}>-</span>;
-                }
-
+                if (!vehicle.proprietarios) return <span className={styles.emptyText}>-</span>;
+                
                 const ownersList = vehicle.proprietarios.split(',').map(name => name.trim());
-
-                // Caso 2: Apenas 1 proprietário
+                
                 if (ownersList.length === 1) {
-                    // Dica: Adicionei um estilo simples aqui para manter o padrão
                     return <span style={{ fontSize: '0.875rem', color: '#374151' }}>{ownersList[0]}</span>;
                 }
-
-                // Caso 3: Múltiplos (Dropdown Estilizado)
+                
                 return (
                     <div className={styles.selectContainer}>
                         <select className={styles.selectNative} defaultValue="">
-                            {/* O valor disabled vazio serve como placeholder */}
                             <option value="" disabled style={{ color: '#9ca3af' }}>
                                 {ownersList.length} Proprietários
                             </option>
-
                             {ownersList.map((owner, index) => (
-                                <option key={index} value={owner}>
-                                    {owner}
-                                </option>
+                                <option key={index} value={owner}>{owner}</option>
                             ))}
                         </select>
-
-                        {/* O ícone fica flutuando por cima do select via CSS absolute */}
                         <ChevronDown size={14} className={styles.selectIcon} />
                     </div>
                 );
@@ -168,31 +174,33 @@ export default function VehiclesClient() {
             accessor: "actions",
             render: (vehicle) => (
                 <div style={{ display: 'flex', gap: '10px' }}>
-                    <Link
-                        href={`/admin/vehicles/${vehicle.veic_id}?mode=view`}
-                        style={{ display: 'flex', alignItems: 'center', gap: '5px', color: '#2563eb', textDecoration: 'none' }}
+                    <Link 
+                        href={`/admin/vehicles/${vehicle.veic_id}?mode=view`} 
+                        style={{ display: 'flex', alignItems: 'center', color: '#2563eb' }}
+                        title="Visualizar"
                     >
                         <Eye size={16} />
                     </Link>
-                    <Link
-                        href={`/admin/vehicles/${vehicle.veic_id}?mode=edit`}
-                        style={{ display: 'flex', alignItems: 'center', gap: '5px', color: '#2563eb', textDecoration: 'none' }}
+                    <Link 
+                        href={`/admin/vehicles/${vehicle.veic_id}?mode=edit`} 
+                        style={{ display: 'flex', alignItems: 'center', color: '#2563eb' }}
+                        title="Editar"
                     >
                         <Edit size={16} />
                     </Link>
                     {vehicle.veic_situacao ? (
-                        <button
-                            onClick={() => handleArchiveVehicle(vehicle.veic_id, vehicle.veic_placa)}
-                            style={{ display: 'flex', alignItems: 'center', gap: '5px', color: '#ef4444', background: 'none', border: 'none', cursor: 'pointer' }}
-                            title="Ocultar (Inativar)"
+                        <button 
+                            onClick={() => handleArchiveVehicle(vehicle.veic_id, vehicle.veic_placa)} 
+                            style={{ display: 'flex', alignItems: 'center', color: '#ef4444', background: 'none', border: 'none', cursor: 'pointer' }}
+                            title="Ocultar"
                         >
                             <Trash2 size={16} />
                         </button>
                     ) : (
-                        <button
-                            onClick={() => handleReactivateVehicle(vehicle.veic_id, vehicle.veic_placa)}
-                            style={{ display: 'flex', alignItems: 'center', gap: '5px', color: '#16a34a', background: 'none', border: 'none', cursor: 'pointer' }}
-                            title="Reativar Veículo"
+                        <button 
+                            onClick={() => handleReactivateVehicle(vehicle.veic_id, vehicle.veic_placa)} 
+                            style={{ display: 'flex', alignItems: 'center', color: '#16a34a', background: 'none', border: 'none', cursor: 'pointer' }}
+                            title="Reativar"
                         >
                             <RotateCcw size={16} />
                         </button>
@@ -204,7 +212,6 @@ export default function VehiclesClient() {
 
     return (
         <div className={styles.wrapper}>
-
             <div className={styles.actionsBar}>
                 <div className={styles.filtersGroup}>
                     <div className={styles.searchWrapper}>
@@ -217,12 +224,11 @@ export default function VehiclesClient() {
                             onChange={(e) => setInputValue(e.target.value)}
                         />
                     </div>
-
                     <div className={styles.selectWrapper}>
                         <Filter size={16} className={styles.filterIcon} />
-                        <select
-                            className={styles.statusSelect}
-                            value={statusFilter}
+                        <select 
+                            className={styles.statusSelect} 
+                            value={statusFilter} 
                             onChange={handleStatusChange}
                         >
                             <option value="all">Todos</option>
@@ -231,30 +237,30 @@ export default function VehiclesClient() {
                         </select>
                     </div>
                 </div>
-
                 <Link href="/admin/vehicles/register" className={styles.newButton}>
                     <Plus size={20} />
                     <span>Novo Veículo</span>
                 </Link>
             </div>
 
-
             <div className={styles.tableContainer}>
                 <Table
                     columns={columns}
                     data={vehicles}
                     isLoading={loading}
+                    onSort={handleSort}
+                    sortColumn={sortColumn}
+                    sortDirection={sortDirection}
                 />
             </div>
 
             {!loading && vehicles.length > 0 && (
-                <Pagination
-                    currentPage={page}
-                    totalPages={totalPages}
-                    onPageChange={handlePageChange}
+                <Pagination 
+                    currentPage={page} 
+                    totalPages={totalPages} 
+                    onPageChange={handlePageChange} 
                 />
             )}
-
         </div>
-    )
+    );
 }

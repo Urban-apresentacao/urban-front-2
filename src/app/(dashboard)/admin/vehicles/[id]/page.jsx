@@ -5,6 +5,8 @@ import { useParams, useRouter, useSearchParams } from "next/navigation";
 import VehicleForm from "@/components/vehicleForm/vehicleForm";
 import { getVehicleById, updateVehicle } from "@/services/vehicles.service";
 import Swal from "sweetalert2";
+import Link from "next/link";
+import { ChevronLeft } from "lucide-react";
 import styles from "../register/page.module.css";
 
 export default function EditVehiclePage() {
@@ -71,13 +73,13 @@ export default function EditVehiclePage() {
 
             // Redireciona após o usuário clicar em OK no alerta
             router.push("/admin/vehicles");
-            
+
             // Retorna true para o componente filho saber que deu certo (parar loading, etc)
             return { success: true };
 
         } catch (error) {
             console.error("Erro ao atualizar veículo:", error);
-            
+
             Swal.fire({
                 title: "Erro",
                 text: error.message || "Não foi possível atualizar o veículo.",
@@ -104,20 +106,24 @@ export default function EditVehiclePage() {
 
     return (
         <div className={styles?.container || ""}>
-            <h2 style={{ marginBottom: '20px', color: '#333' }}>
-                {mode === 'view' ? 'Visualizar Veículo' : 'Editar Veículo'}
-            </h2>
-            
+            <div className={styles.header}>
+                <Link href="/admin/vehicles" className={styles.backLink}>
+                    <ChevronLeft size={20} /> Voltar
+                </Link>
+                <h2 style={{ marginBottom: '20px', color: '#333' }}>
+                    {mode === 'view' ? 'Visualizar Veículo' : 'Editar Veículo'}
+                </h2>
+            </div>
             {vehicleData && (
                 <VehicleForm
                     initialData={vehicleData}
                     mode={mode}
                     // IMPORTANTE: O nome da prop deve ser saveFunction para bater com o componente filho
-                    saveFunction={handleUpdateVehicle} 
+                    saveFunction={handleUpdateVehicle}
                     onCancel={handleCancel}
                     // onSuccess é chamado pelo filho. Como já redirecionamos no handleUpdateVehicle,
                     // podemos passar vazio ou mover o redirect para cá.
-                    onSuccess={() => {}} 
+                    onSuccess={() => { }}
                 />
             )}
         </div>

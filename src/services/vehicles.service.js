@@ -1,19 +1,16 @@
 import api from "@/services/api";
 
-// LISTAR (com paginação e busca)
-
-// Atenção: Adicionei 'status' explicitamente no objeto params
-export async function getAllVehicles(termo = "", page = 1, status = "all") {
+// LISTAR (com paginação, busca e ordenação)
+export async function getAllVehicles(termo = "", page = 1, status = "all", orderBy = "veic_id", orderDirection = "DESC") {
     try {
-        // Log para garantir que o service recebeu o pedido do componente
-        console.log("📡 SERVICE FRONTEND CHAMADO:", { termo, page, status });
-
         const response = await api.get('/vehicles', {
             params: { 
                 search: termo,
                 page, 
                 limit: 10,
-                status: status // <--- GARANTA QUE ISSO ESTÁ AQUI
+                status: status,
+                orderBy,
+                orderDirection  
             }
         });
         return response.data;

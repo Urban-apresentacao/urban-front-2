@@ -3,7 +3,8 @@
 import { useAppointments } from "@/hooks/useAppointments";
 import { Table } from "@/components/ui/table/table";
 import Link from "next/link";
-import { Edit, Eye, Search, Ban } from "lucide-react";
+// Adicionei Calendar e Plus aos imports
+import { Edit, Eye, Search, Ban, Calendar, Filter, Plus } from "lucide-react"; 
 import { useState, useEffect, useRef } from "react";
 import { Pagination } from "@/components/ui/pagination/pagination";
 import Swal from "sweetalert2";
@@ -19,14 +20,8 @@ const STATUS_MAP = {
 
 export default function AppointmentsClient() {
   const { 
-    appointments,
-    loading,
-    fetchAppointments,
-    page,
-    totalPages,
-    sortColumn,
-    sortDirection,
-    handleSort
+    appointments, loading, fetchAppointments, page, totalPages,
+    sortColumn, sortDirection, handleSort
   } = useAppointments();
   
   const [filters, setFilters] = useState({
@@ -37,13 +32,11 @@ export default function AppointmentsClient() {
 
   const isMounted = useRef(false);
 
-  // Busca inicial
   useEffect(() => {
     fetchAppointments(filters, 1, "agend_data", "DESC");
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fetchAppointments]); 
 
-  // Debounce para TUDO (Filtros + Ordenação)
   useEffect(() => {
     if (!isMounted.current) {
       isMounted.current = true;
@@ -102,7 +95,7 @@ export default function AppointmentsClient() {
     },
     { 
       header: "Data", 
-      accessor: "agend_data", // Necessário accessor para o handleSort funcionar
+      accessor: "agend_data", 
       render: (item) => new Date(item.agend_data).toLocaleDateString('pt-BR')
     },
     { 
@@ -112,7 +105,7 @@ export default function AppointmentsClient() {
     },
     { 
       header: "Serviço(s)", 
-      accessor: "lista_servicos", // Não ordenável no Backend
+      accessor: "lista_servicos", 
       render: (item) => {
           const servicos = item.lista_servicos || "Nenhum";
           return (
@@ -132,11 +125,7 @@ export default function AppointmentsClient() {
           <span style={{
             backgroundColor: status.bg,
             color: status.color,
-            padding: '4px 8px',
-            borderRadius: '12px',
-            fontSize: '0.75rem',
-            fontWeight: 'bold',
-            whiteSpace: 'nowrap'
+            padding: '4px 8px', borderRadius: '12px', fontSize: '0.75rem', fontWeight: 'bold', whiteSpace: 'nowrap'
           }}>
             {status.label}
           </span>
@@ -148,7 +137,7 @@ export default function AppointmentsClient() {
       accessor: "actions",
       render: (item) => (
         <div style={{ display: 'flex', gap: '10px' }}>
-          <Link href={`/admin/appointments/${item.agend_id}?mode=view`} title="Visualizar Detalhes" style={{ color: '#2563eb' }}>
+          <Link href={`/admin/appointments/${item.agend_id}?mode=view`} title="Visualizar" style={{ color: '#2563eb' }}>
             <Eye size={18} />
           </Link>
           
@@ -171,65 +160,68 @@ export default function AppointmentsClient() {
     <div className={styles.wrapper}>
       <div className={styles.actionsBar}>
         
-        {/* 1. Busca Texto */}
-        <div className={styles.searchWrapper}>
-          <Search size={20} className={styles.searchIcon} />
-          <input
-            name="search"
-            type="text"
-            placeholder="Buscar cliente ou placa..."
-            className={styles.searchInput}
-            value={filters.search}
-            onChange={handleFilterChange}
-          />
+        {/* GRUPO DE FILTROS (Busca + Selects) */}
+        <div className={styles.filtersGroup}>
+            
+            {/* 1. Busca Texto */}
+            <div className={styles.searchWrapper}>
+              <Search size={20} className={styles.searchIcon} />
+              <input
+                name="search"
+                type="text"
+                placeholder="Buscar cliente ou placa..."
+                className={styles.searchInput}
+                value={filters.search}
+                onChange={handleFilterChange}
+              />
+            </div>
+
+            {/* 2. Filtro Status (Agora colado na busca) */}
+            <div className={styles.selectWrapper}>
+                <Filter size={16} className={styles.filterIcon} />
+                <select 
+                    name="status" 
+                    className={styles.filterSelect}
+                    value={filters.status}
+                    onChange={handleFilterChange}
+                >
+                    <option value="">Todos</option>
+                    <option value="1">Pendente</option>
+                    <option value="2">Em Andamento</option>
+                    <option value="3">Concluído</option>
+                    <option value="0">Cancelado</option>
+                </select>
+            </div>
+
+            {/* 3. Filtro Data (Logo após status) */}
+            <div className={styles.dateWrapper}>
+                <Calendar size={16} className={styles.filterIcon} />
+                <input 
+                    name="date"
+                    type="date" 
+                    className={styles.filterInput}
+                    value={filters.date}
+                    onChange={handleFilterChange}
+                    title="Filtrar por data"
+                />
+            </div>
+
         </div>
 
-        {/* 2. Filtro Data */}
-        <div className={styles.dateWrapper}>
-            <input 
-                name="date"
-                type="date" 
-                className={styles.filterInput}
-                value={filters.date}
-                onChange={handleFilterChange}
-                title="Filtrar por data"
-            />
-        </div>
-
-        {/* 3. Filtro Status */}
-        <div className={styles.statusWrapper}>
-            <select 
-                name="status" 
-                className={styles.filterSelect}
-                value={filters.status}
-                onChange={handleFilterChange}
-            >
-                <option value="">Status: Todos</option>
-                <option value="1">Pendente</option>
-                <option value="2">Em Andamento</option>
-                <option value="3">Concluído</option>
-                <option value="0">Cancelado</option>
-            </select>
-        </div>
+        {/* BOTÃO DE NOVO AGENDAMENTO (Direita) */}
+        <Link href="/admin/schedule" className={styles.newButton}>
+          <Plus size={20} />
+          <span>Novo Agendamento</span>
+        </Link>
 
       </div>
 
       <div className={styles.tableContainer}>
-        <Table 
-            columns={columns} 
-            data={appointments} 
-            isLoading={loading}
-            onSort={handleSort}           // Função
-            sortColumn={sortColumn}       // Estado
-            sortDirection={sortDirection} // Estado
-        />
+        <Table columns={columns} data={appointments} isLoading={loading} onSort={handleSort} sortColumn={sortColumn} sortDirection={sortDirection} />
       </div>
 
       {!loading && appointments.length > 0 && (
-        <Pagination
-          currentPage={page}
-          totalPages={totalPages} onPageChange={handlePageChange}
-        />
+        <Pagination currentPage={page} totalPages={totalPages} onPageChange={handlePageChange} />
       )}
     </div>
   );

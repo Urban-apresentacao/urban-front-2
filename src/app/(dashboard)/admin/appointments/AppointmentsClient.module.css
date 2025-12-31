@@ -6,81 +6,110 @@
   width: 100%;
 }
 
-/* --- BARRA DE FILTROS --- */
+/* --- BARRA DE AÇÕES (TOPO) --- */
 .actionsBar {
   display: flex;
+  justify-content: space-between; /* Filtros na Esquerda, Botão na Direita */
   align-items: center;
   gap: 1rem;
   width: 100%;
-  flex-wrap: wrap; 
+  flex-wrap: wrap; /* Permite quebrar linha no mobile */
 }
 
-/* --- WRAPPERS --- */
-
-/* AQUI ESTÁ A MUDANÇA PRINCIPAL: */
-.searchWrapper {
-  position: relative;
-  
-  /* 1. Define o tamanho padrão (igual Serviços) */
-  width: 100%;
-  max-width: 400px; 
-
-  /* 2. O Pulo do Gato: Empurra os vizinhos (Data/Status) para a direita */
-  margin-right: auto; 
+/* --- GRUPO DE FILTROS (Esquerda) --- */
+.filtersGroup {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex: 1; /* Ocupa o espaço disponível, empurrando o botão pra direita */
+  flex-wrap: wrap;
 }
 
-/* Data e Status com largura fixa */
+/* --- WRAPPERS (Posicionamento dos Ícones) --- */
+.searchWrapper, 
+.selectWrapper,
 .dateWrapper {
-  flex: 0 0 160px;
+  position: relative;
+  display: flex;
+  align-items: center;
 }
 
-.statusWrapper {
-  flex: 0 0 180px; 
+/* Tamanhos dos Inputs */
+.searchWrapper {
+  width: 320px; /* Largura fixa para busca */
 }
 
-/* Ícone da Lupa */
-.searchIcon {
+.selectWrapper {
+  width: 180px; /* Largura fixa para status */
+}
+
+.dateWrapper {
+  width: 160px; /* Largura fixa para data */
+}
+
+/* --- ÍCONES DENTRO DOS INPUTS --- */
+.searchIcon,
+.filterIcon {
   position: absolute;
   left: 12px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #9ca3af;
-  pointer-events: none;
+  color: #9ca3af; /* Cinza suave */
+  pointer-events: none; /* Clique atravessa o ícone */
   z-index: 10;
 }
 
-/* --- ESTILIZAÇÃO UNIFICADA (Igual Serviços) --- */
+/* --- ESTILIZAÇÃO UNIFICADA DOS INPUTS --- */
 .searchInput, 
 .filterInput, 
 .filterSelect {
   width: 100%;
-  height: 42px; 
+  height: 42px; /* Altura padrão para alinhar tudo */
   background-color: #fff;
-  color: #1f2937;
+  color: #1f2937; /* Texto escuro */
   border: 1px solid #e5e7eb;
   border-radius: 8px; 
   font-size: 0.875rem;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05); 
+  padding-left: 40px; /* Espaço para o ícone na esquerda */
+  padding-right: 12px;
   outline: none;
   transition: all 0.2s ease-in-out;
-  padding: 0 12px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05); 
+  appearance: none; /* Remove estilo padrão do navegador */
 }
 
-/* Ajuste para o input de busca (espaço para o ícone) */
-.searchInput {
-  padding-left: 40px; 
-}
-
+/* Placeholder */
 .searchInput::placeholder,
 .filterInput::placeholder { 
   color: #9ca3af; 
 }
 
+/* Foco */
 .searchInput:focus,
 .filterInput:focus,
 .filterSelect:focus {
-  border-color: #2563eb; 
+  border-color: #2563eb; /* Azul ao focar */
   box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1); 
+}
+
+/* --- BOTÃO NOVO (Direita) --- */
+.newButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #2563eb; /* Azul Principal */
+  color: white;
+  padding: 0 20px;
+  height: 42px; /* Mesma altura dos inputs */
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-decoration: none;
+  transition: background-color 0.2s;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  white-space: nowrap; /* Não quebra texto */
+}
+
+.newButton:hover {
+  background-color: #1d4ed8; /* Azul mais escuro */
 }
 
 /* --- CONTAINER DA TABELA --- */
@@ -90,23 +119,26 @@
   background-color: #fff; 
   border-radius: 8px;
   border: 1px solid #e5e7eb; 
-  overflow: hidden; 
+  overflow: hidden; /* Arredonda cantos da tabela */
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
-/* --- RESPONSIVIDADE --- */
+/* --- RESPONSIVIDADE (Mobile) --- */
 @media (max-width: 768px) {
   .actionsBar {
     flex-direction: column;
-    align-items: stretch; /* No mobile, volta a esticar tudo */
+    align-items: stretch;
   }
   
-  .searchWrapper {
-    max-width: 100%; /* No mobile, ocupa a tela toda */
-    margin-right: 0;
+  .filtersGroup {
+    flex-direction: column;
+    width: 100%;
   }
 
-  .dateWrapper, .statusWrapper {
-    flex: auto;
+  .searchWrapper, 
+  .selectWrapper, 
+  .dateWrapper,
+  .newButton {
+    width: 100%; /* No celular ocupa a largura toda */
   }
 }
