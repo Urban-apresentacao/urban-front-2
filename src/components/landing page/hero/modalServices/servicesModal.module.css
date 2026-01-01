@@ -1,0 +1,224 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6); /* Fundo escuro */
+  backdrop-filter: blur(5px); /* Desfoque moderno */
+  z-index: 2000; /* Bem alto para ficar acima de tudo */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.modal {
+  background: white;
+  width: 100%;
+  max-width: 800px; /* Modal larguinho */
+  border-radius: 16px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+  max-height: 90vh; /* Não passa da altura da tela */
+  overflow: hidden;
+  animation: slideUp 0.3s ease-out;
+}
+
+.header {
+  padding: 1.5rem 2rem;
+  border-bottom: 1px solid #f3f4f6;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  background-color: #ffffff;
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #111827;
+  margin: 0;
+}
+
+.subtitle {
+  color: #6b7280;
+  font-size: 0.9rem;
+  margin-top: 4px;
+}
+
+.closeBtn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #9ca3af;
+  padding: 4px;
+  transition: color 0.2s;
+}
+
+.closeBtn:hover {
+  color: #ef4444;
+}
+
+.body {
+  padding: 2rem;
+  overflow-y: auto; /* Scroll se tiver muitos serviços */
+  background-color: #f9fafb;
+}
+
+/* Grid de 2 colunas */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .grid {
+    grid-template-columns: 1fr 1fr; /* 2 colunas no PC */
+  }
+}
+
+/* Card do Serviço */
+.card {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.card:hover {
+  border-color: var(--primary-red);
+  box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.1);
+  transform: translateY(-2px);
+}
+
+.cardHeader {
+  margin-bottom: 0.5rem;
+}
+
+.serviceName {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0 0 4px 0;
+}
+
+.price {
+  font-size: 0.85rem;
+  color: var(--primary-red);
+  font-weight: 600;
+  background-color: #eff6ff;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.desc {
+  font-size: 0.9rem;
+  color: #4b5563;
+  line-height: 1.5;
+  margin-bottom: 1rem;
+}
+
+.detailsBtn {
+  background: none;
+  border: none;
+  color: var(--primary-red);
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0;
+  margin-top: auto; /* Empurra para baixo */
+}
+
+.detailsBtn:hover {
+  text-decoration: underline;
+}
+
+.footer {
+  padding: 1.5rem;
+  border-top: 1px solid #f3f4f6;
+  text-align: center;
+  background-color: white;
+}
+
+.ctaButton {
+  background-color: #ffff; /* Verde Zap */
+  color: #16a34a;
+  border: #16a34a 1px solid;
+  text-decoration: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 700;
+  transition: background 0.2s;
+  display: inline-flex; 
+  
+  /* 2. O SEGREDO: Alinha verticalmente exatamente no centro */
+  align-items: center; 
+  
+  /* 3. Alinha horizontalmente (caso o botão tenha largura fixa) */
+  justify-content: center; 
+  
+  /* Espacinho entre o ícone e o texto */
+  gap: 8px;
+}
+
+.ctaButton:hover {
+  background-color: #16a34a;
+  border: #16a34a 1px solid;
+  color: #ffff;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.body {
+  padding: 2rem;
+  overflow-y: auto;
+  background-color: #f9fafb;
+}
+
+/* Container de cada categoria */
+.categorySection {
+  margin-bottom: 2.5rem; /* Espaço entre uma categoria e outra */
+}
+
+/* Título bonito da categoria (ex: "Lavagem & Higienização") */
+.categoryTitle {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #111827;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #e5e7eb; /* Linha sutil embaixo do título */
+  display: inline-block; /* A linha acompanha o tamanho do texto */
+  padding-right: 2rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}

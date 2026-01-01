@@ -1,0 +1,229 @@
+.storeSection {
+  /* Degradê sutil */
+  background: linear-gradient(0deg, #ffffff 0%, #ffefef 100%);
+  
+  /* MUDANÇA: Aumentei de 6rem para 10rem (muito mais respiro vertical) */
+  padding: 6rem 0; 
+  
+  /* MUDANÇA: Aumentei de 75vh para 85vh (ocupa quase toda a tela) */
+  min-height: 85vh; 
+  
+  display: flex;
+  align-items: center;
+}
+
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+/* --- CABEÇALHO --- */
+.header {
+  text-align: center;
+  max-width: 700px;
+  margin: 0 auto 3rem auto;
+}
+
+.preTitle {
+  color: var(--primary-red);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 0.9rem;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.title {
+  font-size: 2.5rem;
+  color: #111827;
+  font-weight: 800;
+  line-height: 1.2;
+  margin-bottom: 1rem;
+}
+
+.highlight { color: var(--primary-red); }
+.subtitle { color: #6b7280; font-size: 1.1rem; line-height: 1.6; }
+
+/* --- GRID DE PRODUTOS (VITRINE) --- */
+.productsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 2rem;
+  margin-bottom: 6rem; /* Espaço grande entre produtos e mapa */
+}
+
+/* --- CARD DO PRODUTO (Minimalista) --- */
+.card {
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid #e5e7eb;
+  transition: all 0.3s ease;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.1);
+  border-color: #bfdbfe;
+}
+
+.tag {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background-color: #111827;
+  color: white;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 20px;
+  z-index: 10;
+  text-transform: uppercase;
+}
+
+.imageWrapper {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  background-color: #dadada;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.placeholderBg {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.cardContent {
+  padding: 1.2rem;
+  text-align: center;
+}
+
+.productName {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 0.5rem;
+  line-height: 1.4;
+}
+
+.price {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--primary-red);
+  display: block;
+}
+
+/* --- SEÇÃO DE LOCALIZAÇÃO --- */
+.locationContainer {
+  background-color: white;
+  border-radius: 24px;
+  border: 1px solid #e5e7eb;
+  overflow: hidden;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.locationContent {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Lado Esquerdo: Texto */
+.locationText {
+  padding: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  background-color: #ffffff;
+}
+
+.locationLabel {
+  color: #ef4444; /* Vermelho do Maps */
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.5rem;
+}
+
+.locationTitle {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #111827;
+  margin-bottom: 1.5rem;
+  line-height: 1.1;
+}
+
+.addressText {
+  display: flex;
+  gap: 10px;
+  color: #4b5563;
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+  line-height: 1.5;
+}
+
+.icon { color: #ef4444; flex-shrink: 0; margin-top: 3px; }
+
+.timeText {
+  color: #6b7280;
+  font-size: 0.95rem;
+  margin-left: 30px; /* Alinha com o texto do endereço */
+  margin-bottom: 2rem;
+  line-height: 1.6;
+}
+
+.routeBtn {
+  background-color: var(--primary-red);
+  color: white;
+  text-decoration: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s;
+}
+
+.routeBtn:hover {
+  background-color: var(--primary-red);
+  transform: translateY(-2px);
+}
+
+/* Lado Direito: Mapa */
+.mapWrapper {
+  width: 100%;
+  height: 300px; /* Altura no mobile */
+  background-color: #e5e7eb;
+}
+
+/* Responsividade do Mapa */
+@media (min-width: 900px) {
+  .locationContent {
+    flex-direction: row; /* Lado a lado no Desktop */
+  }
+
+  .locationText {
+    width: 40%;
+    padding: 4rem;
+  }
+
+  .mapWrapper {
+    width: 60%;
+    height: auto; /* Altura automática para preencher */
+    min-height: 450px;
+  }
+}
