@@ -1,4 +1,4 @@
-:root {
+/* :root {
   --background: #ffffff;
   --foreground: #171717;
 }
@@ -39,4 +39,43 @@ a {
   html {
     color-scheme: dark;
   }
+} */
+:root {
+  /* Cores da Identidade Visual */
+  --primary-blue: #2563eb;       /* Azul Principal */
+  --primary-dark: #1e40af;       /* Azul Escuro (Hover) */
+  --primary-light: #eff6ff;      /* Azul Muito Claro (Fundos sutis) */
+
+  /* Tons de Cinza e Branco */
+  --white: #ffffff;
+  --bg-light: #f9fafb;           /* Cinza gelo para alternar seções */
+  --border: #e5e7eb;             /* Borda cinza clara */
+  
+  /* Tipografia */
+  --text-main: #111827;          /* Quase preto (Títulos) */
+  --text-body: #4b5563;          /* Cinza escuro (Parágrafos) */
+  --text-muted: #9ca3af;         /* Cinza claro (Detalhes) */
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+body {
+  background-color: var(--white); /* FORÇA O FUNDO BRANCO */
+  color: var(--text-main);
+  -webkit-font-smoothing: antialiased;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  font-family: inherit;
 }

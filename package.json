@@ -12,6 +12,8 @@
     "axios": "^1.13.2",
     "bcrypt": "^6.0.0",
     "date-fns": "^4.1.0",
+    "embla-carousel-autoplay": "^8.6.0",
+    "embla-carousel-react": "^8.6.0",
     "inputmask": "^5.0.9",
     "js-cookie": "^3.0.5",
     "lucide-react": "^0.562.0",

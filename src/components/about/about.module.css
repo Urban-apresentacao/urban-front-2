@@ -1,0 +1,122 @@
+.about {
+  background-color: #ffffff; /* Fundo Branco (Clean) */
+  padding: 8rem 0; /* Espaçamento vertical igual ao do Hero */
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 4rem;
+  align-items: center;
+}
+
+/* Área da Imagem */
+.aboutImage {
+  width: 100%;
+  height: 450px;
+  background-color: #f3f4f6; /* Placeholder cinza */
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #9ca3af;
+  font-weight: 600;
+  order: 2; /* No mobile, a imagem fica abaixo do texto ou você pode mudar para 1 se preferir */
+}
+
+/* Área do Texto */
+.aboutContent {
+  order: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.tagline {
+  color: var(--primary-blue);
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.sectionTitle {
+  font-size: 2.25rem;
+  color: var(--text-main);
+  line-height: 1.2;
+  font-weight: 800;
+}
+
+.text {
+  color: var(--text-body);
+  line-height: 1.7;
+  font-size: 1.05rem;
+}
+
+/* Lista de Checagem */
+.checkList {
+  list-style: none;
+  margin: 1rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.checkList li {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--text-main);
+  font-weight: 600;
+}
+
+.checkIcon {
+  color: var(--primary-blue);
+  flex-shrink: 0;
+}
+
+/* Botão Link */
+.btnLink {
+  background: none;
+  border: none;
+  color: var(--primary-blue);
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0;
+  font-size: 1rem;
+  cursor: pointer;
+  width: fit-content;
+  transition: gap 0.2s;
+}
+
+.btnLink:hover {
+  text-decoration: underline;
+  gap: 0.75rem; /* Efeito de seta andando */
+}
+
+/* --- RESPONSIVIDADE --- */
+@media (min-width: 768px) {
+  .container {
+    grid-template-columns: 1fr 1fr; /* Duas colunas */
+    gap: 6rem;
+  }
+  
+  .aboutImage {
+    order: 1; /* Imagem vai para a esquerda no desktop */
+  }
+  
+  .aboutContent {
+    order: 2;
+  }
+
+  .sectionTitle {
+    font-size: 2.75rem;
+  }
+}

@@ -1,0 +1,48 @@
+.services {
+  background-color: #eff6ff; 
+  padding: 8rem 0;
+  border-top: 1px solid #dbeafe; 
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+
+  display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.sectionHeader {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.sectionTitle {
+  font-size: 2.5rem;
+  color: #111827; /* Texto escuro */
+  margin-bottom: 0.75rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.sectionSubtitle {
+  color: #4b5563;
+  font-size: 1.1rem; /* Levemente maior para leitura fácil */
+  max-width: 600px; /* Garante que o texto não fique muito largo em telas grandes */
+  line-height: 1.6;
+}
+
+.mobileHint {
+  display: inline;
+  font-weight: 500;
+  color: #2563eb; /* Destaque sutil na dica mobile */
+}
+
+@media (min-width: 1024px) {
+  .mobileHint {
+    display: none; 
+  }
+}

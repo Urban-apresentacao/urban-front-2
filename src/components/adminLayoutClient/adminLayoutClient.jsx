@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react";
-import Header from "@/components/header/header";
+import HeaderPanelAdmin from "@/components/headerPainelAdmin/headerPanelAdmin";
 import SidebarAdmin from "@/components/sidebarAdmin/sidebarAdmin";
 import styles from "./layout.module.css";
 
@@ -18,7 +18,7 @@ export default function AdminLayout({ children }) {
 
     return (
         <div className={styles.container}>
-            <Header toggleSidebar={handleToggleSidebar} />
+            <HeaderPanelAdmin toggleSidebar={handleToggleSidebar} />
 
             <div className={styles.body}>
                 <aside className={`${styles.sidebarWrapper} ${sidebarOpen ? styles.open : ''}`}>

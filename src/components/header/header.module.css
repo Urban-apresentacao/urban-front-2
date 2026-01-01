@@ -1,63 +1,224 @@
+/* --- ESTRUTURA PRINCIPAL --- */
 .header {
-  height: 64px;
-  width: 100%;
-  background-color: #111827;
-  color: #f9fafb;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 1.5rem;
-  border-bottom: 1px solid #1f2933;
-  /* Garante que o header fique fixo e acima da sidebar mobile */
+  background-color: #ffffff; /* Fundo branco puro */
+  border-bottom: 1px solid var(--border); /* Usa sua variável ou #e5e7eb */
   position: sticky;
   top: 0;
-  z-index: 50; 
-}
-
-.leftSide {
+  z-index: 1000;
+  height: 80px;
   display: flex;
   align-items: center;
-  gap: 1rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.03); /* Sombra bem leve */
+  transition: all 0.3s ease;
 }
 
-.title {
-  font-size: 1.1rem;
-  font-weight: 600;
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-/* Botão do Menu (Hamburger) */
-.menuButton {
-  background: transparent;
-  border: none;
-  color: #f9fafb;
-  cursor: pointer;
-  display: none; /* Escondido por padrão em Desktop */
-}
-
-.logoutButton {
+/* --- LOGOTIPO --- */
+.logo {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  background: transparent;
-  border: none;
-  color: #f9fafb;
+  gap: 0.75rem;
+  text-decoration: none;
   cursor: pointer;
+}
+
+.logoIcon {
+  background-color: var(--primary-blue); /* #2563eb */
+  color: #ffffff;
+  padding: 8px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 4px rgba(37, 99, 235, 0.2);
+}
+
+.logoText {
+  font-family: 'Inter', sans-serif;
+  font-weight: 800;
+  font-size: 1.25rem;
+  color: var(--text-main); /* #111827 */
+  letter-spacing: -0.5px;
+}
+
+/* --- NAVEGAÇÃO DESKTOP --- */
+.desktopNav {
+  display: none; /* Oculto no mobile */
+  gap: 1.5rem;   
+  align-items: center;
+}
+
+/* LINKS DE NAVEGAÇÃO (COM EFEITO DE LINHA) */
+.navLink {
+  color: var(--text-body); /* #4b5563 */
+  text-decoration: none;
+  font-weight: 500;
   font-size: 0.95rem;
-  transition: color 0.2s;
+  transition: color 0.3s ease;
+  position: relative; /* Necessário para a linha se posicionar */
+  padding: 4px 0;     /* Espaço vertical leve */
 }
 
-.logoutButton:hover {
-  color: #f87171;
+/* A linha azul invisível */
+.navLink::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px; /* Espessura da linha */
+  bottom: 0;
+  left: 0;
+  background-color: var(--primary-blue);
+  transition: width 0.3s ease-in-out; /* A animação acontece aqui */
 }
 
-/* Responsividade */
-@media (max-width: 768px) {
-  .menuButton {
-    display: flex; /* Mostra no mobile */
+/* Hover: Muda cor do texto e cresce a linha */
+.navLink:hover {
+  color: var(--primary-blue);
+}
+
+.navLink:hover::after {
+  width: 100%; /* A linha preenche a largura do link */
+}
+
+/* Divisor Vertical */
+.divider {
+  width: 1px;
+  height: 24px;
+  background-color: #e5e7eb;
+  margin: 0 0.5rem;
+}
+
+/* --- BOTÕES DE AÇÃO --- */
+
+/* Botão Login (Estilo Outline/Ghost) */
+.loginBtn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: transparent;
+  color: var(--text-body);
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-decoration: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  border: 1px solid transparent; 
+  transition: all 0.2s ease;
+}
+
+.loginBtn:hover {
+  color: var(--primary-blue);
+  background-color: #eff6ff; /* Fundo azul bem clarinho */
+  border-color: #dbeafe;     /* Borda azul clara */
+}
+
+/* Botão Agendar (Sólido) */
+.activeBtn {
+  background-color: var(--primary-blue);
+  color: #ffffff !important;
+  padding: 0.7rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-decoration: none;
+  box-shadow: 0 4px 6px rgba(37, 99, 235, 0.15);
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+}
+
+/* Removemos o efeito de linha do botão Agendar para não conflitar */
+.activeBtn::after {
+  display: none;
+}
+
+.activeBtn:hover {
+  background-color: var(--primary-dark); 
+  transform: translateY(-1px);
+  box-shadow: 0 6px 12px rgba(37, 99, 235, 0.25);
+  color: #ffffff; /* Garante texto branco */
+}
+
+/* --- MOBILE --- */
+.mobileBtn {
+  display: flex; 
+  background: transparent;
+  border: none;
+  color: var(--text-main);
+  cursor: pointer;
+  padding: 4px;
+}
+
+/* Menu Dropdown Mobile */
+.mobileNav {
+  position: absolute;
+  top: 80px; 
+  left: 0;
+  width: 100%;
+  background-color: #ffffff;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  border-top: 1px solid #e5e7eb;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  animation: slideDown 0.3s ease-out;
+}
+
+.mobileLink {
+  color: var(--text-main);
+  text-decoration: none;
+  padding: 1rem;
+  border-radius: 8px;
+  font-weight: 600;
+  background-color: #f9fafb;
+  text-align: center;
+  transition: all 0.2s;
+}
+
+.mobileLink:hover {
+  background-color: var(--primary-blue);
+  color: #ffffff;
+}
+
+.mobileDivider {
+  border: 0;
+  height: 1px;
+  background-color: #e5e7eb;
+  margin: 0.5rem 0;
+}
+
+.mobileLogin {
+  color: var(--primary-blue);
+  border: 1px solid #dbeafe;
+  background-color: #eff6ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- RESPONSIVIDADE --- */
+@media (min-width: 768px) {
+  .desktopNav {
+    display: flex;
   }
-
-  /* Opcional: Esconder o texto "Sair" no mobile para economizar espaço */
-  .logoutText {
+  
+  .mobileBtn, 
+  .mobileNav {
     display: none;
   }
 }

@@ -1,0 +1,138 @@
+.carouselWrapper {
+  position: relative;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* MÁSCARA DO CARROSSEL */
+.embla {
+  overflow: hidden;
+  /* Espaço vertical para a sombra do hover não cortar */
+  padding: 2rem 4px; 
+  cursor: grab;
+}
+
+.embla:active {
+  cursor: grabbing;
+}
+
+/* CONTAINER DOS SLIDES */
+.emblaContainer {
+  display: flex;
+  /* TRUQUE: Margem negativa para compensar o padding do primeiro slide */
+  /* Deve ser igual ao valor do espaço entre slides (padding-left abaixo) */
+  margin-left: -1.5rem; 
+}
+
+/* CONFIGURAÇÃO DO SLIDE (ESPAÇAMENTO) */
+.emblaSlide {
+  /* O espaço entre os cards agora é feito com padding-left */
+  padding-left: 1.5rem; 
+  min-width: 0;
+  
+  /* MOBILE: 1 Card inteiro (100%) */
+  flex: 0 0 100%;
+}
+
+/* DESIGN DO CARD */
+.card {
+  background-color: var(--bg-white);
+  border: 1px solid #d1d5db;
+  border-radius: 12px;
+  padding: 2rem;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  transition: all 0.3s ease;
+  user-select: none;
+  
+  /* Sombra inicial */
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.card:hover {
+  border-color: var(--primary-blue);
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px -5px rgba(37, 99, 235, 0.15);
+}
+
+.iconBox {
+  width: 50px;
+  height: 50px;
+  background-color: var(--bg-soft-blue);
+  color: var(--primary-blue);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.cardTitle {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin-bottom: 0.75rem;
+}
+
+.cardDesc {
+  font-size: 0.95rem;
+  color: var(--text-gray);
+  line-height: 1.6;
+}
+
+/* BOTÕES DE NAVEGAÇÃO */
+.navBtn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid var(--border-color);
+  background-color: #ffffff;
+  color: var(--primary-blue);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  transition: all 0.2s;
+}
+
+.navBtn:hover {
+  background-color: var(--primary-blue);
+  color: #fff;
+  border-color: var(--primary-blue);
+}
+
+/* Posição dos botões */
+.prevBtn { left: -10px; }
+.nextBtn { right: -10px; }
+
+/* --- RESPONSIVIDADE (QUANTIDADE DE CARDS) --- */
+
+/* Tablet: Exatamente 2 cards (50%) */
+@media (min-width: 640px) {
+  .emblaSlide {
+    flex: 0 0 50%;
+  }
+}
+
+/* Desktop: Exatamente 3 cards (33.333%) */
+@media (min-width: 1024px) {
+  .emblaSlide {
+    flex: 0 0 33.333333%;
+  }
+  
+  /* Afasta os botões no desktop */
+  .prevBtn { left: -50px; }
+  .nextBtn { right: -50px; }
+}
+
+@media (max-width: 768px) {
+  .navBtn { display: none; }
+}

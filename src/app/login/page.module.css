@@ -123,6 +123,39 @@
     animation: spin 1s linear infinite;
 }
 
+.signupContainer {
+  margin-top: 24px; /* Espaço depois do botão voltar */
+  text-align: center;
+  font-size: 14px;
+  color: #6b7280; /* Cinza texto */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.signupLink {
+  color: #2563eb; /* Azul Principal */
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.signupLink:hover {
+  color: #1d4ed8; /* Azul mais escuro no hover */
+  text-decoration: underline;
+}
+
+/* Ajuste sutil no Footer para não ficar colado */
+.footer {
+  margin-top: 24px; /* Reduzi um pouco já que agora tem o link de cadastro antes */
+  text-align: center;
+  font-size: 12px;
+  color: #9ca3af;
+  border-top: 1px solid #f3f4f6; /* Uma linha sutil separando o footer fica elegante */
+  padding-top: 20px;
+}
+
 @keyframes spin {
     from { transform: rotate(0deg); }
     to { transform: rotate(360deg); }

@@ -1,8 +1,9 @@
 'use client'
 
-import { Mail, Lock, Eye, EyeOff, Loader2 } from 'lucide-react' // Importei Loader2 para animação
+import { Mail, Lock, Eye, EyeOff, Loader2 } from 'lucide-react'
 import styles from './page.module.css'
 import InputLogin from '@/components/ui/inputLogin/inputLogin' 
+import Link from 'next/link' // Importante: Use Link do Next.js para navegação rápida
 
 import { useState } from "react";
 import { useLogin } from "./useLogin";
@@ -13,7 +14,6 @@ export default function Login() {
     const [senha, setSenha] = useState("");
     const [showPassword, setShowPassword] = useState(false);
 
-    // Agora desestruturamos o loading também
     const { handleLogin, loading } = useLogin();
 
     return (
@@ -40,7 +40,7 @@ export default function Login() {
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         required
-                        disabled={loading} // Bloqueia enquanto carrega
+                        disabled={loading}
                     />
 
                     {/* INPUT SENHA */}
@@ -51,7 +51,7 @@ export default function Login() {
                         value={senha}
                         onChange={(e) => setSenha(e.target.value)}
                         required
-                        disabled={loading} // Bloqueia enquanto carrega
+                        disabled={loading}
                     >
                         <button
                             type="button"
@@ -63,7 +63,7 @@ export default function Login() {
                         </button>
                     </InputLogin>
 
-                    {/* BOTÃO DE ENTRAR COM LOADING */}
+                    {/* BOTÃO DE ENTRAR */}
                     <button 
                         className={styles.button} 
                         disabled={loading}
@@ -88,6 +88,15 @@ export default function Login() {
                         Voltar
                     </button>
                 </form>
+
+                {/* --- NOVO: Link para Cadastro --- */}
+                <div className={styles.signupContainer}>
+                    <span>Não tem uma conta?</span>
+                    {/* Ajuste o href conforme a rota do seu cadastro (ex: /cadastro, /register) */}
+                    <Link href="/register" className={styles.signupLink}>
+                        Cadastre-se agora
+                    </Link>
+                </div>
 
                 <footer className={styles.footer}>
                     <span>© 2025 • Sistema Administrativo</span>

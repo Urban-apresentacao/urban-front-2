@@ -1,0 +1,127 @@
+.hero {
+  /* Degradê sutil */
+  background: linear-gradient(180deg, #ffffff 0%, #eff6ff 100%);
+  
+  /* MUDANÇA: Aumentei de 6rem para 10rem (muito mais respiro vertical) */
+  padding: 10rem 0; 
+  
+  /* MUDANÇA: Aumentei de 75vh para 85vh (ocupa quase toda a tela) */
+  min-height: 85vh; 
+  
+  display: flex;
+  align-items: center;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  width: 100%;
+
+  display: grid;
+  grid-template-columns: 1fr;
+  /* MUDANÇA: Aumentei de 4rem para 6rem (afasta mais o texto da imagem) */
+  gap: 6rem; 
+  align-items: center;
+}
+
+.heroContent {
+  display: flex;
+  flex-direction: column;
+  /* MUDANÇA: Aumentei de 2rem para 3rem (separa bem Título vs Texto vs Botões) */
+  gap: 3rem; 
+}
+
+.heroTitle {
+  font-size: 2.75rem;
+  /* MUDANÇA: Aumentei de 1.1 para 1.2 (linhas do título não ficam tão grudadas) */
+  line-height: 1.2; 
+  color: var(--text-main);
+  font-weight: 800;
+  letter-spacing: -1px;
+}
+
+.highlight {
+  color: var(--primary-blue);
+}
+
+.heroText {
+  color: var(--text-body);
+  font-size: 1.15rem;
+  /* MUDANÇA: Aumentei para 1.8 para leitura mais leve */
+  line-height: 1.8; 
+  max-width: 500px;
+}
+
+.heroActions {
+  display: flex;
+  /* MUDANÇA: Aumentei o espaço entre os botões */
+  gap: 1.5rem; 
+  /* MUDANÇA: Mais espaço extra antes dos botões começarem */
+  margin-top: 1.5rem; 
+}
+
+.btnPrimary {
+  background-color: var(--primary-blue);
+  color: var(--white);
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: all 0.2s;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
+}
+
+.btnPrimary:hover {
+  background-color: var(--primary-dark);
+  transform: translateY(-2px);
+}
+
+.btnSecondary {
+  background-color: transparent;
+  color: var(--primary-blue);
+  border: 1px solid var(--border);
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: all 0.2s;
+}
+
+.btnSecondary:hover {
+  border-color: var(--primary-blue);
+  background-color: var(--bg-light);
+}
+
+/* Wrapper para controlar proporção da imagem */
+.heroImageWrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.heroImagePlaceholder {
+  width: 100%;
+  height: 450px; /* Aumentei levemente a altura da imagem também */
+  background-color: #e5e7eb;
+  border-radius: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  font-weight: bold;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+}
+
+/* --- RESPONSIVIDADE --- */
+@media (min-width: 768px) {
+  .container {
+    grid-template-columns: 1.2fr 1fr;
+    gap: 6rem; /* Mantém o gap grande no desktop */
+  }
+
+  .heroTitle {
+    font-size: 3.5rem;
+  }
+}
