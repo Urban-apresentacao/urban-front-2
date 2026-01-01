@@ -19,7 +19,7 @@
 
 /* --- COLUNA 1: SOBRE --- */
 .title {
-  color: var(--primary-blue); /* Nome da empresa em Azul */
+  color: var(--primary-red); /* Nome da empresa em Azul */
   font-size: 1.25rem;
   font-weight: 800;
   margin-bottom: 1rem;
@@ -53,7 +53,7 @@
 }
 
 .iconLink:hover {
-  background-color: var(--primary-blue);
+  background-color: var(--primary-red);
   color: #ffffff;
   transform: translateY(-3px); /* Pulo sutil */
   box-shadow: 0 4px 6px rgba(37, 99, 235, 0.2);
@@ -83,7 +83,7 @@
 }
 
 .list a:hover {
-  color: var(--primary-blue);
+  color: var(--primary-red);
   transform: translateX(4px); /* Move levemente para a direita */
 }
 
@@ -96,7 +96,7 @@
 }
 
 .icon {
-  color: var(--primary-blue);
+  color: var(--primary-red);
   flex-shrink: 0; /* Impede o ícone de amassar */
 }
 

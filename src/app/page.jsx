@@ -1,10 +1,10 @@
 import styles from './page.module.css'
 
-import Header from '@/components/header/header'
-import Hero from '@/components/hero/hero';
-import About from '@/components/about/about';
-import Services from '@/components/services/services';
-import Footer from '@/components/footer/footer'
+import Header from '@/components/landing page/header/header'
+import Hero from '@/components/landing page/hero/hero';
+import StoreSection from '@/components/landing page/store/store';
+import About from '@/components/landing page/about/about';
+import Footer from '@/components/landing page/footer/footer'
 
 export default function Home() {
 	return (
@@ -14,9 +14,9 @@ export default function Home() {
 			<main>
 				<Hero />
 
-				<About />
+				<StoreSection />
 
-				<Services />
+				<About />
 			</main>
 
 			<Footer />

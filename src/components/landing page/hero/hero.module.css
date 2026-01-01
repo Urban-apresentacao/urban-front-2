@@ -1,0 +1,98 @@
+.hero {
+  background: linear-gradient(180deg, #ffffff 0%, #ffefef 100%);
+  padding: 6rem 0; 
+  min-height: 90vh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 4rem; 
+}
+
+.heroGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+.heroContent {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  order: 1; 
+}
+
+.heroTitle {
+  font-size: 2.5rem;
+  line-height: 1.2;
+  color: var(--text-main);
+  font-weight: 800;
+  letter-spacing: -1px;
+}
+.highlight { color: var(--primary-red); }
+.heroText {
+  color: var(--text-body);
+  font-size: 1.1rem;
+  line-height: 1.6;
+  max-width: 500px;
+}
+.heroActions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.btnPrimary, .btnSecondary {
+  padding: 0.8rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.btnPrimary { background: var(--primary-red); color: white; border: none; }
+.btnSecondary { background: transparent; color: var(--primary-red); border: 1px solid var(--primary-red); }
+
+/* --- WRAPPER DA IMAGEM --- */
+.heroImageWrapper {
+  order: 2; 
+  position: relative;
+  width: 100%;
+  height: 350px; 
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+
+@media (min-width: 900px) {
+  .hero {
+    padding: 4rem 0 8rem 0; 
+  }
+
+  .heroGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem; 
+    align-items: center;
+  }
+
+  .heroContent {
+    order: 0;
+    text-align: left;
+    align-items: flex-start;
+  }
+
+  .heroImageWrapper {
+    order: 0; 
+    height: 650px;
+    width: 100%;
+  }
+  
+  .heroTitle { font-size: 3.75rem; }
+}

@@ -43,11 +43,14 @@ a {
 :root {
   /* Cores da Identidade Visual */
   --primary-blue: #2563eb;       /* Azul Principal */
+  --primary-red: #fa0106;
+  --primary-darkred: #cc1516;
   --primary-dark: #1e40af;       /* Azul Escuro (Hover) */
   --primary-light: #eff6ff;      /* Azul Muito Claro (Fundos sutis) */
 
   /* Tons de Cinza e Branco */
   --white: #ffffff;
+  --grey: #231f20;
   --bg-light: #f9fafb;           /* Cinza gelo para alternar seções */
   --border: #e5e7eb;             /* Borda cinza clara */
   

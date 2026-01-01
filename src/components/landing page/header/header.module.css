@@ -8,8 +8,14 @@
   height: 80px;
   display: flex;
   align-items: center;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.03); /* Sombra bem leve */
+  /* box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.03); Sombra bem leve */
   transition: all 0.3s ease;
+  /* 1. A "Fita de LED" (A linha sólida) */
+  border-bottom: 2px solid #fa0106; /* Use o vermelho da sua marca */
+
+  /* 2. O "Brilho do LED" (A luz vazando na parede) */
+  /* x-offset | y-offset | blur-radius | spread | color */
+  /* box-shadow: 0 4px 20px rgba(250, 1, 6, 0.35); */
 }
 
 .container {
@@ -26,13 +32,27 @@
 .logo {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  justify-content: center;
+  height: 100%; /* Ocupa a altura do header */
   text-decoration: none;
   cursor: pointer;
+  gap: 15px;
+  /* Removemos max-width/height daqui para deixar o componente Image controlar */
+  overflow: hidden; /* Garante que nada vaze */
+}
+
+.logoImage {
+  /* object-fit: contain;  */
+  display: block;
+  border-radius: 8px;
+  /* width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%; */
 }
 
 .logoIcon {
-  background-color: var(--primary-blue); /* #2563eb */
+  background-color: var(--primary-red); /* #fa0106 */
   color: #ffffff;
   padding: 8px;
   border-radius: 8px;
@@ -76,13 +96,13 @@
   height: 2px; /* Espessura da linha */
   bottom: 0;
   left: 0;
-  background-color: var(--primary-blue);
+  background-color: var(--primary-red);
   transition: width 0.3s ease-in-out; /* A animação acontece aqui */
 }
 
 /* Hover: Muda cor do texto e cresce a linha */
 .navLink:hover {
-  color: var(--primary-blue);
+  color: var(--primary-red);
 }
 
 .navLink:hover::after {
@@ -116,14 +136,14 @@
 }
 
 .loginBtn:hover {
-  color: var(--primary-blue);
+  color: var(--primary-red);
   background-color: #eff6ff; /* Fundo azul bem clarinho */
   border-color: #dbeafe;     /* Borda azul clara */
 }
 
 /* Botão Agendar (Sólido) */
 .activeBtn {
-  background-color: var(--primary-blue);
+  background-color: var(--primary-red);
   color: #ffffff !important;
   padding: 0.7rem 1.5rem;
   border-radius: 8px;
@@ -141,7 +161,7 @@
 }
 
 .activeBtn:hover {
-  background-color: var(--primary-dark); 
+  background-color: var(--primary-darkred); 
   transform: translateY(-1px);
   box-shadow: 0 6px 12px rgba(37, 99, 235, 0.25);
   color: #ffffff; /* Garante texto branco */
@@ -185,7 +205,7 @@
 }
 
 .mobileLink:hover {
-  background-color: var(--primary-blue);
+  background-color: var(--primary-red);
   color: #ffffff;
 }
 

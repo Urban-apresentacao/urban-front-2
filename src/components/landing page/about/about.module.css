@@ -1,6 +1,15 @@
 .about {
-  background-color: #ffffff; /* Fundo Branco (Clean) */
-  padding: 8rem 0; /* Espaçamento vertical igual ao do Hero */
+  /* Degradê sutil */
+  background: linear-gradient(0deg, #ffffff 0%, #ffefef 100%);
+  
+  /* MUDANÇA: Aumentei de 6rem para 10rem (muito mais respiro vertical) */
+  padding: 10rem 0; 
+  
+  /* MUDANÇA: Aumentei de 75vh para 85vh (ocupa quase toda a tela) */
+  min-height: 85vh; 
+  
+  display: flex;
+  align-items: center;
 }
 
 .container {
@@ -37,7 +46,7 @@
 }
 
 .tagline {
-  color: var(--primary-blue);
+  color: var(--primary-red);
   font-size: 0.9rem;
   text-transform: uppercase;
   letter-spacing: 1.5px;
@@ -76,7 +85,7 @@
 }
 
 .checkIcon {
-  color: var(--primary-blue);
+  color: var(--primary-red);
   flex-shrink: 0;
 }
 
@@ -84,7 +93,7 @@
 .btnLink {
   background: none;
   border: none;
-  color: var(--primary-blue);
+  color: var(--primary-red);
   font-weight: 700;
   display: flex;
   align-items: center;

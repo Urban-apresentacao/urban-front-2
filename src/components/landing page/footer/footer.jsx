@@ -9,7 +9,7 @@ export default function Footer() {
         
         {/* Coluna 1: Sobre */}
         <div className={styles.column}>
-          <h3 className={styles.title}>[NOME DA EMPRESA]</h3>
+          <h3 className={styles.title}>AutoLimp - Loja e Estética Automotiva</h3>
           <p className={styles.text}>
             Especialistas em estética automotiva. Cuidamos do seu carro com excelência e produtos de alta qualidade.
           </p>
@@ -27,7 +27,7 @@ export default function Footer() {
             <li><a href="#home">Início</a></li>
             <li><a href="#sobre">Sobre Nós</a></li>
             <li><a href="#servicos">Nossos Serviços</a></li>
-            <li><a href="#contato">Agendar Visita</a></li>
+            {/* <li><a href="#contato">Agendar Visita</a></li> */}
           </ul>
         </div>
 
@@ -36,7 +36,7 @@ export default function Footer() {
           <h4 className={styles.subtitle}>Contato</h4>
           <div className={styles.contactItem}>
             <MapPin size={18} className={styles.icon} />
-            <span>Rua Exemplo, 123 - Centro</span>
+            <span>Residencial Primavera - Rua 4 n° 119 - Herculândia-SP</span>
           </div>
           <div className={styles.contactItem}>
             <Phone size={18} className={styles.icon} />
@@ -44,13 +44,13 @@ export default function Footer() {
           </div>
           <div className={styles.contactItem}>
             <Mail size={18} className={styles.icon} />
-            <span>contato@nomedaempresa.com</span>
+            <span>contato@autolimp.com</span>
           </div>
         </div>
       </div>
       
       <div className={styles.copy}>
-        © {new Date().getFullYear()} [NOME DA EMPRESA]. Todos os direitos reservados.
+        © {new Date().getFullYear()} AutoLimp. Todos os direitos reservados.
       </div>
     </footer>
   );
