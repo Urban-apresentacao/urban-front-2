@@ -4,23 +4,19 @@ export function useAuth() {
   
   function logout() {
     // 1. Limpar os cookies corretos
-    // Precisamos remover 'logged' (que criamos no login) e 'role'
-    // O { path: '/' } é crucial para garantir que apague em todo o site
-    Cookies.remove('logged', { path: '/' });
+    // ATENÇÃO: Mudamos de 'logged' para 'token'
+    Cookies.remove('token', { path: '/' }); 
     Cookies.remove('role', { path: '/' });
 
-    // 2. Limpar dados específicos do localStorage
-    // .clear() apaga TUDO (pode apagar preferências de tema, etc).
-    // .removeItem('user') apaga só o que gravamos no login.
+    // 2. Limpar dados do localStorage
+    // Garanta que está usando a mesma chave que usou no useLogin (ex: 'user' ou 'user_data')
     localStorage.removeItem('user'); 
+    localStorage.removeItem('user_data'); // Limpa os dois por garantia
     
-    // Opcional: Se usar sessionStorage, limpe também
+    // Opcional
     sessionStorage.clear();
 
-    // 3. Redirecionamento "Hard" (Recomendado)
-    // Em vez de router.push('/login'), usamos window.location.href.
-    // Isso força o navegador a recarregar a página do zero, limpando
-    // qualquer estado de memória (states, context api) do usuário anterior.
+    // 3. Redirecionamento Hard para limpar memória
     window.location.href = '/login';
   }
 

@@ -6,7 +6,7 @@ import InputLogin from '@/components/ui/inputLogin/inputLogin'
 import Link from 'next/link' // Importante: Use Link do Next.js para navegação rápida
 
 import { useState } from "react";
-import { useLogin } from "./useLogin";
+import { useLogin } from "../../hooks/useLogin";
 
 export default function Login() {
 
