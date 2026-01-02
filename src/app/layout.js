@@ -81,7 +81,7 @@ export const metadata = {
     type: "website",
     images: [
       {
-        url: "/logo_autolimp.jpeg", 
+        url: "/images/logo_autolimp.jpeg", 
         width: 1200,
         height: 630,
         alt: "Resultado de serviço na AutoLimp Estética Automotiva",
@@ -113,7 +113,7 @@ export default function RootLayout({ children }) {
     "@context": "https://schema.org",
     "@type": "AutoWash", // Tipo específico para lava-rápido/estética
     "name": "AutoLimp",
-    "image": `${baseUrl}/og-image.jpg`,
+    "image": `${baseUrl}/images/logo_autolimp.jpeg`,
     "description": "Estética automotiva especializada em Herculândia-SP.",
     "address": {
       "@type": "PostalAddress",
