@@ -24,9 +24,9 @@
 .calendarContainer :global(.rbc-header) {
     padding: 10px;
     font-weight: 600;
-    color: #374151;
-    background-color: #f9fafb;
-    border-bottom: 1px solid #e5e7eb;
+    color: #513937;
+    background-color: #fbf9f9;
+    border-bottom: 1px solid #ebe5e5;
 }
 
 /* Eventos */
@@ -38,15 +38,13 @@
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
-/* Dia atual */
 .calendarContainer :global(.rbc-today) {
-    background-color: #eff6ff;
+    background-color: #fff0ef;
 }
 
-/* Toolbar (Botões Hoje, Mês, Dia...) */
 .calendarContainer :global(.rbc-toolbar button) {
-    color: #374151;
-    border: 1px solid #d1d5db;
+    color: #513737;
+    border: 1px solid #dbd3d1;
     border-radius: 6px;
     padding: 6px 12px;
     font-size: 0.9rem;
@@ -54,13 +52,13 @@
 }
 
 .calendarContainer :global(.rbc-toolbar button:hover) {
-    background-color: #f3f4f6;
+    background-color: #f6f3f3;
 }
 
 .calendarContainer :global(.rbc-toolbar button.rbc-active) {
-    background-color: #2563eb;
+    background-color: var(--primary-red);
     color: white;
-    border-color: #2563eb;
+    border-color: var(--primary-red);
 }
 
 .calendarContainer :global(.rbc-toolbar-label) {
@@ -69,46 +67,36 @@
     color: #111827;
 }
 
-/* --- NOVO: AJUSTE DOS HORÁRIOS LATERAIS (Dia/Semana) --- */
-/* Deixa o texto da hora mais escuro e visível */
 .calendarContainer :global(.rbc-time-gutter .rbc-timeslot-group),
 .calendarContainer :global(.rbc-time-gutter .rbc-label) {
-    color: #eff2f7 !important;
+    color: #f7f0ef !important;
     font-weight: 600;
     font-size: 0.85rem;
 }
 
-/* Remove a borda feia que às vezes fica no topo do gutter */
 .calendarContainer :global(.rbc-time-view .rbc-header) {
-    border-bottom: 1px solid #e5e7eb;
+    border-bottom: 1px solid #ebe5e5;
 }
 
-/* --- SCROLLBAR SUAVE E CLARA --- */
-
 .calendarContainer :global(.rbc-time-content) {
-    /* Removemos o 'overlay' para voltar ao comportamento padrão e estável */
     overflow-y: auto !important; 
-
-    /* Firefox: Polegar Cinza Claro / Trilho Branco */
     scrollbar-width: thin;
-    scrollbar-color: #e5e7eb #ffffff; 
+    scrollbar-color: #ebe5e5 #ffffff; 
 }
 
 /* Chrome, Edge, Safari */
 .calendarContainer :global(.rbc-time-content)::-webkit-scrollbar {
-    width: 12px; /* Largura padrão para ser fácil de clicar */
+    width: 12px; 
 }
 
-/* O TRILHO (Fundo da barra) */
 .calendarContainer :global(.rbc-time-content)::-webkit-scrollbar-track {
-    background: #ffffff; /* BRANCO TOTAL: Se funde com o fundo da página */
+    background: #ffffff; 
 }
 
-/* O POLEGAR (A parte que mexe) */
 .calendarContainer :global(.rbc-time-content)::-webkit-scrollbar-thumb {
-    background-color: #e5e7eb; /* Cinza muito claro (Gray-200) */
-    border-radius: 10px;       /* Redondinho */
-    border: 3px solid #ffffff; /* Borda grossa branca cria efeito de que a barra é mais fina */
+    background-color: #ebe5e5; 
+    border-radius: 10px; 
+    border: 3px solid #ffffff;
 }
 
 .calendarContainer :global(.rbc-agenda-date-cell){
@@ -125,18 +113,14 @@
     border-radius: 0;
 }
 
-
-/* Ao passar o mouse, ela fica um pouquinho mais visível */
 .calendarContainer :global(.rbc-time-content)::-webkit-scrollbar-thumb:hover {
-    background-color: #d1d5db; /* Cinza médio (Gray-300) */
+    background-color: #dbd1d1; 
 }
 
-/* --- NOVO: DATAS DO MÊS BEM VISÍVEIS --- */
-/* Afeta os números 01, 02, 03... dentro dos quadrados */
 .calendarContainer :global(.rbc-date-cell),
 .calendarContainer :global(.rbc-date-cell > a),
 .calendarContainer :global(.rbc-date-cell > button) {
-    color: #374151 !important;
+    color: #513737 !important;
     font-weight: 700 !important;
     font-size: 0.95rem;
     opacity: 1 !important;
@@ -144,17 +128,16 @@
     padding: 4px 8px;
 }
 
-/* Opcional: Datas de meses vizinhos (off-range) ficam cinza médio para diferenciar */
 .calendarContainer :global(.rbc-off-range .rbc-date-cell),
 .calendarContainer :global(.rbc-off-range .rbc-date-cell > a) {
-    color: #9ca3af !important;
+    color: #af9c9c !important;
     font-weight: 400 !important;
 }
 
 /* --- LINK "VER MAIS" (+2 mais) --- */
 .calendarContainer :global(.rbc-show-more) {
     background-color: transparent;
-    color: #6b7280; /* Cinza médio */
+    color: #806b6b; /* Cinza médio */
     font-weight: 600;
     font-size: 0.85rem;
     text-decoration: none;
@@ -164,42 +147,32 @@
 }
 
 .calendarContainer :global(.rbc-show-more:hover) {
-    color: #2563eb;
+    color: var(--primary-red);
     text-decoration: none;
 }
 
-/* 1. Ajuste na Tabela para aceitar espaçamentos melhores */
 .calendarContainer :global(.rbc-agenda-view table) {
     border-collapse: separate; 
     border-spacing: 0;
-    /* Remove a borda padrão externa se quiser um visual mais limpo */
     border: none; 
 }
 
-/* 2. O PULO DO GATO: Separador de Dias */
-/* Seleciona qualquer linha (tr) que POSSUA (.has) a célula de data (.rbc-agenda-date-cell).
-   Isso afeta apenas a PRIMEIRA linha de cada novo dia. */
 .calendarContainer :global(.rbc-agenda-view tbody tr:has(.rbc-agenda-date-cell) td) {
-    /* Cria uma "borda" invisível (branca) no topo para simular margem */
     border-top: 20px solid #ffffff; 
-    
-    /* Opcional: Adiciona uma borda sutil cinza acima do espaço branco para delimitar */
     position: relative;
 }
 
-/* 3. Limpeza visual das células */
 .calendarContainer :global(.rbc-agenda-view td) {
-    border-left: none;  /* Remove bordas verticais para ficar mais "clean" */
+    border-left: none; 
     border-right: none;
-    padding: 10px;      /* Mais respiro interno */
+    padding: 10px;  
     vertical-align: middle;
 }
 
-/* 4. Destaque para a Data (Coluna Esquerda) */
 .calendarContainer :global(.rbc-agenda-date-cell) {
     font-weight: bold;
-    color: #374151;
-    text-transform: capitalize; /* "terça dez 30" -> "Terça Dez 30" */
-    background-color: #f9fafb;  /* Fundo cinza claro na data */
-    border-radius: 8px 0 0 8px; /* Arredonda canto esquerdo */
+    color: #513737;
+    text-transform: capitalize; 
+    background-color: #fbf9f9; 
+    border-radius: 8px 0 0 8px;
 }

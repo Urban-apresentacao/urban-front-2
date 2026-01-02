@@ -6,26 +6,25 @@
   padding: 0.75rem 1rem;
   border-radius: 8px;
 
-  color: #e5e7eb;
+  color: #ebe5e5;
   text-decoration: none;
 
   transition: background 0.2s, color 0.2s;
 }
 
 .item:hover {
-  background-color: #1f2933;
+  background-color: #331f1f;
 }
 
 .icon {
   flex-shrink: 0;
 }
 
-/* 🔥 ITEM ATIVO */
 .active {
-  background-color: #2563eb;
+  background-color: var(--primary-red);
   color: #ffffff;
 }
 
 .active:hover {
-  background-color: #2563eb;
+  background-color: var(--primary-darkred);
 }

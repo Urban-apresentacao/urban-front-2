@@ -2,7 +2,7 @@
   padding: 2rem;
   max-width: 1280px;
   margin: 0 auto;
-  background-color: #f9fafb;
+  background-color: #fbf9f9;
   min-height: 100vh;
   font-family: system-ui, -apple-system, sans-serif;
 }
@@ -17,12 +17,12 @@
 .title {
   font-size: 1.8rem;
   font-weight: 700;
-  color: #111827;
+  color: #271111;
 }
 
 .dateBadge {
-  background: #e0e7ff;
-  color: #3730a3;
+  background: #ffe0e0;
+  color: var(--primary-red);
   padding: 0.5rem 1rem;
   border-radius: 9999px;
   font-weight: 600;
@@ -54,7 +54,7 @@
 
 .iconWrapper {
   background: #eff6ff;
-  color: #2563eb;
+  color: var(--primary-red);
   padding: 12px;
   border-radius: 10px;
 }
@@ -66,13 +66,13 @@
 
 .statLabel {
   font-size: 0.875rem;
-  color: #6b7280;
+  color: #806b6b;
 }
 
 .statValue {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #1f2937;
+  color: #371f1f;
 }
 
 /* --- Grid de Conteúdo (Meio) --- */
@@ -94,7 +94,7 @@
   padding: 1.5rem;
   border-radius: 12px;
   box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-  border: 1px solid #e5e7eb;
+  border: 1px solid #ebe5e5;
 }
 
 .cardHeader {
@@ -102,7 +102,7 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1.5rem;
-  border-bottom: 1px solid #f3f4f6;
+  border-bottom: 1px solid #f6f3f3;
   padding-bottom: 1rem;
 }
 
@@ -113,12 +113,12 @@
 }
 
 .iconBlue {
-  color: #2563eb;
+  color: #eb2525;
 }
 
 .cardTitle {
   font-weight: 600;
-  color: #374151;
+  color: #513737;
   font-size: 1.1rem;
 }
 
@@ -165,18 +165,18 @@
 .serviceName {
   font-size: 1.25rem;
   font-weight: 700;
-  color: #111827;
+  color: #271111;
   margin: 0;
 }
 
 .clientName {
-  color: #4b5563;
+  color: #634b4b;
   margin: 0.5rem 0;
 }
 
 .metaData {
   margin-top: 1rem;
-  color: #6b7280;
+  color: #806b6b;
   font-size: 0.9rem;
   display: flex;
   justify-content: center;
@@ -199,9 +199,9 @@
   justify-content: space-between;
   align-items: center;
   padding: 0.75rem;
-  background: #f9fafb;
+  background: #fbf9f9;
   border-radius: 8px;
-  border-left: 4px solid #2563eb;
+  border-left: 4px solid #eb2525;
 }
 
 .apptInfo {
@@ -211,13 +211,13 @@
 
 .apptService {
   font-weight: 600;
-  color: #374151;
+  color: #513737;
   font-size: 0.95rem;
 }
 
 .apptClient {
   font-size: 0.85rem;
-  color: #6b7280;
+  color: #806b6b;
 }
 
 .timeBadge {
@@ -226,14 +226,14 @@
   border-radius: 6px;
   font-weight: 600;
   font-size: 0.85rem;
-  color: #2563eb;
-  border: 1px solid #dbeafe;
+  color: var(--primary-red);
+  border: 1px solid #fedbdb;
 }
 
 .emptyState {
   text-align: center;
   padding: 2rem;
-  color: #9ca3af;
+  color: #af9c9c;
 }
 
 /* --- Grid Analítico (Fundo) --- */
@@ -248,7 +248,7 @@
     align-items: center;
     height: 100vh;
     font-size: 1.2rem;
-    color: #6b7280;
+    color: #806b6b;
     font-weight: 500;
 }
 
@@ -263,7 +263,7 @@
     background: none;
     border: none;
     cursor: pointer;
-    color: #9ca3af;
+    color: #af9c9c;
     display: flex;
     align-items: center;
     padding: 4px;
@@ -272,8 +272,8 @@
 }
 
 .eyeBtn:hover {
-    background-color: #f3f4f6;
-    color: #4b5563;
+    background-color: #f6f3f3;
+    color: #634b4b;
 }
 
 /* Pequeno ajuste no título do serviço para não quebrar se for grande */

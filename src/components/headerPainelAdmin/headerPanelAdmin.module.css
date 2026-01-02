@@ -1,14 +1,13 @@
 .header {
   height: 64px;
   width: 100%;
-  background-color: #111827;
-  color: #f9fafb;
+  background-color: #000000;
+  color: #fbf9f9;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 1.5rem;
-  border-bottom: 1px solid #1f2933;
-  /* Garante que o header fique fixo e acima da sidebar mobile */
+  border-bottom: 1px solid #000000;
   position: sticky;
   top: 0;
   z-index: 50; 
@@ -29,9 +28,9 @@
 .menuButton {
   background: transparent;
   border: none;
-  color: #f9fafb;
+  color: #fbf9f9;
   cursor: pointer;
-  display: none; /* Escondido por padrão em Desktop */
+  display: none; 
 }
 
 .logoutButton {
@@ -40,7 +39,7 @@
   gap: 0.5rem;
   background: transparent;
   border: none;
-  color: #f9fafb;
+  color: #fbf9f9;
   cursor: pointer;
   font-size: 0.95rem;
   transition: color 0.2s;

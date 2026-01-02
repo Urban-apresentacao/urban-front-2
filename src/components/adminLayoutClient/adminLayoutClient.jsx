@@ -22,7 +22,6 @@ export default function AdminLayout({ children }) {
 
             <div className={styles.body}>
                 <aside className={`${styles.sidebarWrapper} ${sidebarOpen ? styles.open : ''}`}>
-                    {/* AQUI: Passamos a função closeSidebar para o componente filho */}
                     <SidebarAdmin closeMobileMenu={closeSidebar} />
                 </aside>
 

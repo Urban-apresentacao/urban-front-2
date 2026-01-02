@@ -53,7 +53,7 @@
 }
 
 .card:hover {
-  border-color: var(--primary-blue);
+  border-color: var(--primary-red);
   transform: translateY(-5px);
   box-shadow: 0 15px 30px -5px rgba(37, 99, 235, 0.15);
 }
@@ -61,8 +61,8 @@
 .iconBox {
   width: 50px;
   height: 50px;
-  background-color: var(--bg-soft-blue);
-  color: var(--primary-blue);
+  background-color: var(--primary-redlight);
+  color: var(--primary-red);
   border-radius: 10px;
   display: flex;
   align-items: center;
@@ -83,7 +83,6 @@
   line-height: 1.6;
 }
 
-/* BOTÕES DE NAVEGAÇÃO */
 .navBtn {
   position: absolute;
   top: 50%;
@@ -94,7 +93,7 @@
   border-radius: 50%;
   border: 1px solid var(--border-color);
   background-color: #ffffff;
-  color: var(--primary-blue);
+  color: var(--primary-red);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -104,31 +103,25 @@
 }
 
 .navBtn:hover {
-  background-color: var(--primary-blue);
+  background-color: var(--primary-red);
   color: #fff;
-  border-color: var(--primary-blue);
+  border-color: var(--primary-red);
 }
 
-/* Posição dos botões */
 .prevBtn { left: -10px; }
 .nextBtn { right: -10px; }
 
-/* --- RESPONSIVIDADE (QUANTIDADE DE CARDS) --- */
-
-/* Tablet: Exatamente 2 cards (50%) */
 @media (min-width: 640px) {
   .emblaSlide {
     flex: 0 0 50%;
   }
 }
 
-/* Desktop: Exatamente 3 cards (33.333%) */
 @media (min-width: 1024px) {
   .emblaSlide {
     flex: 0 0 33.333333%;
   }
   
-  /* Afasta os botões no desktop */
   .prevBtn { left: -50px; }
   .nextBtn { right: -50px; }
 }

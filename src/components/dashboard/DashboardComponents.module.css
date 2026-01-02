@@ -16,7 +16,7 @@
 
 .iconWrapper {
     background: #eff6ff;
-    color: #2563eb;
+    color: var(--primary-red);
     padding: 12px;
     border-radius: 10px;
     display: flex;
@@ -32,7 +32,7 @@
 
 .statLabel {
     font-size: 0.875rem;
-    color: #6b7280;
+    color: #806b6b;
 }
 
 .valueRow {
@@ -54,7 +54,7 @@
     padding: 1.5rem;
     border-radius: 12px;
     box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-    border: 1px solid #e5e7eb;
+    border: 1px solid #ebe5e5;
     height: 100%; /* Ocupa altura total do pai */
     display: flex;
     flex-direction: column;
@@ -62,7 +62,7 @@
 
 .cardHeader {
     margin-bottom: 1.5rem;
-    border-bottom: 1px solid #f3f4f6;
+    border-bottom: 1px solid #f6f3f3;
     padding-bottom: 1rem;
 }
 
@@ -73,13 +73,13 @@
 }
 
 .iconBlue {
-    color: #2563eb;
+    color: var(--primary-red);
     display: flex; /* Centraliza ícone */
 }
 
 .cardTitle {
     font-weight: 600;
-    color: #374151;
+    color: #513737;
     font-size: 1.1rem;
 }
 

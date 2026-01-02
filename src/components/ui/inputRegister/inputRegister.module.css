@@ -1,15 +1,14 @@
-/* src/components/ui/inputRegister/inputRegister.module.css */
 .field {
   position: relative;
   display: flex;
   align-items: center;
-  width: 100%; /* Garante que ocupe a célula do grid */
+  width: 100%; 
 }
 
 .icon {
   position: absolute;
   left: 0;
-  color: #9ca3af; /* Cinza médio */
+  color: #af9c9c; 
   transition: color 0.2s ease;
   pointer-events: none;
   z-index: 1;
@@ -17,19 +16,18 @@
 
 .field input {
   width: 100%;
-  /* Reduzido padding vertical de 14px para 10px */
   padding: 10px 12px 10px 30px; 
   background: transparent;
   border: none;
-  border-bottom: 2px solid #e5e7eb;
-  color: #111827;
-  font-size: 14px; /* Fonte levemente menor */
+  border-bottom: 2px solid #ebe5e5;
+  color: #271111;
+  font-size: 14px; 
   border-radius: 0;
   transition: all 0.2s ease;
 }
 .field input:focus {
   outline: none;
-  border-bottom-color: #2563eb; /* Azul Principal */
+  border-bottom-color: var(--primary-red);
 }
 
 .field label {
@@ -37,46 +35,36 @@
   left: 30px;
   top: 50%;
   transform: translateY(-50%);
-  color: #6b7280; /* Cinza original */
+  color: #806b6b;
   font-size: 14px;
   pointer-events: none;
   transition: 0.2s ease;
-  z-index: 10; /* Garante que fique acima do input transparente */
+  z-index: 10; 
 }
-
-/* === ALTERAÇÃO AQUI === */
-/* Remova a linha: .field input[type="date"] ~ label, */
-/* Deixe apenas estas duas: */
 
 .field input:focus ~ label,
 .filled {
   top: -8px !important;
   font-size: 11px !important;
-  color: #2563eb !important; /* Azul */
+  color: var(--primary-red) !important;
   font-weight: 600;
   transform: none !important;
 }
 
 .field input:focus ~ .icon {
-  color: #2563eb;
+  color: var(--primary-red);
 }
 
-/* 1. Por padrão, deixa o texto do input date transparente (invisível) */
 .field input[type="date"] {
   color: transparent;
   transition: color 0.1s ease;
 }
 
-/* 2. Se o usuário clicar (foco) OU se já tiver valor (.hasValue), mostra a cor normal */
 .field input[type="date"]:focus,
 .field input[type="date"].hasValue {
-  color: #111827; /* Azul Escuro (sua cor de texto padrão) */
+  color: #271111;
 }
 
-/* 3. Garante que o ícone de calendário nativo do navegador permaneça clicável/visível
-      (Opcional: se quiser esconder o nativo para usar só o seu ícone, use display: none) */
 .field input[type="date"]::-webkit-calendar-picker-indicator {
   cursor: pointer;
-  /* Se o ícone nativo estiver atrapalhando seu ícone customizado, descomente abaixo: */
-  /* opacity: 0; */
 }

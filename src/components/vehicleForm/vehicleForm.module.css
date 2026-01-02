@@ -1,88 +1,67 @@
-/* userForm.module.css */
-
 .form {
     display: grid;
-    /* Define duas colunas de tamanho igual */
     grid-template-columns: 1fr 1fr; 
-    
-    /* Gap horizontal (espaço entre colunas) */
     column-gap: 1.5rem;
-    
-    /* Gap vertical AUMENTADO: 
-       Isso garante espaço para a mensagem de erro flutuar 
-       sem bater no campo da linha de baixo */
     row-gap: 2.5rem; 
-
     width: 100%;
-    background-color: #fff; /* Fundo branco card */
+    background-color: #fff;
     padding: 2rem;
     border-radius: 8px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1); /* Sombra suave */
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1); 
 }
 
-/* --- CLASSE NOVA: Agrupador de Input + Erro --- */
 .inputGroup {
-    position: relative; /* Essencial para o absolute do erro funcionar */
+    position: relative; 
     display: flex;
     flex-direction: column;
-    /* Se quiser que o label fique colado no input, use gap pequeno aqui */
     gap: 0.25rem; 
 }
 
-/* --- CLASSE NOVA: Texto de Erro Flutuante --- */
 .errorText {
-    color: #dc2626; /* Vermelho padrão de erro */
-    font-size: 0.75rem; /* 12px */
+    color: #dc2626;
+    font-size: 0.75rem; 
     font-weight: 500;
-    
-    /* O Segredo do Layout: */
     position: absolute;
-    bottom: -22px; /* Joga o texto para fora do input (para baixo) */
+    bottom: -22px;
     left: 0;
-    
-    white-space: nowrap; /* Impede que o texto quebre linha e estrague o alinhamento */
-    pointer-events: none; /* Impede que o texto de erro bloqueie cliques */
+    white-space: nowrap; 
+    pointer-events: none; 
 }
 
-/* Ocupa a largura total (para Observações) */
 .fullWidth {
     grid-column: 1 / -1; 
 }
 
-/* --- Área dos Botões --- */
 .actions {
     grid-column: 1 / -1; 
     display: flex;
     justify-content: flex-end;
     gap: 1rem;
-    
-    /* Aumentei a margem superior para separar bem dos campos */
     margin-top: 1.5rem; 
     padding-top: 1.5rem;
-    border-top: 1px solid #e5e7eb;
+    border-top: 1px solid #ebe5e5;
 }
 
-/* --- Estilos dos Botões --- */
 .btnCancel {
     padding: 0.6rem 1.5rem;
     background: #fff;
-    border: 1px solid #d1d5db;
+    border: 1px solid #dbd1d1;
     border-radius: 6px;
     cursor: pointer;
-    color: #374151;
+    color: #513737;
     font-weight: 500;
     transition: all 0.2s;
     font-size: 0.875rem;
 }
 
 .btnCancel:hover {
-    background: #f3f4f6;
-    border-color: #9ca3af;
+    background: #f6f3f3;
+    border-color: #af9c9c;
 }
 
 .btnSave {
     padding: 0.6rem 1.5rem;
-    background: #2563eb;
+    background: var(--primary-red);
     border: none;
     border-radius: 6px;
     cursor: pointer;
@@ -96,11 +75,11 @@
 }
 
 .btnSave:hover {
-    background: #1d4ed8;
+    background: var(--primary-darkred);
 }
 
 .btnSave:disabled {
-    background: #93c5fd;
+    background: #fd9393;
     cursor: not-allowed;
     opacity: 0.7;
 }
@@ -109,32 +88,27 @@
   display: flex;
   align-items: center;
   padding: 0.5rem 1rem;
-  background-color: #4f46e5; /* Cor diferente (ex: índigo) */
+  background-color: #e54646; 
   color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
   font-weight: 500;
-  /* Margem direita automática ajuda a separar dos botões de ação se o container for flex */
   margin-right: auto; 
 }
 
 .btnLink:hover {
-  background-color: #4338ca;
+  background-color: #ca3a38;
 }
 
-
-/* ... seus estilos anteriores (form, inputGroup, errorText, etc) ... */
-
-/* --- BOTÃO DE MOSTRAR SENHA --- */
 .eyeButton {
     position: absolute;
     right: 10px;
-    top: 38px; /* Ajuste conforme a altura do seu label/input */
+    top: 38px; 
     background: none;
     border: none;
     cursor: pointer;
-    color: #6b7280;
+    color: #806d6b;
     z-index: 10;
     padding: 0;
     display: flex;
@@ -142,65 +116,59 @@
 }
 
 .eyeButton:hover {
-    color: #374151;
+    color: #513737;
 }
 
-/* --- LISTA DE REQUISITOS (Checklist) --- */
+/* --- LISTA DE REQUISITOS (Checklist da senha) --- */
 .passwordRequirements {
-    position: absolute; /* Faz flutuar por cima de tudo */
-    top: 100%; /* Cola logo abaixo do input */
+    position: absolute; 
+    top: 100%; 
     left: 0;
-    width: 100%; /* Mesma largura do input */
-    
-    background-color: white; /* Importante para tapar o que está atrás */
-    border: 1px solid #e5e7eb;
+    width: 100%; 
+    background-color: white; 
+    border: 1px solid #ebe5e5;
     border-radius: 6px;
     padding: 12px;
     margin-top: 4px;
-    
     display: flex;
     flex-direction: column;
     gap: 6px;
-    
-    z-index: 50; /* Garante que fique na frente dos outros campos */
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* Sombra para destacar */
+    z-index: 50; 
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
 .reqItem {
     display: flex;
     align-items: center;
     gap: 8px;
-    font-size: 0.75rem; /* 12px */
+    font-size: 0.75rem; 
     font-weight: 500;
     transition: color 0.2s ease;
 }
 
 .pending {
-    color: #ef4444; /* Vermelho */
+    color: #ef4444;
 }
 
 .success {
-    color: #10b981; /* Verde */
+    color: #10b981; 
 }
 
 /* --- Responsividade --- */
 @media (max-width: 768px) {
     .form {
-        /* No mobile, muda para 1 coluna apenas */
         grid-template-columns: 1fr;
         padding: 1.5rem;
-        
-        /* No mobile podemos reduzir um pouco o gap vertical */
         row-gap: 2rem; 
     }
     
     .actions {
-        flex-direction: column-reverse; /* Salvar em cima, Cancelar em baixo */
+        flex-direction: column-reverse; 
         gap: 0.75rem;
     }
     
     .btnCancel, .btnSave {
         width: 100%;
-        height: 48px; /* Área de toque maior no mobile */
+        height: 48px; 
     }
 }

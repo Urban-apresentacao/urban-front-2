@@ -146,7 +146,7 @@
    */
 
 
-   .wrapper {
+.wrapper {
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -162,8 +162,7 @@
 
 /* --- HERO SECTION --- */
 .hero {
-  /* Degradê sutil do branco para um azul muito pálido */
-  background: linear-gradient(180deg, #ffffff 0%, #eff6ff 100%);
+  background: linear-gradient(180deg, #ffffff 0%, #ffefef 100%);
   padding: 4rem 0 6rem 0;
   display: flex;
   align-items: center;
@@ -190,7 +189,7 @@
 }
 
 .highlight {
-  color: var(--primary-blue);
+  color: var(--primary-red);
 }
 
 .heroText {
@@ -207,7 +206,7 @@
 }
 
 .btnPrimary {
-  background-color: var(--primary-blue);
+  background-color: var(--primary-red);
   color: var(--white);
   padding: 0.8rem 1.5rem;
   border-radius: 8px;
@@ -217,13 +216,13 @@
 }
 
 .btnPrimary:hover {
-  background-color: var(--primary-dark);
+  background-color: var(--primary-darkred);
 }
 
 .btnSecondary {
   background-color: transparent;
-  color: var(--primary-blue);
-  border: 1px solid var(--primary-blue);
+  color: var(--primary-red);
+  border: 1px solid var(--primary-red);
   padding: 0.8rem 1.5rem;
   border-radius: 8px;
   font-weight: 600;
@@ -232,13 +231,14 @@
 }
 
 .btnSecondary:hover {
-  background-color: var(--primary-light);
+  background-color: var(--primary-redlight);
 }
 
 .heroImage {
   width: 100%;
   height: 350px;
-  background-color: #e5e7eb; /* Cinza claro placeholder */
+  background-color: #ebe5e5;
+  /* Cinza claro placeholder */
   border-radius: 16px;
   display: flex;
   align-items: center;
@@ -250,7 +250,8 @@
 
 /* --- SOBRE (ABOUT) --- */
 .about {
-  background-color: var(--white); /* Fundo Branco */
+  background-color: var(--white);
+  /* Fundo Branco */
   padding: 6rem 0;
 }
 
@@ -264,13 +265,14 @@
 .aboutImage {
   width: 100%;
   height: 400px;
-  background-color: #f3f4f6;
+  background-color: #f6f3f3;
   border-radius: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
   color: var(--text-muted);
-  order: 2; /* No mobile, imagem vai depois */
+  order: 2;
+  /* No mobile, imagem vai depois */
 }
 
 .aboutContent {
@@ -278,7 +280,7 @@
 }
 
 .tagline {
-  color: var(--primary-blue);
+  color: var(--primary-red);
   font-size: 0.9rem;
   text-transform: uppercase;
   letter-spacing: 1px;
@@ -316,12 +318,12 @@
 }
 
 .checkIcon {
-  color: var(--primary-blue);
+  color: var(--primary-red);
 }
 
 .btnLink {
   background: none;
-  color: var(--primary-blue);
+  color: var(--primary-red);
   font-weight: 600;
   display: flex;
   align-items: center;
@@ -336,7 +338,8 @@
 
 /* --- SERVIÇOS --- */
 .services {
-  background-color: var(--bg-light); /* Cinza gelo muito claro */
+  background-color: var(--bg-light);
+  /* Cinza gelo muito claro */
   padding: 6rem 0;
 }
 
@@ -367,18 +370,18 @@
 .card:hover {
   transform: translateY(-5px);
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
-  border-color: var(--primary-blue);
+  border-color: var(--primary-red);
 }
 
 .iconBox {
-  background-color: var(--primary-light);
+  background-color: var(--primary-redlight);
   width: 50px;
   height: 50px;
   border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--primary-blue);
+  color: var(--primary-red);
   margin-bottom: 1.5rem;
 }
 
@@ -396,20 +399,23 @@
 /* --- RESPONSIVIDADE --- */
 @media (min-width: 768px) {
   .hero .container {
-    grid-template-columns: 1fr 1fr; /* Lado a lado no desktop */
+    grid-template-columns: 1fr 1fr;
+    /* Lado a lado no desktop */
   }
-  
+
   .about .container {
     grid-template-columns: 1fr 1fr;
   }
-  
+
   .aboutImage {
-    order: 1; /* Imagem na esquerda no desktop */
+    order: 1;
+    /* Imagem na esquerda no desktop */
   }
+
   .aboutContent {
     order: 2;
   }
-  
+
   .grid {
     grid-template-columns: repeat(3, 1fr);
   }

@@ -11,19 +11,17 @@
     display: flex;
     flex: 1;
     overflow: hidden;
-    position: relative; /* ADICIONADO: Necessário para o overlay cobrir esta área */
+    position: relative;
 }
 
 /* Wrapper da Sidebar */
 .sidebarWrapper {
     flex-shrink: 0;
     height: 100%;
-    border-right: 1px solid #e5e7eb;
-    background-color: #111827; /* ADICIONADO: Garante que o fundo não seja transparente ao sobrepor */
-    
-    /* ADICIONADO: Transição suave para quando o menu deslizar */
+    border-right: 1px solid #ebe5e5;
+    background-color: #271111; 
     transition: transform 0.3s ease-in-out;
-    z-index: 40; /* Garante que fique acima do conteúdo no mobile */
+    z-index: 40; 
 }
 
 /* Área de Conteúdo Principal */
@@ -31,7 +29,7 @@
     flex: 1;
     overflow-y: auto;
     padding: 2rem;
-    background-color: #f3f4f6;
+    background-color: #f6f3f3;
 }
 
 /* --- NOVO: Estilos para o Fundo Escuro (Overlay) --- */

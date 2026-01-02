@@ -1,12 +1,15 @@
 .overlay {
     position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
     background-color: rgba(0, 0, 0, 0.5);
     backdrop-filter: blur(4px);
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 1060; /* Maior que o outro modal se precisar abrir por cima */
+    z-index: 1060;
 }
 
 .modal {
@@ -22,8 +25,15 @@
 }
 
 @keyframes slideUp {
-    from { transform: translateY(20px); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
 }
 
 .header {
@@ -33,90 +43,151 @@
     padding: 1rem 1.5rem;
     border-bottom: 1px solid #f3f4f6;
 }
-.header h3 { margin: 0; display: flex; align-items: center; font-size: 1.15rem; color: #111827; }
 
-.closeBtn { background: transparent; border: none; cursor: pointer; color: #9ca3af; }
-.closeBtn:hover { color: #ef4444; }
+.header h3 {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    font-size: 1.15rem;
+    color: #111827;
+}
+
+.closeBtn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: #9ca3af;
+}
+
+.closeBtn:hover {
+    color: #ef4444;
+}
 
 .body {
     padding: 1.5rem;
     overflow-y: auto;
 }
 
-.centerText { text-align: center; color: #6b7280; padding: 2rem; }
+.centerText {
+    text-align: center;
+    color: #6b7280;
+    padding: 2rem;
+}
 
-/* TABLE STYLES */
 .tableContainer {
     border: 1px solid #e5e7eb;
     border-radius: 8px;
     overflow: hidden;
 }
 
-.historyTable { width: 100%; border-collapse: collapse; }
-.historyTable th { 
-    background-color: #f9fafb; padding: 10px; text-align: left; 
-    font-size: 0.85rem; color: #6b7280; border-bottom: 1px solid #e5e7eb; 
-}
-.historyTable td { 
-    padding: 10px; border-bottom: 1px solid #f3f4f6; font-size: 0.9rem; color: #374151; 
+.historyTable {
+    width: 100%;
+    border-collapse: collapse;
 }
 
-.userName { display: flex; align-items: center; gap: 8px; font-weight: 500; }
+.historyTable th {
+    background-color: #fbf9f9;
+    padding: 10px;
+    text-align: left;
+    font-size: 0.85rem;
+    color: #806b6b;
+    border-bottom: 1px solid #ebe5e5;
+}
+
+.historyTable td {
+    padding: 10px;
+    border-bottom: 1px solid #f6f3f3;
+    font-size: 0.9rem;
+    color: #513737;
+}
+
+.userName {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+}
 
 .badgeActive {
-    background-color: #dcfce7; color: #166534; 
-    padding: 2px 8px; borderRadius: 12px; font-size: 0.75rem; font-weight: bold;
+    background-color: #fcdcdc;
+    color: #166534;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: bold;
 }
 
-.inactiveRow td { color: #9ca3af; }
+.inactiveRow td {
+    color: #af9c9c;
+}
 
 .btnFinalize {
-    background: none; border: none; cursor: pointer; color: #ef4444; 
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #ef4444;
     transition: transform 0.2s;
 }
-.btnFinalize:hover { transform: scale(1.1); color: #b91c1c; }
+
+.btnFinalize:hover {
+    transform: scale(1.1);
+    color: #b91c1c;
+}
 
 .footer {
-    padding: 1rem; border-top: 1px solid #f3f4f6; display: flex; justify-content: flex-end;
+    padding: 1rem;
+    border-top: 1px solid #f6f3f3;
+    display: flex;
+    justify-content: flex-end;
 }
+
 .btnClose {
-    padding: 0.5rem 1rem; background: #f3f4f6; border: 1px solid #d1d5db;
-    border-radius: 6px; cursor: pointer; color: #374151; font-weight: 600;
+    padding: 0.5rem 1rem;
+    background: #f6f3f3;
+    border: 1px solid #dbd1d1;
+    border-radius: 6px;
+    cursor: pointer;
+    color: #513737;
+    font-weight: 600;
 }
-.btnClose:hover { background: #e5e7eb; }
 
-/* ... CSS anterior ... */
+.btnClose:hover {
+    background: #ebe5e5;
+}
 
-/* Container para alinhar os botões na célula de ações */
 .actionsCell {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px; /* Espaço entre o lápis e o X */
+    gap: 8px;
 }
 
-/* Botão de Finalizar (Vermelho) */
 .btnFinalize {
-    background: none; 
-    border: none; 
-    cursor: pointer; 
-    color: #ef4444; 
-    transition: transform 0.2s;
-    display: flex; /* Alinhamento icone */
-    padding: 4px;
-}
-.btnFinalize:hover { transform: scale(1.1); color: #b91c1c; }
-
-/* NOVO: Botão de Editar (Azul) */
-.btnEdit {
-    background: none; 
-    border: none; 
-    cursor: pointer; 
-    color: #3b82f6; /* Azul */
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #ef4444;
     transition: transform 0.2s;
     display: flex;
     padding: 4px;
 }
-.btnEdit:hover { transform: scale(1.1); color: #1d4ed8; }
 
-/* ... resto do CSS ... */
+.btnFinalize:hover {
+    transform: scale(1.1);
+    color: #b91c1c;
+}
+
+.btnEdit {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--primary-red);
+    transition: transform 0.2s;
+    display: flex;
+    padding: 4px;
+}
+
+.btnEdit:hover {
+    transform: scale(1.1);
+    color: var(--primary-darkred);
+}

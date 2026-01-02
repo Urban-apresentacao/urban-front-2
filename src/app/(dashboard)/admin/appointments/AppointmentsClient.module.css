@@ -9,11 +9,11 @@
 /* --- BARRA DE AÇÕES (TOPO) --- */
 .actionsBar {
   display: flex;
-  justify-content: space-between; /* Filtros na Esquerda, Botão na Direita */
+  justify-content: space-between; 
   align-items: center;
   gap: 1rem;
   width: 100%;
-  flex-wrap: wrap; /* Permite quebrar linha no mobile */
+  flex-wrap: wrap; 
 }
 
 /* --- GRUPO DE FILTROS (Esquerda) --- */
@@ -21,7 +21,7 @@
   display: flex;
   align-items: center;
   gap: 1rem;
-  flex: 1; /* Ocupa o espaço disponível, empurrando o botão pra direita */
+  flex: 1; 
   flex-wrap: wrap;
 }
 
@@ -34,17 +34,16 @@
   align-items: center;
 }
 
-/* Tamanhos dos Inputs */
 .searchWrapper {
-  width: 320px; /* Largura fixa para busca */
+  width: 320px;
 }
 
 .selectWrapper {
-  width: 180px; /* Largura fixa para status */
+  width: 180px; 
 }
 
 .dateWrapper {
-  width: 160px; /* Largura fixa para data */
+  width: 160px; 
 }
 
 /* --- ÍCONES DENTRO DOS INPUTS --- */
@@ -52,8 +51,8 @@
 .filterIcon {
   position: absolute;
   left: 12px;
-  color: #9ca3af; /* Cinza suave */
-  pointer-events: none; /* Clique atravessa o ícone */
+  color: #af9c9c; 
+  pointer-events: none; 
   z-index: 10;
 }
 
@@ -62,18 +61,18 @@
 .filterInput, 
 .filterSelect {
   width: 100%;
-  height: 42px; /* Altura padrão para alinhar tudo */
+  height: 42px; 
   background-color: #fff;
-  color: #1f2937; /* Texto escuro */
-  border: 1px solid #e5e7eb;
+  color: #1f2937; 
+  border: 1px solid #ebe5e5;
   border-radius: 8px; 
   font-size: 0.875rem;
-  padding-left: 40px; /* Espaço para o ícone na esquerda */
+  padding-left: 40px; 
   padding-right: 12px;
   outline: none;
   transition: all 0.2s ease-in-out;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05); 
-  appearance: none; /* Remove estilo padrão do navegador */
+  appearance: none; 
 }
 
 /* Placeholder */
@@ -86,8 +85,8 @@
 .searchInput:focus,
 .filterInput:focus,
 .filterSelect:focus {
-  border-color: #2563eb; /* Azul ao focar */
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1); 
+  border-color: var(--primary-red);
+  box-shadow: 0 0 0 3px rgba(235, 37, 37, 0.1); 
 }
 
 /* --- BOTÃO NOVO (Direita) --- */
@@ -95,10 +94,10 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  background-color: #2563eb; /* Azul Principal */
+  background-color: var(--primary-red);
   color: white;
   padding: 0 20px;
-  height: 42px; /* Mesma altura dos inputs */
+  height: 42px;
   border-radius: 8px;
   font-weight: 600;
   font-size: 0.9rem;
@@ -109,7 +108,7 @@
 }
 
 .newButton:hover {
-  background-color: #1d4ed8; /* Azul mais escuro */
+  background-color: var(--primary-darkred); /* Azul mais escuro */
 }
 
 /* --- CONTAINER DA TABELA --- */
@@ -118,7 +117,7 @@
   overflow-x: auto; 
   background-color: #fff; 
   border-radius: 8px;
-  border: 1px solid #e5e7eb; 
+  border: 1px solid #ebe5e5; 
   overflow: hidden; /* Arredonda cantos da tabela */
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }

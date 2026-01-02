@@ -8,7 +8,7 @@
 .icon {
   position: absolute;
   left: 0;
-  color: #9ca3af; /* Cinza médio */
+  color: #af9c9c;
   transition: color 0.2s ease;
   pointer-events: none;
   z-index: 1;
@@ -19,8 +19,8 @@
   padding: 12px 12px 12px 30px;
   background: transparent;
   border: none;
-  border-bottom: 2px solid #e5e7eb; /* Cinza claro */
-  color: #111827; /* Azul escuro texto */
+  border-bottom: 2px solid #ebe5e5; 
+  color: #271111; 
   font-size: 15px;
   border-radius: 0;
   transition: all 0.2s ease;
@@ -28,7 +28,7 @@
 
 .field input:focus {
   outline: none;
-  border-bottom-color: #2563eb; /* Azul Principal */
+  border-bottom-color: var(--primary-red); 
 }
 
 .field label {
@@ -36,23 +36,22 @@
   left: 30px;
   top: 50%;
   transform: translateY(-50%);
-  color: #6b7280; /* Cinza texto */
+  color: #806b6b; 
   font-size: 14px;
   pointer-events: none;
   transition: 0.2s ease;
 }
 
-/* Floating Label Logic */
 .field input:focus ~ label,
 .field input:not(:placeholder-shown) ~ label,
 .filled {
   top: -8px !important;
   font-size: 11px !important;
-  color: #2563eb !important;
+  color: var(--primary-red) !important;
   font-weight: 600;
   transform: none !important;
 }
 
 .field input:focus ~ .icon {
-  color: #2563eb;
+  color: var(--primary-red);
 }

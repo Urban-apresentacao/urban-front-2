@@ -8,7 +8,7 @@
 .label {
   font-size: 0.875rem; /* 14px */
   font-weight: 500;
-  color: #374151; /* Cinza escuro (gray-700) */
+  color: #513737; /* Cinza escuro (gray-700) */
 }
 
 /* Aplica o estilo tanto para input, select quanto para o campo de máscara */
@@ -18,10 +18,10 @@
   padding: 0.5rem 0.75rem;
   
   font-size: 0.875rem;
-  color: #111827;
+  color: #271111;
   background-color: #ffffff;
   
-  border: 1px solid #d1d5db; /* gray-300 */
+  border: 1px solid #dbd1d1; /* gray-300 */
   border-radius: 0.5rem;     /* 8px */
   
   outline: none;
@@ -29,18 +29,18 @@
 }
 
 .input::placeholder {
-  color: #9ca3af; /* gray-400 */
+  color: #af9c9c; /* gray-400 */
 }
 
 /* Estado de Foco (Borda Azul e Sombra suave) */
 .input:focus {
-  border-color: #2563eb; /* blue-600 */
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15); 
+  border-color: var(--primary-red); /* blue-600 */
+  box-shadow: 0 0 0 3px rgba(235, 37, 37, 0.15); 
 }
 
 /* Estado Desabilitado */
 .input:disabled {
-  background-color: #f3f4f6;
+  background-color: #f6f3f3;
   cursor: not-allowed;
-  color: #6b7280;
+  color: #806b6b;
 }

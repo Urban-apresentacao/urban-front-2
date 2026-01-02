@@ -21,7 +21,7 @@
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
   overflow-y: auto;
   scrollbar-width: thin;
-  scrollbar-color: #e5e7eb transparent;
+  scrollbar-color: #ebe5e5 transparent;
 }
 
 /* ===== BRAND / HEADER ===== */
@@ -37,7 +37,7 @@
   width: 42px;
   height: 42px;
   border-radius: 10px;
-  background-color: #2563eb;
+  background-color: var(--primary-red);
   color: #ffffff;
   font-weight: 800;
   font-size: 16px;
@@ -45,14 +45,14 @@
 }
 
 .brand h1 {
-  color: #111827;
+  color: #271211;
   font-size: 22px;
   font-weight: 700;
   margin-bottom: 4px;
 }
 
 .brand p {
-  color: #6b7280;
+  color: #806b6b;
   font-size: 13px;
 }
 
@@ -78,7 +78,7 @@
 .selectIcon {
   position: absolute;
   left: 0;
-  color: #9ca3af;
+  color: #af9c9c;
   pointer-events: none;
   z-index: 1;
 }
@@ -88,7 +88,7 @@
   right: 12px;
   top: 50%;
   transform: translateY(-50%);
-  color: #9ca3af;
+  color: #af9c9c;
   pointer-events: none;
 }
 
@@ -97,8 +97,8 @@
   padding: 10px 36px 10px 30px; 
   background: transparent;
   border: none;
-  border-bottom: 2px solid #e5e7eb;
-  color: #111827;
+  border-bottom: 2px solid #ebe5e5;
+  color: #271411;
   font-size: 14px;
   cursor: pointer;
   border-radius: 0;
@@ -109,7 +109,7 @@
 
 .selectInput:focus {
   outline: none;
-  border-bottom-color: #2563eb;
+  border-bottom-color: var(--primary-red);
 }
 
 .selectLabel {
@@ -117,7 +117,7 @@
   left: 30px;
   top: 50%;
   transform: translateY(-50%);
-  color: #6b7280;
+  color: #806b6b;
   font-size: 14px;
   pointer-events: none;
   transition: 0.2s ease;
@@ -127,7 +127,7 @@
 .selectInput:valid ~ .selectLabel {
   top: -3px;
   font-size: 11px;
-  color: #2563eb;
+  color: var(--primary-red);
   font-weight: 600;
 }
 
@@ -138,7 +138,7 @@
   padding: 12px;
   border-radius: 8px;
   border: none;
-  background-color: #2563eb;
+  background-color: var(--primary-red);
   color: #ffffff;
   font-weight: 600;
   font-size: 15px;
@@ -147,7 +147,7 @@
 }
 
 .button:hover {
-  background-color: #1d4ed8;
+  background-color: var(--primary-darkred);
 }
 
 .button:disabled {
@@ -159,18 +159,18 @@
   grid-column: span 2;
   padding: 10px;
   background: transparent;
-  border: 1px solid #e5e7eb;
+  border: 1px solid #ebe5e5;
   border-radius: 8px;
-  color: #6b7280;
+  color: #806c6b;
   font-size: 13px;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .backButton:hover {
-  border-color: #111827;
-  color: #111827;
-  background-color: #f9fafb;
+  border-color: #271111;
+  color: #271211;
+  background-color: #fbf9f9;
 }
 
 .eyeButton {
@@ -181,7 +181,7 @@
   background: none;
   border: none;
   cursor: pointer;
-  color: #9ca3af;
+  color: #af9d9c;
   padding: 4px;
 }
 
@@ -198,7 +198,6 @@
 
 /* Acessa o ícone interno do calendário nos navegadores Chrome/Edge/Opera */
 .form input[type="date"]::-webkit-calendar-picker-indicator {
-  /* Se o ícone está branco (100%), invertendo ele vira preto (0%) */
   filter: invert(1); 
   cursor: pointer;
   opacity: 0.6;
@@ -210,8 +209,8 @@
 }
 
 .passwordRequirements {
-  background-color: #f9fafb;
-  border: 1px solid #e5e7eb;
+  background-color: #fbf9f9;
+  border: 1px solid #ebe5e5;
   border-radius: 8px;
   padding: 12px;
   margin-top: 10px;
@@ -227,7 +226,7 @@
   align-items: center;
   gap: 8px;
   font-size: 12px;
-  color: #6b7280;
+  color: #806c6b;
   font-weight: 500;
   transition: color 0.3s ease;
 }
@@ -237,7 +236,7 @@
 }
 
 .reqItem.pending {
-  color: #9ca3af;
+  color: #af9c9c;
 }
 
 .reqIcon {

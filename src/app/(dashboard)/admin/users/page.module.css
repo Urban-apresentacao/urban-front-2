@@ -1,5 +1,5 @@
 .title {
-    color: #111827;
+    color: #271111;
     margin-bottom: 30px;
     font-size: 1.5rem;
 }
@@ -8,11 +8,10 @@
     width: 100%;
 }
 
-/* Skeleton e animações mantidas... */
 .headerSkeleton {
     width: 200px;
     height: 28px;
-    background-color: #e5e7eb;
+    background-color: #ebe5e5;
     border-radius: 6px;
     margin-bottom: 1.5rem;
     animation: pulse 1.5s infinite;
@@ -26,7 +25,7 @@
 
 .cardSkeleton {
     height: 60px;
-    background-color: #e5e7eb;
+    background-color: #ebe5e5;
     border-radius: 8px;
     animation: pulse 1.5s infinite;
 }
@@ -37,16 +36,14 @@
     100% { opacity: 1; }
 }
 
-/* --- RESPONSIVIDADE --- */
 @media (max-width: 640px) {
     .container {
-        /* AQUI: Reduzi o padding para ganhar espaço lateral no celular */
         padding: 0rem; 
     }
 
     .title {
         font-size: 1.25rem;
         margin-bottom: 1rem;
-        padding-left: 0.25rem; /* Leve recuo só para alinhar com o visual */
+        padding-left: 0.25rem;
     }
 }

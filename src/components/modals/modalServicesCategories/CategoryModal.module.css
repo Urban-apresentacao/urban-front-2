@@ -2,7 +2,7 @@
 .overlay {
     position: fixed;
     top: 0; left: 0; right: 0; bottom: 0;
-    background-color: rgba(17, 24, 39, 0.6); /* Cinza escuro transparente */
+    background-color: rgba(39, 17, 17, 0.6); /* Cinza escuro transparente */
     backdrop-filter: blur(4px); /* Efeito de vidro fosco */
     display: flex;
     align-items: center;
@@ -32,7 +32,7 @@
     justify-content: space-between;
     align-items: center;
     padding: 1.5rem;
-    border-bottom: 1px solid #f3f4f6;
+    border-bottom: 1px solid #f6f3f3;
     background-color: #ffffff;
 }
 
@@ -40,13 +40,13 @@
     margin: 0;
     font-size: 1.25rem;
     font-weight: 700;
-    color: #111827;
+    color: #271111;
 }
 
 .closeBtn {
     background: transparent;
     border: none;
-    color: #9ca3af;
+    color: #af9c9c;
     cursor: pointer;
     padding: 4px;
     border-radius: 6px;
@@ -57,11 +57,10 @@
 }
 
 .closeBtn:hover {
-    background-color: #f3f4f6;
-    color: #ef4444; /* Vermelho ao passar o mouse */
+    background-color: #f6f3f3;
+    color: #ef4444; 
 }
 
-/* Corpo do Modal */
 .body {
     padding: 2rem 1.5rem;
     display: flex;
@@ -78,36 +77,35 @@
 .fieldGroup label {
     font-size: 0.875rem;
     font-weight: 600;
-    color: #374151;
+    color: #513737;
 }
 
 .input {
     width: 100%;
     padding: 0.75rem 1rem;
-    border: 1px solid #d1d5db;
+    border: 1px solid #dbd1d1;
     border-radius: 8px;
     font-size: 1rem;
     color: #1f2937;
     outline: none;
     transition: all 0.2s;
-    background-color: #f9fafb;
+    background-color: #fbf9f9;
 }
 
 .input:focus {
     background-color: #fff;
-    border-color: #2563eb;
+    border-color: var(--primary-red);
     box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
 }
 
-/* --- TOGGLE SWITCH (Estilo iPhone) --- */
 .toggleWrapper {
     display: flex;
     align-items: center;
     gap: 12px;
-    background-color: #f9fafb;
+    background-color: #fbf9f9;
     padding: 10px;
     border-radius: 8px;
-    border: 1px solid #f3f4f6;
+    border: 1px solid #f6f3f3;
 }
 
 .switch {
@@ -128,7 +126,7 @@
     position: absolute;
     cursor: pointer;
     top: 0; left: 0; right: 0; bottom: 0;
-    background-color: #e5e7eb; /* Cinza desligado */
+    background-color: #ebe5e5;
     transition: .3s;
     border-radius: 34px;
 }
@@ -158,14 +156,14 @@ input:checked + .slider:before {
 .statusLabel {
     font-size: 0.95rem;
     font-weight: 600;
-    color: #4b5563;
+    color: #634b4b;
 }
 
 /* Rodapé */
 .footer {
     padding: 1.5rem;
-    background-color: #f9fafb;
-    border-top: 1px solid #f3f4f6;
+    background-color: #fbf9f9;
+    border-top: 1px solid #f6f3f3;
     display: flex;
     justify-content: flex-end;
     gap: 12px;
@@ -174,21 +172,21 @@ input:checked + .slider:before {
 .cancelBtn {
     padding: 0.6rem 1.2rem;
     background: #ffffff;
-    border: 1px solid #d1d5db;
+    border: 1px solid #dbd2d1;
     border-radius: 8px;
     cursor: pointer;
     font-weight: 600;
-    color: #374151;
+    color: #513737;
     transition: background 0.2s;
 }
 
 .cancelBtn:hover {
-    background-color: #f3f4f6;
+    background-color: #f6f3f3;
 }
 
 .saveBtn {
     padding: 0.6rem 1.5rem;
-    background: #16a34a; /* Verde Principal */
+    background: #16a34a;
     color: white;
     border: none;
     border-radius: 8px;
@@ -207,31 +205,29 @@ input:checked + .slider:before {
     cursor: not-allowed;
 }
 
-/* --- ESTILIZAÇÃO DA BARRA DE ROLAGEM (SCROLLBAR) --- */
-
 /* Para Firefox */
 .body {
-    scrollbar-width: thin; /* Deixa fininha */
-    scrollbar-color: #cbd5e1 transparent; /* Cor da barra (cinza) e fundo (transparente) */
+    scrollbar-width: thin; 
+    scrollbar-color: #e1cbcb transparent; 
 }
 
 /* Para Chrome, Edge, Safari e Opera */
 .body::-webkit-scrollbar {
-    width: 6px; /* Largura da barra vertical */
+    width: 6px; 
 }
 
 .body::-webkit-scrollbar-track {
-    background: transparent; /* Fundo do trilho invisível */
-    margin: 4px 0; /* Um respiro nas pontas */
+    background: transparent; 
+    margin: 4px 0; 
 }
 
 .body::-webkit-scrollbar-thumb {
-    background-color: #d1d5db; /* Cor da barra (Gray-300) */
-    border-radius: 10px;       /* Bordas bem redondas */
+    background-color: #dbd1d1; 
+    border-radius: 10px;
 }
 
 .body::-webkit-scrollbar-thumb:hover {
-    background-color: #9ca3af; /* Escurece ao passar o mouse (Gray-400) */
+    background-color: #af9c9c;
 }
 
 /* Responsividade Mobile */

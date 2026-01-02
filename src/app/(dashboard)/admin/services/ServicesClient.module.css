@@ -8,67 +8,64 @@
 
 /* --- BARRA DE AÇÕES (BUSCA + BOTÃO) --- */
 .actionsBar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-    width: 100%;
-    flex-wrap: wrap; 
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  width: 100%;
+  flex-wrap: wrap;
 }
 
-/* Novo Grupo */
 .filtersGroup {
-    display: flex;
-    gap: 10px;
-    flex: 1; 
-    max-width: 300px; 
+  display: flex;
+  gap: 10px;
+  flex: 1;
+  max-width: 300px;
 }
 
-/* Wrapper da Busca (FLEX 1 = Cresce) */
 .searchWrapper {
-    position: relative;
-    flex: 1;
-    min-width: 400px;
+  position: relative;
+  flex: 1;
+  min-width: 400px;
 }
 
-/* Wrapper do Select (FIXO = Pequeno) */
 .selectWrapper {
-    position: relative;
-    width: 170px;
-    flex-shrink: 0;
+  position: relative;
+  width: 170px;
+  flex-shrink: 0;
 }
 
 .filterIcon {
-    position: absolute;
-    left: 12px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #6b7280;
-    pointer-events: none;
-    z-index: 10;
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #806b6b;
+  pointer-events: none;
+  z-index: 10;
 }
 
 .statusSelect {
-    width: 100%;
-    padding: 0 10px 0 35px;
-    height: 42px; 
-    background-color: #fff;
-    color: #374151;
-    border: 1px solid #e5e7eb;
-    border-radius: 8px;
-    font-size: 0.875rem;
-    outline: none;
-    cursor: pointer;
-    appearance: none;
-    background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%236b7280%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
-    background-repeat: no-repeat;
-    background-position: right 12px top 50%;
-    background-size: 10px auto;
+  width: 100%;
+  padding: 0 10px 0 35px;
+  height: 42px;
+  background-color: #fff;
+  color: #513737;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  outline: none;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%236b7280%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px top 50%;
+  background-size: 10px auto;
 }
 
 .statusSelect:focus {
-    border-color: #2563eb;
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1); 
+  border-color: var(--primary-red);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
 }
 
 .searchIcon {
@@ -76,48 +73,45 @@
   left: 12px;
   top: 50%;
   transform: translateY(-50%);
-  color: #9ca3af;
+  color: #af9c9c;
   pointer-events: none;
 }
 
 .searchInput {
   width: 100%;
-  padding: 10px 10px 10px 40px; 
-  height: 42px; 
+  padding: 10px 10px 10px 40px;
+  height: 42px;
   background-color: #fff;
-  color: #1f2937;
-  border: 1px solid #e5e7eb;
+  color: #371f1f;
+  border: 1px solid #ebe5e5;
   border-radius: 8px;
   font-size: 0.875rem;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05); 
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
   outline: none;
   transition: all 0.2s ease-in-out;
 }
 
-.searchInput::placeholder { color: #9ca3af; }
-
-.searchInput:focus {
-  border-color: #2563eb;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1); 
+.searchInput::placeholder {
+  color: #af9c9c;
 }
 
-/* --- BOTÃO NOVO (ESTILIZADO IGUAL USUÁRIOS) --- */
+.searchInput:focus {
+  border-color: var(--primary-red);
+  box-shadow: 0 0 0 3px rgba(235, 37, 37, 0.1);
+}
+
 .newButton {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  
-  background-color: #16a34a; /* Verde */
+  background-color: #16a34a;
   color: #ffffff;
-  
-  padding: 0 1.5rem; /* Ajustado padding lateral */
-  height: 42px;      /* Mesma altura do input */
+  padding: 0 1.5rem;
+  height: 42px;
   border-radius: 8px;
-  
   text-decoration: none;
   font-weight: 600;
   font-size: 0.875rem;
-  
   transition: background-color 0.2s;
   white-space: nowrap;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
@@ -127,37 +121,35 @@
   background-color: #15803d;
 }
 
-/* --- CONTAINER DA TABELA --- */
 .tableContainer {
   width: 100%;
-  overflow-x: auto; 
+  overflow-x: auto;
   -webkit-overflow-scrolling: touch;
-  background-color: #fff; 
+  background-color: #fff;
   border-radius: 8px;
-  border: 1px solid #e5e7eb; 
-  overflow: hidden; 
+  border: 1px solid #ebe5e5;
+  overflow: hidden;
   scrollbar-width: thin;
-  scrollbar-color: #cbd5e1 transparent;
+  scrollbar-color: #e1cbcb transparent;
 }
 
 /* --- RESPONSIVIDADE --- */
 @media (max-width: 640px) {
-    /* No celular, empilha a busca e o botão */
-    .actionsBar {
-        flex-direction: column-reverse; /* Botão em cima ou embaixo? (column normal = busca em cima) */
-        align-items: stretch; /* Estica para ocupar a largura total */
-    }
-    
-    .searchWrapper {
-        max-width: 100%; /* Busca ocupa tudo no mobile */
-    }
+  .actionsBar {
+    flex-direction: column-reverse;
+    align-items: stretch;
+  }
 
-    .newButton {
-        justify-content: center; /* Centraliza o texto no botão */
-    }
+  .searchWrapper {
+    max-width: 100%;
+  }
 
-    .tableContainer th, 
-    .tableContainer td {
-        padding: 0.75rem; 
-    }
+  .newButton {
+    justify-content: center;
+  }
+
+  .tableContainer th,
+  .tableContainer td {
+    padding: 0.75rem;
+  }
 }

@@ -2,7 +2,7 @@
 .page {
   height: 100vh;
   width: 100vw;
-  background-color: #111827; /* Azul Escuro Fundo */
+  background-color: #271111; /* Azul Escuro Fundo */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -33,7 +33,7 @@
   width: 52px;
   height: 52px;
   border-radius: 14px;
-  background-color: #2563eb; /* Azul Principal */
+  background-color: var(--primary-red); /* Azul Principal */
   color: #ffffff;
   font-weight: 900;
   font-size: 18px;
@@ -41,31 +41,29 @@
 }
 
 .brand h1 {
-  color: #111827;
+  color: #271111;
   font-size: 24px;
   font-weight: 700;
   margin-bottom: 6px;
 }
 
 .brand p {
-  color: #6b7280; /* Cinza */
+  color: #806b6b;
   font-size: 14px;
 }
 
-/* ===== FORM ===== */
 .form {
   display: flex;
   flex-direction: column;
-  gap: 24px; /* Espaçamento entre inputs */
+  gap: 24px; 
 }
 
-/* ===== BUTTONS ===== */
 .button {
   margin-top: 10px;
   padding: 14px;
   border-radius: 8px;
   border: none;
-  background-color: #2563eb; /* Azul Principal */
+  background-color: var(--primary-red); 
   color: #ffffff;
   font-weight: 600;
   font-size: 15px;
@@ -74,14 +72,14 @@
 }
 
 .button:hover {
-  background-color: #1d4ed8;
+  background-color: var(--primary-darkred);
 }
 
 .backButton {
   padding: 12px;
   border-radius: 8px;
   background: transparent;
-  border: 1px solid #e5e7eb;
+  border: 1px solid #ebe5e5;
   color: #6b7280;
   font-size: 14px;
   font-weight: 500;
@@ -90,9 +88,9 @@
 }
 
 .backButton:hover {
-  border-color: #111827;
-  color: #111827;
-  background-color: #f9fafb;
+  border-color: #271211;
+  color: #271311;
+  background-color: #fbf9f9;
 }
 
 .eyeButton {
@@ -103,20 +101,19 @@
   background: none;
   border: none;
   cursor: pointer;
-  color: #9ca3af;
+  color: #af9d9c;
   padding: 4px;
 }
 
 .eyeButton:hover {
-  color: #111827;
+  color: #271211;
 }
 
-/* ===== FOOTER ===== */
 .footer {
   margin-top: 32px;
   text-align: center;
   font-size: 12px;
-  color: #9ca3af;
+  color: #af9d9c;
 }
 
 .spin {
@@ -124,10 +121,10 @@
 }
 
 .signupContainer {
-  margin-top: 24px; /* Espaço depois do botão voltar */
+  margin-top: 24px;
   text-align: center;
   font-size: 14px;
-  color: #6b7280; /* Cinza texto */
+  color: #6b7280;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -135,24 +132,23 @@
 }
 
 .signupLink {
-  color: #2563eb; /* Azul Principal */
+  color: var(--primary-red); 
   font-weight: 600;
   text-decoration: none;
   transition: color 0.2s;
 }
 
 .signupLink:hover {
-  color: #1d4ed8; /* Azul mais escuro no hover */
+  color: var(--primary-darkred);
   text-decoration: underline;
 }
 
-/* Ajuste sutil no Footer para não ficar colado */
 .footer {
-  margin-top: 24px; /* Reduzi um pouco já que agora tem o link de cadastro antes */
+  margin-top: 24px; 
   text-align: center;
   font-size: 12px;
-  color: #9ca3af;
-  border-top: 1px solid #f3f4f6; /* Uma linha sutil separando o footer fica elegante */
+  color: #af9c9c;
+  border-top: 1px solid #f6f3f3; 
   padding-top: 20px;
 }
 
@@ -161,7 +157,6 @@
     to { transform: rotate(360deg); }
 }
 
-/* ===== RESPONSIVO ===== */
 @media (max-width: 480px) {
   .container {
     padding: 32px 24px;

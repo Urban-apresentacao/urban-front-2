@@ -12,10 +12,10 @@ export function middleware(request) {
   // Mandamos ele direto para o dashboard correspondente.
   if (pathname === '/login' && token) {
      if (role === 'admin') {
-         return NextResponse.redirect(new URL('/admin/dashboard', request.url));
+         return NextResponse.redirect(new URL('/admin', request.url));
      }
      // Assumindo que o usuário comum vai para /user/dashboard
-     return NextResponse.redirect(new URL('/user/dashboard', request.url));
+     return NextResponse.redirect(new URL('/user', request.url));
   }
 
   // --- REGRA 2: Proteção de Rotas Privadas (/admin e /user) ---
@@ -29,7 +29,7 @@ export function middleware(request) {
     // b) Proteção por Cargo (Role)
     if (pathname.startsWith('/admin') && role !== 'admin') {
       // Se não for admin, manda para o dashboard dele ou para login
-      return NextResponse.redirect(new URL('/user/dashboard', request.url));
+      return NextResponse.redirect(new URL('/user', request.url));
     }
 
     if (pathname.startsWith('/user') && role !== 'user') {

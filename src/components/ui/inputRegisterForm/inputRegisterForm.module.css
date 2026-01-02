@@ -10,7 +10,7 @@
 .label {
   font-size: 0.875rem; /* 14px */
   font-weight: 500;
-  color: #374151; /* Cinza escuro */
+  color: #513737; /* Cinza escuro */
 }
 
 /* Wrapper essencial para o "olhinho" funcionar.
@@ -34,10 +34,10 @@
   padding-right: 2.5rem; 
   
   font-size: 0.875rem;
-  color: #111827; /* Texto quase preto */
+  color: #271111; /* Texto quase preto */
   background-color: #ffffff;
   
-  border: 1px solid #d1d5db; /* Borda cinza suave */
+  border: 1px solid #dbd1d1; /* Borda cinza suave */
   border-radius: 0.5rem;     /* 8px */
   
   outline: none;
@@ -45,20 +45,20 @@
 }
 
 .input::placeholder {
-  color: #9ca3af; /* Placeholder cinza claro */
+  color: #af9c9c; /* Placeholder cinza claro */
 }
 
 /* Estado de Foco (Borda Azul e Sombra) */
 .input:focus {
-  border-color: #2563eb; /* Azul */
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15); /* Anel azul suave */
+  border-color: var(--primary-red); /* Azul */
+  box-shadow: 0 0 0 3px rgba(235, 37, 37, 0.15); /* Anel azul suave */
 }
 
 /* Estado Desabilitado */
 .input:disabled {
-  background-color: #f3f4f6;
+  background-color: #f6f3f3;
   cursor: not-allowed;
-  color: #6b7280;
+  color: #806b6b;
 }
 
 /* Estilo do Botão do Olho (Toggle) */
@@ -78,11 +78,11 @@
   align-items: center;
   justify-content: center;
   
-  color: #9ca3af; /* Cor inicial do ícone */
+  color: #af9c9c; /* Cor inicial do ícone */
   padding: 0;
   transition: color 0.2s;
 }
 
 .toggleButton:hover {
-  color: #2563eb; /* Escurece ao passar o mouse */
+  color: var(--primary-darkred); /* Escurece ao passar o mouse */
 }

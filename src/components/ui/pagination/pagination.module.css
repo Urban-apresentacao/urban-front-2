@@ -1,16 +1,16 @@
 .container {
     display: flex;
     align-items: center;
-    justify-content: flex-end; /* Desktop: alinha à direita */
+    justify-content: flex-end;
     gap: 1rem;
     margin-top: 1rem;
-    flex-wrap: wrap; /* Permite quebrar linha se necessário */
+    flex-wrap: wrap; 
 }
 
 .info {
     font-size: 0.875rem;
-    color: #6b7280;
-    white-space: nowrap; /* Não quebra o texto "Página 1 de 10" */
+    color: #806b6b;
+    white-space: nowrap; 
 }
 
 .controls {
@@ -23,39 +23,37 @@
     align-items: center;
     justify-content: center;
     padding: 0.5rem;
-    border: 1px solid #e5e7eb;
+    border: 1px solid #ebe5e5;
     border-radius: 6px;
     background-color: #fff;
-    color: #374151;
+    color: #513737;
     cursor: pointer;
     transition: all 0.2s ease;
-    
-    /* Garante área de toque mínima no mobile */
     min-width: 36px; 
     min-height: 36px;
 }
 
 .button:not(:disabled):hover {
-    background-color: #f9fafb;
-    border-color: #d1d5db;
+    background-color: #fbf9f9;
+    border-color: #dbd1d1;
 }
 
 .button:disabled {
-    background-color: #f3f4f6;
-    color: #9ca3af;
+    background-color: #f6f3f3;
+    color: #af9c9c;
     cursor: not-allowed;
 }
 
 /* --- RESPONSIVIDADE --- */
 @media (max-width: 640px) {
     .container {
-        justify-content: center; /* Centraliza tudo no mobile */
-        flex-direction: column; /* Coloca texto em cima, botões embaixo */
+        justify-content: center; 
+        flex-direction: column; 
         gap: 0.75rem;
     }
     
     .info {
-        order: -1; /* Força o texto para o topo (opcional, remova se preferir embaixo) */
+        order: -1;
         font-size: 0.9rem;
     }
 }
