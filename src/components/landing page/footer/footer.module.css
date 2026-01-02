@@ -5,6 +5,7 @@
   padding-top: 5rem;
   border-top: 1px solid var(--border);
   font-size: 0.95rem;
+  border-top: 2px solid #fa0106;
 }
 
 /* Grid de Colunas */
@@ -19,7 +20,7 @@
 
 /* --- COLUNA 1: SOBRE --- */
 .title {
-  color: var(--primary-red); /* Nome da empresa em Azul */
+  color: var(--primary-red);
   font-size: 1.25rem;
   font-weight: 800;
   margin-bottom: 1rem;
@@ -45,23 +46,29 @@
   justify-content: center;
   width: 40px;
   height: 40px;
-  border-radius: 50%; /* Círculo perfeito */
-  background-color: var(--bg-light); /* Fundo cinza claro */
-  color: var(--text-muted); /* Ícone cinza */
+  border-radius: 50%;
+  background-color: var(--bg-light); 
+  color: var(--text-muted);
   transition: all 0.2s ease-in-out;
   border: 1px solid transparent;
+  text-decoration: none; 
 }
 
 .iconLink:hover {
   background-color: var(--primary-red);
   color: #ffffff;
-  transform: translateY(-3px); /* Pulo sutil */
-  box-shadow: 0 4px 6px rgba(37, 99, 235, 0.2);
+  transform: translateY(-3px);
+  box-shadow: 0 4px 6px rgba(235, 37, 37, 0.2);
+}
+
+.iconLink.whatsapp:hover {
+  background-color: #25D366;
+  box-shadow: 0 4px 6px rgba(37, 211, 102, 0.3);
 }
 
 /* --- COLUNAS 2 e 3: LINKS E CONTATO --- */
 .subtitle {
-  color: var(--text-main); /* Títulos pretos */
+  color: var(--text-main);
   font-size: 1.1rem;
   margin-bottom: 1.5rem;
   font-weight: 700;
@@ -84,7 +91,7 @@
 
 .list a:hover {
   color: var(--primary-red);
-  transform: translateX(4px); /* Move levemente para a direita */
+  transform: translateX(4px); 
 }
 
 /* Lista de Contatos */
@@ -97,7 +104,7 @@
 
 .icon {
   color: var(--primary-red);
-  flex-shrink: 0; /* Impede o ícone de amassar */
+  flex-shrink: 0; 
 }
 
 .contactItem span {
@@ -112,12 +119,12 @@
   border-top: 1px solid var(--border);
   font-size: 0.85rem;
   color: var(--text-muted);
-  background-color: var(--bg-light); /* Diferença sutil no fundo */
+  background-color: var(--bg-light);
 }
 
 /* --- RESPONSIVIDADE --- */
 @media (min-width: 768px) {
   .container {
-    grid-template-columns: 2fr 1fr 1fr; /* Coluna 'Sobre' mais larga */
+    grid-template-columns: 2fr 1fr 1fr;
   }
 }

@@ -1,7 +1,6 @@
-/* --- ESTRUTURA PRINCIPAL --- */
 .header {
-  background-color: #ffffff; /* Fundo branco puro */
-  border-bottom: 1px solid var(--border); /* Usa sua variável ou #e5e7eb */
+  background-color: #ffffff;
+  border-bottom: 1px solid var(--border);
   position: sticky;
   top: 0;
   z-index: 1000;
@@ -10,10 +9,7 @@
   align-items: center;
   /* box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.03); Sombra bem leve */
   transition: all 0.3s ease;
-  /* 1. A "Fita de LED" (A linha sólida) */
-  border-bottom: 2px solid #fa0106; /* Use o vermelho da sua marca */
-
-  /* 2. O "Brilho do LED" (A luz vazando na parede) */
+  border-bottom: 2px solid #fa0106;
   /* x-offset | y-offset | blur-radius | spread | color */
   /* box-shadow: 0 4px 20px rgba(250, 1, 6, 0.35); */
 }
@@ -113,7 +109,7 @@
 .divider {
   width: 1px;
   height: 24px;
-  background-color: #e5e7eb;
+  background-color: #ded9d9;
   margin: 0 0.5rem;
 }
 
@@ -137,11 +133,10 @@
 
 .loginBtn:hover {
   color: var(--primary-red);
-  background-color: #eff6ff; /* Fundo azul bem clarinho */
-  border-color: #dbeafe;     /* Borda azul clara */
+  background-color: var(--primary-redlight);
+  border-color: #fedbdb; 
 }
 
-/* Botão Agendar (Sólido) */
 .activeBtn {
   background-color: var(--primary-red);
   color: #ffffff !important;
@@ -150,12 +145,11 @@
   font-weight: 600;
   font-size: 0.95rem;
   text-decoration: none;
-  box-shadow: 0 4px 6px rgba(37, 99, 235, 0.15);
+  box-shadow: 0 4px 6px rgba(235, 37, 37, 0.15);
   transition: all 0.2s ease;
   border: 1px solid transparent;
 }
 
-/* Removemos o efeito de linha do botão Agendar para não conflitar */
 .activeBtn::after {
   display: none;
 }
@@ -163,8 +157,8 @@
 .activeBtn:hover {
   background-color: var(--primary-darkred); 
   transform: translateY(-1px);
-  box-shadow: 0 6px 12px rgba(37, 99, 235, 0.25);
-  color: #ffffff; /* Garante texto branco */
+  box-shadow: 0 6px 12px rgba(235, 37, 37, 0.25);
+  color: #ffffff;
 }
 
 /* --- MOBILE --- */

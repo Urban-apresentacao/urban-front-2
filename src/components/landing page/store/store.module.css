@@ -1,13 +1,7 @@
 .storeSection {
-  /* Degradê sutil */
   background: linear-gradient(0deg, #ffffff 0%, #ffefef 100%);
-  
-  /* MUDANÇA: Aumentei de 6rem para 10rem (muito mais respiro vertical) */
   padding: 6rem 0; 
-  
-  /* MUDANÇA: Aumentei de 75vh para 85vh (ocupa quase toda a tela) */
-  min-height: 85vh; 
-  
+  min-height: 85vh;
   display: flex;
   align-items: center;
 }
@@ -19,7 +13,6 @@
   padding: 0 1.5rem;
 }
 
-/* --- CABEÇALHO --- */
 .header {
   text-align: center;
   max-width: 700px;
@@ -47,15 +40,13 @@
 .highlight { color: var(--primary-red); }
 .subtitle { color: #6b7280; font-size: 1.1rem; line-height: 1.6; }
 
-/* --- GRID DE PRODUTOS (VITRINE) --- */
 .productsGrid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
   gap: 2rem;
-  margin-bottom: 6rem; /* Espaço grande entre produtos e mapa */
+  margin-bottom: 6rem; 
 }
 
-/* --- CARD DO PRODUTO (Minimalista) --- */
 .card {
   background: white;
   border-radius: 16px;
@@ -125,7 +116,6 @@
   display: block;
 }
 
-/* --- SEÇÃO DE LOCALIZAÇÃO --- */
 .locationContainer {
   background-color: white;
   border-radius: 24px;
@@ -139,7 +129,6 @@
   flex-direction: column;
 }
 
-/* Lado Esquerdo: Texto */
 .locationText {
   padding: 2.5rem;
   display: flex;
@@ -150,7 +139,7 @@
 }
 
 .locationLabel {
-  color: #ef4444; /* Vermelho do Maps */
+  color: #ef4444;
   font-weight: 700;
   text-transform: uppercase;
   font-size: 0.85rem;
@@ -180,7 +169,7 @@
 .timeText {
   color: #6b7280;
   font-size: 0.95rem;
-  margin-left: 30px; /* Alinha com o texto do endereço */
+  margin-left: 30px;
   margin-bottom: 2rem;
   line-height: 1.6;
 }
@@ -203,17 +192,54 @@
   transform: translateY(-2px);
 }
 
-/* Lado Direito: Mapa */
 .mapWrapper {
   width: 100%;
-  height: 300px; /* Altura no mobile */
+  height: 300px;
   background-color: #e5e7eb;
 }
 
-/* Responsividade do Mapa */
+.footer {
+  margin-top: 3rem;
+  text-align: center;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.viewAllBtn {
+  background-color: transparent;
+  border: 2px solid #e5e7eb;
+  color: #374151;
+  padding: 12px 28px;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: all 0.2s ease;
+}
+
+.viewAllBtn:hover {
+  border-color: var(--primary-red);
+  color: var(--primary-red);
+  background-color: var(--primary-redlight);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+@media (max-width: 768px) {
+  .viewAllBtn {
+    width: 100%;
+    padding: 14px;
+  }
+}
+
 @media (min-width: 900px) {
   .locationContent {
-    flex-direction: row; /* Lado a lado no Desktop */
+    flex-direction: row; 
   }
 
   .locationText {
@@ -223,7 +249,7 @@
 
   .mapWrapper {
     width: 60%;
-    height: auto; /* Altura automática para preencher */
+    height: auto;
     min-height: 450px;
   }
 }

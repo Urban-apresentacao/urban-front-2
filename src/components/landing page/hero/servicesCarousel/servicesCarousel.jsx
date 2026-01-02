@@ -30,28 +30,24 @@ export default function ServicesCarousel({ onCategorySelect }) {
   return (
     <div className={styles.carouselWrapper}>
       
-      {/* Botão Anterior */}
       <button className={`${styles.navBtn} ${styles.prevBtn}`} onClick={scrollPrev}>
         <ChevronLeft size={24} />
       </button>
 
-      {/* Viewport do Embla */}
       <div className={styles.embla} ref={emblaRef}>
         <div className={styles.emblaContainer}>
-          {/* Loop pelas categorias do DB */}
           {Object.entries(categories).map(([id, category]) => {
-            const IconComponent = category.icon; // Pega o componente do ícone dinamicamente
+            const IconComponent = category.icon;
 
             return (
               <div className={styles.emblaSlide} key={id}>
                 <div 
                   className={styles.card} 
-                  onClick={() => onCategorySelect(parseInt(id))} // Ação de Filtrar
-                  role="button" // Acessibilidade
+                  onClick={() => onCategorySelect(parseInt(id))}
+                  role="button"
                   tabIndex={0}
                 >
                   <div className={styles.iconBox}>
-                    {/* Renderiza o ícone que veio do DB */}
                     <IconComponent size={32} />
                   </div>
                   <h3 className={styles.cardTitle}>{category.name}</h3>
@@ -63,7 +59,6 @@ export default function ServicesCarousel({ onCategorySelect }) {
         </div>
       </div>
 
-      {/* Botão Próximo */}
       <button className={`${styles.navBtn} ${styles.nextBtn}`} onClick={scrollNext}>
         <ChevronRight size={24} />
       </button>

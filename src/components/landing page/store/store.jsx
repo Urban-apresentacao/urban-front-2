@@ -1,18 +1,46 @@
 "use client";
 
-import React from 'react';
-import Image from 'next/image';
-import { ShoppingBag, MapPin, Navigation } from 'lucide-react'; // Ícones novos
+import React, { useState, useEffect } from 'react';
+import { ShoppingBag, MapPin, Navigation, ChevronDown, ChevronUp } from 'lucide-react';
 import styles from './store.module.css';
 import { products } from './data/productsDb';
+import Image from 'next/image';
 
 export default function StoreSection() {
-  
+  const [visibleCount, setVisibleCount] = useState(8);
+  const [defaultLimit, setDefaultLimit] = useState(8);
+  const getInitialCount = () => (window.innerWidth < 768 ? 3 : 8);
+
+  useEffect(() => {
+    const handleResize = () => {
+      const count = getInitialCount();
+      setDefaultLimit(count);
+      setVisibleCount(count);
+    };
+
+    handleResize();
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const handleShowMore = () => {
+    setVisibleCount(products.length);
+  };
+
+  const handleShowLess = () => {
+    setVisibleCount(defaultLimit);
+    
+    const section = document.getElementById('loja');
+    if (section) {
+      section.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <section id="loja" className={styles.storeSection}>
       <div className={styles.container}>
         
-        {/* --- CABEÇALHO DA LOJA --- */}
         <div className={styles.header}>
           <span className={styles.preTitle}>Nossa Loja Física</span>
           <h2 className={styles.title}>Produtos <span className={styles.highlight}>Profissionais</span></h2>
@@ -21,9 +49,8 @@ export default function StoreSection() {
           </p>
         </div>
 
-        {/* --- GRID DE PRODUTOS (VITRINE) --- */}
         <div className={styles.productsGrid}>
-          {products.map((product) => (
+          {products.slice(0, visibleCount).map((product) => (
             <div key={product.id} className={styles.card}>
               
               {product.tag && <span className={styles.tag}>{product.tag}</span>}
@@ -43,7 +70,22 @@ export default function StoreSection() {
           ))}
         </div>
 
-        {/* --- SEÇÃO DE LOCALIZAÇÃO (NOVO) --- */}
+        {products.length > defaultLimit && (
+          <div className={styles.footer} style={{ marginBottom: '4rem', textAlign: 'center' }}>
+            
+            {visibleCount < products.length ? (
+              <button className={styles.viewAllBtn} onClick={handleShowMore}>
+                Ver todos os produtos <ChevronDown size={20} />
+              </button>
+            ) : (
+              <button className={styles.viewAllBtn} onClick={handleShowLess}>
+                Ver menos produtos <ChevronUp size={20} />
+              </button>
+            )}
+
+          </div>
+        )}
+
         <div className={styles.locationContainer}>
           <div className={styles.locationContent}>
             <div className={styles.locationText}>
@@ -60,7 +102,6 @@ export default function StoreSection() {
                 Segunda a Sexta: 09h às 17h<br />
               </p>
 
-              {/* Botão para abrir no Waze/Maps do celular */}
               <a 
                 href="https://maps.google.com/?q=AutoLimp+Estetica" 
                 target="_blank" 
@@ -70,7 +111,6 @@ export default function StoreSection() {
               </a>
             </div>
 
-            {/* O MAPA DO GOOGLE */}
             <div className={styles.mapWrapper}>
               <iframe 
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d446.71798718180605!2d-50.37848961921088!3d-22.012482474102686!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9495bd000d47181d%3A0xbc8e7fff1430e75a!2sAutolimp%20produtos%20e%20estetica%20automotiva!5e1!3m2!1spt-BR!2sbr!4v1767292827035!5m2!1spt-BR!2sbr"

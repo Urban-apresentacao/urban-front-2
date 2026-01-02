@@ -8,26 +8,18 @@
 
 .embla {
   overflow: hidden;
-  padding: 1rem 0; /* Espaço vertical para a sombra não cortar */
+  padding: 1rem 0;
 }
 
-/* A CORREÇÃO DO LOOP E ESPAÇAMENTO VEM AQUI 👇 */
 .emblaContainer {
   display: flex;
-  /* Removemos o 'gap' pois ele buga o loop infinito */
-  /* gap: 1.5rem; */
-  
-  /* Usamos margem negativa para compensar o padding dos slides */
   margin-left: -1.5rem; 
 }
 
 .emblaSlide {
-  /* O espaçamento agora é interno do slide */
   padding-left: 1.5rem; 
   min-width: 0;
-  
-  /* Padrão Mobile: 1 card por vez (100%) ou um pedacinho do próximo (85%) */
-  flex: 0 0 85%; 
+  flex: 0 0 100%;  /* Padrão Mobile: 1 card por vez (100%) ou um pedacinho do próximo (85%) */
 }
 
 @media (min-width: 640px) {
@@ -44,13 +36,11 @@
   }
 }
 
-/* O Card (Visual) */
 .card {
   background: #ffffff;
   border-radius: 16px;
-  /* Altura fixa ajuda a manter alinhamento */
   height: 220px; 
-  border: 1px solid #e5e7eb;
+  border: 1px solid #ebe5e5;
   cursor: pointer;
   display: flex;
   flex-direction: column;
@@ -62,11 +52,9 @@
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
   position: relative;
   overflow: hidden;
-  /* O padding interno do card */
   padding: 1.5rem;
 }
 
-/* Efeito Hover Top */
 .card:hover {
   transform: translateY(-8px);
   border-color: var(--primary-red);
@@ -74,7 +62,7 @@
 }
 
 .iconBox {
-  background-color: #eff6ff;
+  background-color: #ffefef;
   color: var(--primary-red);
   padding: 16px;
   border-radius: 50%;
@@ -82,7 +70,6 @@
   align-items: center;
   justify-content: center;
   transition: all 0.3s ease;
-  /* Tamanho fixo para o ícone não dançar */
   width: 64px;
   height: 64px;
   flex-shrink: 0;
@@ -97,9 +84,8 @@
 .cardTitle {
   font-size: 1rem;
   font-weight: 700;
-  color: #1f2937;
+  color: #371f1f;
   line-height: 1.3;
-  /* Limita o título a 2 linhas para não quebrar o layout */
   display: -webkit-box;
   -webkit-box-orient: vertical;
   overflow: hidden;
@@ -107,13 +93,14 @@
 
 .clickHint {
   font-size: 0.75rem;
-  color: #9ca3af;
+  color: #af9c9c;
   font-weight: 600;
-  opacity: 0;
-  transform: translateY(10px);
+  /* transform: translateY(10px); */
   transition: all 0.3s ease;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .card:hover .clickHint {
@@ -122,7 +109,20 @@
   color: var(--primary-red);
 }
 
-/* Botões de Navegação */
+@media (min-width: 1024px) {
+  .clickHint {
+    opacity: 0;
+    transform: translateY(10px);
+    color: #af9c9c;
+  }
+  
+  .card:hover .clickHint {
+    opacity: 1;
+    transform: translateY(0);
+    color: #eb2525;
+  }
+}
+
 .navBtn {
   position: absolute;
   top: 50%;
@@ -130,7 +130,7 @@
   z-index: 10;
   background-color: white;
   border: 1px solid #e5e7eb;
-  color: #374151;
+  color: #513737;
   width: 40px;
   height: 40px;
   border-radius: 50%;

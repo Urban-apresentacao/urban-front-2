@@ -55,6 +55,17 @@
   font-weight: 600;
   cursor: pointer;
 }
+
+.btnPrimary:hover { 
+  background: var(--primary-darkred);
+  transition: background 0.3s ease;
+}
+.btnSecondary:hover { 
+  background: var(--primary-darkred);
+  transition: background 0.3s ease;
+  color: white;
+ }
+
 .btnPrimary { background: var(--primary-red); color: white; border: none; }
 .btnSecondary { background: transparent; color: var(--primary-red); border: 1px solid var(--primary-red); }
 

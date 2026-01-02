@@ -23,13 +23,8 @@ export default function Hero() {
   return (
     <>
       <section id="home" className={styles.hero}>
-        {/* O Container principal segura tudo e centraliza na tela */}
         <div className={styles.container}>
-          
-          {/* --- NOVO EMBRULHO: Grid do Topo (Texto + Imagem) --- */}
-          <div className={styles.heroGrid}>
-            
-            {/* Coluna da Esquerda (Texto) */}
+          <div className={styles.heroGrid}>  
             <div className={styles.heroContent}>
               <h1 className={styles.heroTitle}>
                 Estética automotiva de <span className={styles.highlight}>alto padrão</span> para quem ama seu carro.
@@ -46,7 +41,6 @@ export default function Hero() {
               </div>
             </div>
 
-            {/* Coluna da Direita (Imagem Grande) */}
             <div className={styles.heroImageWrapper}>
               <Image 
                   src="/images/imagem_byd.jpg"
@@ -57,12 +51,8 @@ export default function Hero() {
                   style={{ objectFit: 'cover' }}
                 />
             </div>
-
-          </div> {/* Fim do heroGrid */}
-
-          {/* --- O CARROSSEL FICA AQUI FORA, EMBAIXO DE TUDO --- */}
+          </div>
           <ServicesCarousel onCategorySelect={handleCategoryClick} />
-
         </div>
       </section>
 

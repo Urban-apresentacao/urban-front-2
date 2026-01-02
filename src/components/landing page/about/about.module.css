@@ -1,76 +1,124 @@
 .about {
-  /* Degradê sutil */
-  background: linear-gradient(0deg, #ffffff 0%, #ffefef 100%);
-  
-  /* MUDANÇA: Aumentei de 6rem para 10rem (muito mais respiro vertical) */
-  padding: 10rem 0; 
-  
-  /* MUDANÇA: Aumentei de 75vh para 85vh (ocupa quase toda a tela) */
-  min-height: 85vh; 
-  
+  /* Mantive seu degradê suave */
+  background: linear-gradient(180deg, #ffffff 0%, #fff1f2 100%);
+  padding: 8rem 0; 
+  /* min-height removido para se ajustar ao conteúdo, evita buracos em telas gigantes */
   display: flex;
   align-items: center;
 }
 
 .container {
   max-width: 1200px;
+  width: 100%;
   margin: 0 auto;
   padding: 0 1.5rem;
   
-  display: grid;
-  grid-template-columns: 1fr;
+  display: flex;
+  flex-direction: column;
   gap: 4rem;
   align-items: center;
 }
 
-/* Área da Imagem */
-.aboutImage {
+/* --- ÁREA DA IMAGEM --- */
+.imageWrapper {
+  position: relative; /* Necessário para o card flutuante */
   width: 100%;
-  height: 450px;
-  background-color: #f3f4f6; /* Placeholder cinza */
+  max-width: 500px; /* Limita a largura no mobile */
+  margin: 0 auto;
+  order: 2; /* Mobile: Imagem embaixo */
+}
+
+.imageContainer {
+  width: 100%;
+  height: 400px; /* Altura fixa para ficar bonito */
+  position: relative;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.15);
+  background-color: #e5e7eb; /* Cor de fundo enquanto carrega */
+}
+
+/* O Card Flutuante */
+.floatingCard {
+  position: absolute;
+  bottom: -20px; /* Sai um pouco para fora da imagem */
+  left: -20px;   /* Sai um pouco para a esquerda */
+  
+  background: white;
+  padding: 1rem 1.5rem;
   border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  border: 1px solid #f3f4f6;
+  
+  /* Animaçãozinha leve */
+  animation: float 4s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+.iconCircle {
+  background-color: #fef3c7; /* Amarelo clarinho */
+  padding: 10px;
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #9ca3af;
-  font-weight: 600;
-  order: 2; /* No mobile, a imagem fica abaixo do texto ou você pode mudar para 1 se preferir */
 }
 
-/* Área do Texto */
+.cardTitle {
+  display: block;
+  font-weight: 800;
+  color: #111827;
+  font-size: 0.95rem;
+}
+
+.cardDesc {
+  display: block;
+  font-size: 0.8rem;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+/* --- CONTEÚDO DE TEXTO --- */
 .aboutContent {
-  order: 1;
+  order: 1; /* Mobile: Texto em cima */
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
 }
 
 .tagline {
-  color: var(--primary-red);
+  color: var(--primary-red, #fa0106);
   font-size: 0.9rem;
   text-transform: uppercase;
-  letter-spacing: 1.5px;
+  letter-spacing: 2px;
   font-weight: 700;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.2rem;
 }
 
 .sectionTitle {
   font-size: 2.25rem;
-  color: var(--text-main);
-  line-height: 1.2;
+  color: #111827;
+  line-height: 1.1;
   font-weight: 800;
 }
 
 .text {
-  color: var(--text-body);
+  color: #4b5563;
   line-height: 1.7;
   font-size: 1.05rem;
 }
 
-/* Lista de Checagem */
+/* Lista */
 .checkList {
   list-style: none;
-  margin: 1rem 0;
+  margin: 0.5rem 0;
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -80,12 +128,12 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  color: var(--text-main);
+  color: #1f2937;
   font-weight: 600;
 }
 
 .checkIcon {
-  color: var(--primary-red);
+  color: var(--primary-red, #fa0106);
   flex-shrink: 0;
 }
 
@@ -93,39 +141,47 @@
 .btnLink {
   background: none;
   border: none;
-  color: var(--primary-red);
+  color: var(--primary-red, #fa0106);
   font-weight: 700;
   display: flex;
   align-items: center;
   gap: 0.5rem;
   padding: 0;
   font-size: 1rem;
-  cursor: pointer;
+  text-decoration: none;
   width: fit-content;
   transition: gap 0.2s;
+  margin-top: 1rem;
 }
 
 .btnLink:hover {
   text-decoration: underline;
-  gap: 0.75rem; /* Efeito de seta andando */
+  gap: 0.8rem;
 }
 
 /* --- RESPONSIVIDADE --- */
-@media (min-width: 768px) {
+@media (min-width: 900px) {
   .container {
-    grid-template-columns: 1fr 1fr; /* Duas colunas */
-    gap: 6rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    align-items: center;
   }
   
-  .aboutImage {
-    order: 1; /* Imagem vai para a esquerda no desktop */
+  .imageWrapper {
+    order: 0; /* Desktop: Imagem na Esquerda */
+    margin: 0; /* Remove margem automática */
+  }
+  
+  .imageContainer {
+    height: 500px; /* Imagem mais alta no desktop */
   }
   
   .aboutContent {
-    order: 2;
+    order: 0; /* Desktop: Texto na Direita */
   }
 
   .sectionTitle {
-    font-size: 2.75rem;
+    font-size: 3rem;
   }
 }
