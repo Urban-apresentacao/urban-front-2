@@ -13,6 +13,6 @@ export async function createServiceCategory(payload) {
 }
 
 export async function updateServiceCategory(id, payload) {
-    const { data } = await api.put(`/service-categories/${id}`, payload);
+    const { data } = await api.patch(`/service-categories/${id}`, payload);
     return data;
 }

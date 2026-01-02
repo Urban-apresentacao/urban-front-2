@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import UserForm from "@/components/userForm/userForm";
+import UserFormAdmin from "@/components/userForm/userFormAdmin/userFormAdmin";
 import { registerUser } from "@/services/register.service";
 import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
@@ -83,7 +83,7 @@ export default function RegisterUserPage() {
             </div>
 
             <div className={styles.formCard}>
-                <UserForm 
+                <UserFormAdmin 
                     saveFunction={handleCreateUser}
                     onSuccess={handleSuccess}
                     onCancel={handleCancel}

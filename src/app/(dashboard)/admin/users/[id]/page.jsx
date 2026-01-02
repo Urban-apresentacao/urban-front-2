@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
-import UserForm from "@/components/userForm/userForm";
+import UserFormAdmin from "@/components/userForm/userFormAdmin/userFormAdmin";
 import { getUserById, updateUser } from "@/services/users.service";
 import Swal from "sweetalert2";
 import styles from "../register/page.module.css";
@@ -89,7 +89,7 @@ export default function EditUserPage() {
             </h2>
 
             {userData && (
-                <UserForm
+                <UserFormAdmin
                     initialData={userData}
                     mode={mode}
                     saveFunction={handleUpdateUser}

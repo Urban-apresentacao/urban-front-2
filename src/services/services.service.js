@@ -41,7 +41,7 @@ export async function createService(payload) {
 }
 
 export async function updateService(id, payload) {
-    const { data } = await api.put(`/services/${id}`, payload);
+    const { data } = await api.patch(`/services/${id}`, payload);
     return data;
 }
 
