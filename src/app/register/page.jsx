@@ -6,7 +6,7 @@ import {
 } from 'lucide-react'
 import styles from './page.module.css'
 import InputRegister from '@/components/ui/inputRegister/inputRegister'
-
+import Image from 'next/image'
 import { useState } from "react";
 import { useRegister } from "@/hooks/useRegister";
 import Swal from "sweetalert2";
@@ -49,50 +49,50 @@ export default function Cadastro() {
 
     // 1. CPF
     if (!validateCPF(formData.usu_cpf)) {
-        Swal.fire({
-            title: "CPF Inválido",
-            text: "Por favor, verifique os números digitados.",
-            icon: "warning",
-            confirmButtonColor: "#f59e0b"
-        });
-        return; 
+      Swal.fire({
+        title: "CPF Inválido",
+        text: "Por favor, verifique os números digitados.",
+        icon: "warning",
+        confirmButtonColor: "#f59e0b"
+      });
+      return;
     }
 
     // 2. Email
     if (!validateEmail(formData.usu_email)) {
-        Swal.fire({
-            title: "E-mail Inválido",
-            text: "Por favor, insira um endereço válido.",
-            icon: "warning",
-            confirmButtonColor: "#f59e0b"
-        });
-        return; 
+      Swal.fire({
+        title: "E-mail Inválido",
+        text: "Por favor, insira um endereço válido.",
+        icon: "warning",
+        confirmButtonColor: "#f59e0b"
+      });
+      return;
     }
 
     // 3. SENHA (Validação simples, pois o usuário já está vendo o checklist)
     if (!isPasswordValid) {
-        Swal.fire({
-            title: "Senha Incompleta",
-            text: "Por favor, atenda a todos os requisitos de senha exibidos na tela.",
-            icon: "warning",
-            confirmButtonColor: "#f59e0b"
-        });
-        return; 
+      Swal.fire({
+        title: "Senha Incompleta",
+        text: "Por favor, atenda a todos os requisitos de senha exibidos na tela.",
+        icon: "warning",
+        confirmButtonColor: "#f59e0b"
+      });
+      return;
     }
 
     // 4. Data de Nascimento
     if (formData.usu_data_nasc) {
-        const dateError = getBirthDateError(formData.usu_data_nasc);
-        
-        if (dateError) {
-            Swal.fire({
-                title: "Data Inválida",
-                text: dateError,
-                icon: "warning",
-                confirmButtonColor: "#f59e0b"
-            });
-            return;
-        }
+      const dateError = getBirthDateError(formData.usu_data_nasc);
+
+      if (dateError) {
+        Swal.fire({
+          title: "Data Inválida",
+          text: dateError,
+          icon: "warning",
+          confirmButtonColor: "#f59e0b"
+        });
+        return;
+      }
     }
 
     // 4. Tenta Enviar
@@ -102,12 +102,19 @@ export default function Cadastro() {
       // Hook trata
     }
   };
-  
+
   return (
     <div className={styles.page}>
       <div className={styles.container}>
         <div className={styles.brand}>
-          <span className={styles.logo}>ADM</span>
+          <Image
+            src="/images/logo_autolimp.jpeg"
+            alt="Logo AutoLimp"
+            width={60}
+            height={60}
+            priority
+            className={styles.logoImage}
+          />
           <h1>Criar Conta</h1>
           <p>Preencha os dados para se cadastrar</p>
         </div>
@@ -237,7 +244,7 @@ export default function Cadastro() {
         </form>
 
         <footer className={styles.footer}>
-          <span>© 2025 • Sistema Administrativo</span>
+          <span>© 2025 • Sistema AutoLimp</span>
         </footer>
       </div>
     </div>

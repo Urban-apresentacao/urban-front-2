@@ -169,7 +169,7 @@ export default function AppointmentsClient() {
               <input
                 name="search"
                 type="text"
-                placeholder="Buscar cliente ou placa..."
+                placeholder="Pesquisar agendamentos..."
                 className={styles.searchInput}
                 value={filters.search}
                 onChange={handleFilterChange}

@@ -16,7 +16,7 @@ export async function getAllUsers(termo = "", page = 1) {
 // ATUALIZAR (PACTH)
 export async function updateUser(id, userData) {
   try {
-    const { data } = await api.put(`/users/${id}`, userData);
+    const { data } = await api.patch(`/users/${id}`, userData);
     return data;
   } catch (error) {
     console.error("Erro ao atualizar usuário:", error);

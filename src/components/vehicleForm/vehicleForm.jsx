@@ -29,7 +29,6 @@ export default function VehicleForm({ onSuccess, onCancel, saveFunction, initial
 
   // 1. STATE COM TODOS OS CAMPOS
   const getInitialState = () => {
-    // Valores padrão
     const defaults = {
       cat_id: '',
       mar_id: '',
@@ -37,22 +36,22 @@ export default function VehicleForm({ onSuccess, onCancel, saveFunction, initial
       veic_placa: '',
       veic_ano: '',
       veic_cor: '',
-      veic_combustivel: 'FLEX',
+      veic_combustivel: '',
       veic_observacao: '',
-      veic_situacao: 'true' // String para select
+      veic_situacao: 'true'
     };
 
     if (!initialData) return defaults;
 
     // Se tiver initialData (Edição), preenche
     return {
-      cat_id: initialData.cat_id || '', 
+      cat_id: initialData.cat_id || '',
       mar_id: initialData.mar_id || '',
       mod_id: initialData.mod_id || '',
       veic_placa: initialData.veic_placa || '',
       veic_ano: initialData.veic_ano || '',
       veic_cor: initialData.veic_cor || '',
-      veic_combustivel: initialData.veic_combustivel || 'FLEX',
+      veic_combustivel: initialData.veic_combustivel || '',
       veic_observacao: initialData.veic_observ || '',
       veic_situacao: String(initialData.veic_situacao ?? 'true')
     };
@@ -76,7 +75,6 @@ export default function VehicleForm({ onSuccess, onCancel, saveFunction, initial
 
     setFormData((prev) => {
       const newData = { ...prev, [name]: value };
-      // Limpa os filhos se o pai mudar
       if (name === 'cat_id') { newData.mar_id = ""; newData.mod_id = ""; }
       if (name === 'mar_id') { newData.mod_id = ""; }
       return newData;
@@ -95,20 +93,16 @@ export default function VehicleForm({ onSuccess, onCancel, saveFunction, initial
   const validateForm = () => {
     const newErrors = {};
 
-    // 1. Calcula o limite de ano
     const currentYear = new Date().getFullYear();
     const maxYear = currentYear + 1;
-    const minYear = 1900; 
-
+    const minYear = 1900;
 
     if (!formData.cat_id) newErrors.cat_id = "Selecione uma categoria";
     if (!formData.mar_id) newErrors.mar_id = "Selecione uma marca";
     if (!formData.mod_id) newErrors.mod_id = "Selecione um modelo";
-    if (!formData.veic_placa) newErrors.veic_placa = "Informe a placa"; 
+    if (!formData.veic_placa) newErrors.veic_placa = "Informe a placa";
     if (!formData.veic_ano) newErrors.veic_ano = "Informe o ano";
 
-
-    // 2. Lógica de validação do Ano
     if (!formData.veic_ano) {
       newErrors.veic_ano = "Informe o ano";
     } else {
@@ -208,7 +202,7 @@ export default function VehicleForm({ onSuccess, onCancel, saveFunction, initial
 
   const handleLinkUserSave = async (modalData) => {
     const payload = {
-      veic_id: initialData.veic_id, 
+      veic_id: initialData.veic_id,
       usu_id: modalData.usu_id,
       ehproprietario: modalData.is_owner,
       data_inicial: modalData.start_date
@@ -226,9 +220,9 @@ export default function VehicleForm({ onSuccess, onCancel, saveFunction, initial
       <form onSubmit={handleSubmit} className={styles.form}>
 
         {initialData && (
-            <div className={styles.inputGroup} style={{ maxWidth: '100px' }}>
-                <InputRegisterForm label="ID" value={initialData.veic_id} disabled={true} />
-            </div>
+          <div className={styles.inputGroup} style={{ maxWidth: '100px' }}>
+            <InputRegisterForm label="ID" value={initialData.veic_id} disabled={true} />
+          </div>
         )}
 
         <div className={styles.inputGroup}>
@@ -262,7 +256,7 @@ export default function VehicleForm({ onSuccess, onCancel, saveFunction, initial
             value={formData.mod_id}
             onChange={handleChange}
             disabled={!isEditable || (!formData.mar_id && !initialData)}
-            options={toOptions(models?.dados || [], 'mod_id', 'mod_nome')}
+            options={toOptions(models, 'mod_id', 'mod_nome')}
           />
           <ErrorMessage message={errors.mod_id} />
         </div>
@@ -271,16 +265,11 @@ export default function VehicleForm({ onSuccess, onCancel, saveFunction, initial
           <InputMaskRegister
             name="veic_placa"
             label="Placa"
-            // MUDANÇA AQUI: Usar 'a' minúsculo para representar letras
             mask={[
               { mask: 'aaa-0000' }, // Placa Antiga (ABC-1234)
               { mask: 'aaa-0a00' }  // Placa Mercosul (ABC-1D23)
             ]}
-            // Removemos o 'definitions' pois 'a' já é nativo
-            
-            // O prepare garante que o 'a' vire 'A' visualmente
-            prepare={(str) => str.toUpperCase()} 
-            
+            prepare={(str) => str.toUpperCase()}
             value={formData.veic_placa}
             onAccept={(value) => handleMaskChange(value, "veic_placa")}
             required
@@ -362,7 +351,7 @@ export default function VehicleForm({ onSuccess, onCancel, saveFunction, initial
 
               <button
                 type="button"
-                className={styles.btnLink} 
+                className={styles.btnLink}
                 onClick={() => setShowHistoryModal(true)}
                 style={{ backgroundColor: '#fff', color: '#374151', border: '1px solid #d1d5db' }}
               >
@@ -396,7 +385,7 @@ export default function VehicleForm({ onSuccess, onCancel, saveFunction, initial
         onSave={handleLinkUserSave}
       />
 
-      <ModalVehicleHistory 
+      <ModalVehicleHistory
         isOpen={showHistoryModal}
         onClose={() => setShowHistoryModal(false)}
         vehicleId={initialData?.veic_id}

@@ -2,8 +2,9 @@
 
 import { Mail, Lock, Eye, EyeOff, Loader2 } from 'lucide-react'
 import styles from './page.module.css'
-import InputLogin from '@/components/ui/inputLogin/inputLogin' 
-import Link from 'next/link' // Importante: Use Link do Next.js para navegação rápida
+import InputLogin from '@/components/ui/inputLogin/inputLogin'
+import Link from 'next/link'
+import Image from 'next/image'
 
 import { useState } from "react";
 import { useLogin } from "../../hooks/useLogin";
@@ -20,7 +21,16 @@ export default function Login() {
         <div className={styles.page}>
             <div className={styles.container}>
                 <div className={styles.brand}>
-                    <span className={styles.logo}>ADM</span>
+
+                    <Image
+                        src="/images/logo_autolimp.jpeg"
+                        alt="Logo AutoLimp"
+                        width={60}
+                        height={60}
+                        priority
+                        className={styles.logoImage}
+                    />
+
                     <h1>Acesso ao Sistema</h1>
                     <p>Entre com suas credenciais</p>
                 </div>
@@ -31,7 +41,7 @@ export default function Login() {
                         e.preventDefault();
                         handleLogin(email, senha);
                     }}>
-                    
+
                     {/* INPUT EMAIL */}
                     <InputLogin
                         label="Email"
@@ -64,14 +74,14 @@ export default function Login() {
                     </InputLogin>
 
                     {/* BOTÃO DE ENTRAR */}
-                    <button 
-                        className={styles.button} 
+                    <button
+                        className={styles.button}
                         disabled={loading}
                         style={{ opacity: loading ? 0.7 : 1, cursor: loading ? 'not-allowed' : 'pointer' }}
                     >
                         {loading ? (
                             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
-                                <Loader2 size={20} className={styles.spin} /> 
+                                <Loader2 size={20} className={styles.spin} />
                                 <span>Entrando...</span>
                             </div>
                         ) : (
@@ -99,7 +109,7 @@ export default function Login() {
                 </div>
 
                 <footer className={styles.footer}>
-                    <span>© 2025 • Sistema Administrativo</span>
+                    <span>© 2025 • Sistema AutoLimp</span>
                 </footer>
             </div>
         </div>

@@ -177,8 +177,8 @@ export default function ModalUserLink({ isOpen, onClose, onSave }) {
                     <label 
                         className={styles.checkboxContainer}
                         style={{ 
-                            borderColor: formData.is_owner ? '#2563eb' : '#d1d5db', 
-                            backgroundColor: formData.is_owner ? '#eff6ff' : '#fff' 
+                            borderColor: formData.is_owner ? '#eb2525ff' : '#dbd1d1ff', 
+                            backgroundColor: formData.is_owner ? '#ffefefff' : '#fff' 
                         }}
                     >
                         <div className={styles.checkboxContent}>
@@ -193,7 +193,7 @@ export default function ModalUserLink({ isOpen, onClose, onSave }) {
                             className={styles.realCheckbox}
                         />
                         <div className={styles.checkIndicator}>
-                            {formData.is_owner ? <CheckCircle size={20} color="#2563eb" /> : <div className={styles.circleEmpty} />}
+                            {formData.is_owner ? <CheckCircle size={20} color="#eb2525ff" /> : <div className={styles.circleEmpty} />}
                         </div>
                     </label>
 
