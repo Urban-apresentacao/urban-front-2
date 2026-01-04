@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation"; // Para redirecionar
-import VehicleForm from "@/components/forms/VehicleForm"; // Importe o form que você criou
-import { getVehicleById, updateVehicle } from "@/services/vehicle.service"; // Seus services
+// import VehicleForm from "@/components/forms/VehicleForm"; // Importe o form que você criou
+// import { getVehicleById, updateVehicle } from "@/services/vehicle.service"; // Seus services
 import Swal from "sweetalert2";
 
 export default function EditVehiclePage({ params }) {
@@ -59,13 +59,13 @@ export default function EditVehiclePage({ params }) {
       <h1 className="text-2xl font-bold mb-6 text-gray-800">Editar Veículo</h1>
       
       {/* Renderiza o seu formulário */}
-      <VehicleForm 
+      {/* <VehicleForm 
         mode="edit"
         initialData={vehicleData}
         saveFunction={handleSave}
         onSuccess={handleBack}
         onCancel={handleBack}
-      />
+      /> */}
     </div>
   );
 }
