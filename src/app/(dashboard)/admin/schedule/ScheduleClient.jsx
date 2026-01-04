@@ -8,13 +8,12 @@ import getDay from 'date-fns/getDay';
 import ptBR from 'date-fns/locale/pt-BR';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 
-// IMPORTS ATUALIZADOS
 import { 
     getAppointments, 
     createAppointment, 
     updateAppointment,
-    getAppointmentById, // Necessário para buscar detalhes completos
-    cancelAppointment   // Necessário para o botão vermelho
+    getAppointmentById,
+    cancelAppointment 
 } from "@/services/appointments.service";
 
 import AppointmentForm from "@/components/appointmentsForm/appointmentsForm";
@@ -22,7 +21,6 @@ import ModalCalendar from "@/components/modals/modalCalendar/ModalCalendar";
 import Swal from "sweetalert2";
 import styles from "./ScheduleClient.module.css";
 
-// Configuração de localização
 const locales = { 'pt-BR': ptBR };
 const localizer = dateFnsLocalizer({
   format, parse, startOfWeek, getDay, locales,
@@ -47,13 +45,12 @@ const messages = {
 export default function ScheduleClient() {
     const [events, setEvents] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [selectedEvent, setSelectedEvent] = useState(null); // Dados COMPLETOS para o form
+    const [selectedEvent, setSelectedEvent] = useState(null);
     const [selectedDate, setSelectedDate] = useState(null); 
 
     // 1. Buscar Agendamentos (Fetch Schedule)
     const fetchSchedule = useCallback(async () => {
         try {
-            // Buscamos 1000 itens para garantir que preencha o mês/ano
             const { data } = await getAppointments({ limit: 1000 });
             
             const mappedEvents = data.map(item => {
@@ -65,7 +62,7 @@ export default function ScheduleClient() {
                     title: `${item.veic_placa} - ${item.usu_nome}`,
                     start: startDateTime,
                     end: endDateTime,
-                    resource: item, // Item resumido da lista
+                    resource: item,
                     status: item.agend_situacao 
                 };
             });
@@ -123,8 +120,7 @@ export default function ScheduleClient() {
     // 4. Salvar Formulário (Create/Update)
     const handleSave = async (formData) => {
         try {
-            // CORREÇÃO: Converte lista de objetos de serviços para lista de IDs
-            // Isso evita o erro 400/500 no backend
+            // Converte lista de objetos de serviços para lista de IDs
             const payload = {
                 ...formData,
                 services: formData.services?.map(s => s.serv_id || s) || []
@@ -144,7 +140,7 @@ export default function ScheduleClient() {
                 });
             }
             setIsModalOpen(false);
-            fetchSchedule(); // Recarrega calendário
+            fetchSchedule(); 
         } catch (error) {
             console.error(error);
             const errorMsg = error.response?.data?.message || 'Ocorreu um erro inesperado.';
@@ -190,10 +186,23 @@ export default function ScheduleClient() {
         }
     };
 
+    const getFormMode = () => {
+        if (!selectedEvent) return 'create'; // Se não tem evento, é criação
+
+        // Se estiver Concluído (3) ou Cancelado (0), força o modo visualização
+        const status = String(selectedEvent.agend_situacao);
+        if (status === '3' || status === '0') {
+            return 'view';
+        }
+
+        // Se for Pendente (1) ou Em Andamento (2), mantém edição direta (ou mude para 'view' se preferir)
+        return 'edit';
+    };
+
     // Preparar dados iniciais para o Form
     const getInitialData = () => {
         if (selectedEvent) {
-            return selectedEvent; // Objeto completo vindo do getAppointmentById
+            return selectedEvent;
         }
         if (selectedDate) {
             return {
@@ -205,11 +214,8 @@ export default function ScheduleClient() {
         return null;
     };
 
-    // --- NOVA CONFIGURAÇÃO DE HORÁRIOS VISÍVEIS ---
     const { minTime, maxTime } = useMemo(() => {
-        // Criamos uma data base (hoje) e setamos as horas
         const base = new Date();
-        
         // Define o início da visualização: 07:00
         const min = new Date(base.getFullYear(), base.getMonth(), base.getDate(), 7, 0, 0);
         
@@ -243,15 +249,15 @@ export default function ScheduleClient() {
 
             <ModalCalendar 
                 isOpen={isModalOpen} 
-                onClose={() => setIsModalOpen(false)}
-                title={selectedEvent ? `Editar Agendamento #${selectedEvent.agend_id}` : "Novo Agendamento"}
+                onClose={() => setIsModalOpen(false)} 
+                title={selectedEvent ? `Agendamento #${selectedEvent.agend_id}` : "Novo Agendamento"}
             >
                 <AppointmentForm 
                     initialData={getInitialData()} 
-                    mode={selectedEvent ? 'edit' : 'create'}
+                    mode={getFormMode()}
                     onCancel={() => setIsModalOpen(false)}
                     saveFunction={handleSave}
-                    onCancelAppointment={handleCancelEvent} // Passando a nova função
+                    onCancelAppointment={handleCancelEvent}
                 />
             </ModalCalendar>
         </div>

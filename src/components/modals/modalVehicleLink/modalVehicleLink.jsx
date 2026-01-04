@@ -34,11 +34,11 @@ export default function ModalVehicleLink({ isOpen, onClose, onSave }) {
         try {
             // Busca todos os veículos (pode passar filtros se quiser otimizar)
             const response = await getAllVehicles("", 1, "active"); // Busca apenas ativos
-            
+
             let lista = [];
             if (Array.isArray(response)) lista = response;
             else if (response?.data && Array.isArray(response.data)) lista = response.data;
-            
+
             setVehicles(lista);
         } catch (error) {
             console.error("Erro ao buscar veículos", error);
@@ -49,15 +49,17 @@ export default function ModalVehicleLink({ isOpen, onClose, onSave }) {
     };
 
     // Filtra veículos por PLACA ou MODELO
-    const filteredVehicles = vehicles.filter(v => 
+    const filteredVehicles = vehicles.filter(v =>
         v.veic_placa.toLowerCase().includes(searchTerm.toLowerCase()) ||
         (v.modelo && v.modelo.toLowerCase().includes(searchTerm.toLowerCase()))
     );
 
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
+
         setFormData(prev => ({
             ...prev,
+            // Se for checkbox usa 'checked', se não usa 'value'
             [name]: type === 'checkbox' ? checked : value
         }));
     };
@@ -74,7 +76,7 @@ export default function ModalVehicleLink({ isOpen, onClose, onSave }) {
         }
         setSaving(true);
         try {
-            await onSave(formData); 
+            await onSave(formData);
             onClose();
         } catch (error) {
             console.error(error);
@@ -96,9 +98,9 @@ export default function ModalVehicleLink({ isOpen, onClose, onSave }) {
                 <form onSubmit={handleSubmit} className={styles.body}>
                     <div className={styles.searchWrapper}>
                         <Search size={18} className={styles.searchIcon} />
-                        <input 
-                            type="text" 
-                            placeholder="Buscar por placa ou modelo..." 
+                        <input
+                            type="text"
+                            placeholder="Buscar por placa ou modelo..."
                             className={styles.searchInput}
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
@@ -123,14 +125,14 @@ export default function ModalVehicleLink({ isOpen, onClose, onSave }) {
                                     {filteredVehicles.map(v => {
                                         const isSelected = formData.veic_id === v.veic_id;
                                         return (
-                                            <tr 
-                                                key={v.veic_id} 
+                                            <tr
+                                                key={v.veic_id}
                                                 onClick={() => handleSelectVehicle(v.veic_id)}
                                                 className={isSelected ? styles.selectedRow : ''}
                                             >
                                                 <td>
                                                     <div className={styles.userName}>
-                                                        <Car size={16} /> 
+                                                        <Car size={16} />
                                                         {v.modelo || "Veículo"} - {v.marca || ""}
                                                     </div>
                                                 </td>
@@ -148,25 +150,44 @@ export default function ModalVehicleLink({ isOpen, onClose, onSave }) {
                     <div className={styles.row}>
                         <div className={styles.inputGroup} style={{ flex: 1 }}>
                             <label>Data de Início</label>
-                            <input 
-                                type="date" 
-                                name="start_date" 
-                                value={formData.start_date} 
-                                onChange={handleChange} 
+                            <input
+                                type="date"
+                                name="start_date"
+                                value={formData.start_date}
+                                onChange={handleChange}
                                 className={styles.input}
-                                required 
+                                required
                             />
                         </div>
                     </div>
 
-                    <label className={styles.checkboxContainer} style={{ borderColor: formData.is_owner ? '#2563eb' : '#d1d5db', backgroundColor: formData.is_owner ? '#eff6ff' : '#fff' }}>
+                    <label
+                        className={styles.checkboxContainer}
+                        style={{
+                            borderColor: formData.is_owner ? '#ef4444' : '#d1d5db',
+                            backgroundColor: formData.is_owner ? '#fef2f2' : '#ffffff',
+                            transition: 'all 0.2s ease'
+                        }}
+                    >
                         <div className={styles.checkboxContent}>
-                            <span className={styles.checkboxTitle}>É proprietário deste veículo?</span>
-                            <span className={styles.checkboxDesc}>Define responsabilidade legal.</span>
+                            <span className={styles.checkboxTitle} style={{ color: '#371f1f' }}>É proprietário deste veículo?</span>
+                            <span className={styles.checkboxDesc} style={{ color: '#806b6b' }}>Define responsabilidade legal.</span>
                         </div>
-                        <input type="checkbox" name="is_owner" checked={formData.is_owner} onChange={handleChange} className={styles.realCheckbox} />
+
+                        <input
+                            type="checkbox"
+                            name="is_owner"
+                            checked={formData.is_owner || false}
+                            onChange={handleChange}
+                            className={styles.realCheckbox}
+                        />
+
                         <div className={styles.checkIndicator}>
-                            {formData.is_owner ? <CheckCircle size={20} color="#2563eb" /> : <div className={styles.circleEmpty} />}
+                            {formData.is_owner ? (
+                                <CheckCircle size={24} color="#ef4444" weight="fill" />
+                            ) : (
+                                <div className={styles.circleEmpty} />
+                            )}
                         </div>
                     </label>
 

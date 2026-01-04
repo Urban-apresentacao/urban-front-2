@@ -68,7 +68,7 @@ export default function EditVehiclePage() {
                 title: "Sucesso",
                 text: "Veículo atualizado com sucesso!",
                 icon: "success",
-                confirmButtonColor: "#3085d6",
+                confirmButtonColor: '#16a34a',
             });
 
             // Redireciona após o usuário clicar em OK no alerta

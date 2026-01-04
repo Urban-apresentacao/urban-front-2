@@ -12,19 +12,19 @@ import Swal from "sweetalert2";
 import styles from "./VehiclesClient.module.css";
 
 export default function VehiclesClient() {
-    const { 
-        vehicles, 
-        loading, 
-        fetchVehicles, 
-        page, 
+    const {
+        vehicles,
+        loading,
+        fetchVehicles,
+        page,
         totalPages,
-        sortColumn, 
-        sortDirection, 
-        handleSort 
+        sortColumn,
+        sortDirection,
+        handleSort
     } = useVehicles();
-    
+
     const [inputValue, setInputValue] = useState("");
-    const [statusFilter, setStatusFilter] = useState("all"); 
+    const [statusFilter, setStatusFilter] = useState("all");
 
     const isMounted = useRef(false);
 
@@ -32,16 +32,16 @@ export default function VehiclesClient() {
     // O array vazio [] garante que não repita desnecessariamente
     useEffect(() => {
         fetchVehicles("", 1, "all", "veic_id", "DESC");
-    }, []); 
+    }, []);
 
     // 2. EFEITO INSTANTÂNEO (Filtro de Status e Ordenação)
     // Quando você clica no header ou muda o select, atualiza na hora sem delay
     useEffect(() => {
         if (!isMounted.current) return;
-        
+
         // Passamos o inputValue atual para não perder a busca se houver
         fetchVehicles(inputValue, 1, statusFilter, sortColumn, sortDirection);
-        
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [statusFilter, sortColumn, sortDirection]); // Removido inputValue daqui para não conflitar
 
@@ -52,7 +52,7 @@ export default function VehiclesClient() {
             isMounted.current = true;
             return;
         }
-        
+
         const delayDebounceFn = setTimeout(() => {
             fetchVehicles(inputValue, 1, statusFilter, sortColumn, sortDirection);
         }, 500);
@@ -86,7 +86,12 @@ export default function VehiclesClient() {
         if (result.isConfirmed) {
             try {
                 await toggleVehicleStatus(id, false);
-                await Swal.fire('Ocultado!', 'Veículo desativado.', 'success');
+                await Swal.fire({
+                    title: 'Ocultado!',
+                    text: 'Veículo desativado.',
+                    icon: 'success',
+                    confirmButtonColor: '#16a34a'
+                });
                 fetchVehicles(inputValue, page, statusFilter, sortColumn, sortDirection);
             } catch (error) {
                 console.error(error);
@@ -110,7 +115,12 @@ export default function VehiclesClient() {
         if (result.isConfirmed) {
             try {
                 await toggleVehicleStatus(id, true);
-                await Swal.fire('Ativado!', 'Veículo reativado.', 'success');
+                await Swal.fire({
+                    title: 'Ativado!',
+                    text: 'Veículo reativado.',
+                    icon: 'success',
+                    confirmButtonColor: '#16a34a'
+                });
                 fetchVehicles(inputValue, page, statusFilter, sortColumn, sortDirection);
             } catch (error) {
                 console.error(error);
@@ -130,13 +140,13 @@ export default function VehiclesClient() {
             accessor: "proprietarios", // Não ordenável via backend (complexo)
             render: (vehicle) => {
                 if (!vehicle.proprietarios) return <span className={styles.emptyText}>-</span>;
-                
+
                 const ownersList = vehicle.proprietarios.split(',').map(name => name.trim());
-                
+
                 if (ownersList.length === 1) {
                     return <span style={{ fontSize: '0.875rem', color: '#374151' }}>{ownersList[0]}</span>;
                 }
-                
+
                 return (
                     <div className={styles.selectContainer}>
                         <select className={styles.selectNative} defaultValue="">
@@ -174,31 +184,31 @@ export default function VehiclesClient() {
             accessor: "actions",
             render: (vehicle) => (
                 <div style={{ display: 'flex', gap: '10px' }}>
-                    <Link 
-                        href={`/admin/vehicles/${vehicle.veic_id}?mode=view`} 
+                    <Link
+                        href={`/admin/vehicles/${vehicle.veic_id}?mode=view`}
                         style={{ display: 'flex', alignItems: 'center', color: '#2563eb' }}
                         title="Visualizar"
                     >
                         <Eye size={16} />
                     </Link>
-                    <Link 
-                        href={`/admin/vehicles/${vehicle.veic_id}?mode=edit`} 
+                    <Link
+                        href={`/admin/vehicles/${vehicle.veic_id}?mode=edit`}
                         style={{ display: 'flex', alignItems: 'center', color: '#2563eb' }}
                         title="Editar"
                     >
                         <Edit size={16} />
                     </Link>
                     {vehicle.veic_situacao ? (
-                        <button 
-                            onClick={() => handleArchiveVehicle(vehicle.veic_id, vehicle.veic_placa)} 
+                        <button
+                            onClick={() => handleArchiveVehicle(vehicle.veic_id, vehicle.veic_placa)}
                             style={{ display: 'flex', alignItems: 'center', color: '#ef4444', background: 'none', border: 'none', cursor: 'pointer' }}
                             title="Ocultar"
                         >
                             <Trash2 size={16} />
                         </button>
                     ) : (
-                        <button 
-                            onClick={() => handleReactivateVehicle(vehicle.veic_id, vehicle.veic_placa)} 
+                        <button
+                            onClick={() => handleReactivateVehicle(vehicle.veic_id, vehicle.veic_placa)}
                             style={{ display: 'flex', alignItems: 'center', color: '#16a34a', background: 'none', border: 'none', cursor: 'pointer' }}
                             title="Reativar"
                         >
@@ -226,9 +236,9 @@ export default function VehiclesClient() {
                     </div>
                     <div className={styles.selectWrapper}>
                         <Filter size={16} className={styles.filterIcon} />
-                        <select 
-                            className={styles.statusSelect} 
-                            value={statusFilter} 
+                        <select
+                            className={styles.statusSelect}
+                            value={statusFilter}
                             onChange={handleStatusChange}
                         >
                             <option value="all">Todos</option>
@@ -255,10 +265,10 @@ export default function VehiclesClient() {
             </div>
 
             {!loading && vehicles.length > 0 && (
-                <Pagination 
-                    currentPage={page} 
-                    totalPages={totalPages} 
-                    onPageChange={handlePageChange} 
+                <Pagination
+                    currentPage={page}
+                    totalPages={totalPages}
+                    onPageChange={handlePageChange}
                 />
             )}
         </div>

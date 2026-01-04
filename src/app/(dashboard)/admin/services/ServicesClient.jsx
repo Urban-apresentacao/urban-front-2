@@ -3,29 +3,29 @@
 import { useServices } from "@/hooks/useServices";
 import { Table } from "@/components/ui/table/table";
 import Link from "next/link";
-import { Edit, Plus, Eye, Search, Trash2, RotateCcw, Filter } from "lucide-react"; 
+import { Edit, Plus, Eye, Search, Trash2, RotateCcw, Filter } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { Pagination } from "@/components/ui/pagination/pagination";
 import Swal from "sweetalert2";
-import { toggleServiceStatus } from "@/services/services.service"; 
+import { toggleServiceStatus } from "@/services/services.service";
 import styles from "./ServicesClient.module.css";
 
 export default function ServicesClient() {
   // Desestruturando os dados e funções do Hook, incluindo a Ordenação
-  const { 
-    services, 
-    loading, 
-    fetchServices, 
-    page, 
+  const {
+    services,
+    loading,
+    fetchServices,
+    page,
     totalPages,
     sortColumn,
     sortDirection,
     handleSort
   } = useServices();
-  
+
   // Estados Locais (Busca e Filtro)
   const [inputValue, setInputValue] = useState("");
-  const [statusFilter, setStatusFilter] = useState("all"); 
+  const [statusFilter, setStatusFilter] = useState("all");
 
   const isMounted = useRef(false);
 
@@ -42,14 +42,14 @@ export default function ServicesClient() {
       isMounted.current = true;
       return;
     }
-    
+
     const delayDebounceFn = setTimeout(() => {
       // Passamos TODOS os parâmetros atuais para manter a consistência
       fetchServices(inputValue, 1, statusFilter, sortColumn, sortDirection);
     }, 500);
 
     return () => clearTimeout(delayDebounceFn);
-  }, [inputValue, statusFilter, sortColumn, sortDirection, fetchServices]); 
+  }, [inputValue, statusFilter, sortColumn, sortDirection, fetchServices]);
 
   // --- HANDLERS ---
 
@@ -79,8 +79,12 @@ export default function ServicesClient() {
     if (result.isConfirmed) {
       try {
         await toggleServiceStatus(id, false); // false = Inativo
-        await Swal.fire('Ocultado!', 'Serviço desativado.', 'success');
-        // Recarrega a lista mantendo todos os filtros e ordenação atuais
+        await Swal.fire({
+          title: 'Ocultado!',
+          text: 'Serviço desativado.',
+          icon: 'success',
+          confirmButtonColor: '#16a34a'
+        });
         fetchServices(inputValue, page, statusFilter, sortColumn, sortDirection);
       } catch (error) {
         console.error(error);
@@ -104,7 +108,12 @@ export default function ServicesClient() {
     if (result.isConfirmed) {
       try {
         await toggleServiceStatus(id, true); // true = Ativo
-        await Swal.fire('Ativado!', 'Serviço reativado com sucesso.', 'success');
+        await Swal.fire({
+          title: 'Ativado!',
+          text: 'Serviço reativado.',
+          icon: 'success',
+          confirmButtonColor: '#16a34a'
+        });
         fetchServices(inputValue, page, statusFilter, sortColumn, sortDirection);
       } catch (error) {
         console.error(error);
@@ -159,7 +168,7 @@ export default function ServicesClient() {
           >
             <Edit size={16} />
           </Link>
-          
+
           {/* Lógica do Botão de Status */}
           {service.serv_situacao ? (
             <button
@@ -193,32 +202,32 @@ export default function ServicesClient() {
   return (
     <div className={styles.wrapper}>
       <div className={styles.actionsBar}>
-        
+
         {/* GRUPO DE FILTROS (Busca + Select) */}
         <div className={styles.filtersGroup}>
-            <div className={styles.searchWrapper}>
-                <Search size={20} className={styles.searchIcon} />
-                <input
-                    type="text"
-                    placeholder="Pesquisar serviços..."
-                    className={styles.searchInput}
-                    value={inputValue}
-                    onChange={(e) => setInputValue(e.target.value)}
-                />
-            </div>
+          <div className={styles.searchWrapper}>
+            <Search size={20} className={styles.searchIcon} />
+            <input
+              type="text"
+              placeholder="Pesquisar serviços..."
+              className={styles.searchInput}
+              value={inputValue}
+              onChange={(e) => setInputValue(e.target.value)}
+            />
+          </div>
 
-            <div className={styles.selectWrapper}>
-                <Filter size={16} className={styles.filterIcon} />
-                <select 
-                    className={styles.statusSelect}
-                    value={statusFilter}
-                    onChange={handleStatusChange}
-                >
-                    <option value="all">Todos</option>
-                    <option value="active">Ativos</option>
-                    <option value="inactive">Inativos</option>
-                </select>
-            </div>
+          <div className={styles.selectWrapper}>
+            <Filter size={16} className={styles.filterIcon} />
+            <select
+              className={styles.statusSelect}
+              value={statusFilter}
+              onChange={handleStatusChange}
+            >
+              <option value="all">Todos</option>
+              <option value="active">Ativos</option>
+              <option value="inactive">Inativos</option>
+            </select>
+          </div>
         </div>
 
         <Link href="/admin/services/register" className={styles.newButton}>
@@ -228,13 +237,13 @@ export default function ServicesClient() {
       </div>
 
       <div className={styles.tableContainer}>
-        <Table 
-            columns={columns} 
-            data={services} 
-            isLoading={loading}
-            onSort={handleSort}
-            sortColumn={sortColumn}
-            sortDirection={sortDirection}
+        <Table
+          columns={columns}
+          data={services}
+          isLoading={loading}
+          onSort={handleSort}
+          sortColumn={sortColumn}
+          sortDirection={sortDirection}
         />
       </div>
 

@@ -19,7 +19,6 @@ export default function UsersClient() {
   const [inputValue, setInputValue] = useState("");
   const [statusFilter, setStatusFilter] = useState("all"); // 'all', 'active', 'inactive'
 
-  // Ref para controlar a montagem inicial e evitar duplicação
   const isMounted = useRef(false);
 
   // 1. Busca Inicial (Ao abrir a tela)
@@ -34,9 +33,7 @@ export default function UsersClient() {
       return;
     }
 
-    // Espera o usuário parar de digitar para buscar
     const delayDebounceFn = setTimeout(() => {
-      // Passamos o texto (inputValue) e o status (statusFilter)
       fetchUsers(inputValue, 1, statusFilter, sortColumn, sortDirection);
     }, [inputValue, statusFilter, sortColumn, sortDirection, fetchUsers]);
 
@@ -51,7 +48,6 @@ export default function UsersClient() {
   // Função para mudar o Status no Select
   const handleStatusChange = (e) => {
     setStatusFilter(e.target.value);
-    // O useEffect acima vai detectar a mudança e buscar automaticamente
   };
 
   // --- AÇÃO: INATIVAR USUÁRIO ---
@@ -70,8 +66,13 @@ export default function UsersClient() {
     if (result.isConfirmed) {
       try {
         await toggleUserStatus(id, false); // false = Inativo
-        await Swal.fire('Inativado!', 'Usuário bloqueado.', 'success');
-        fetchUsers(inputValue, page, statusFilter); // Recarrega mantendo os filtros atuais
+        await Swal.fire({
+          title: 'Inativado!',
+          text: 'Usuário bloqueado.',
+          icon: 'success',
+          confirmButtonColor: '#16a34a'
+        });
+        fetchUsers(inputValue, page, statusFilter);
       } catch (error) {
         console.error(error);
         Swal.fire('Erro', 'Erro ao inativar.', 'error');
@@ -95,8 +96,13 @@ export default function UsersClient() {
     if (result.isConfirmed) {
       try {
         await toggleUserStatus(id, true); // true = Ativo
-        await Swal.fire('Ativado!', 'Acesso restaurado.', 'success');
-        fetchUsers(inputValue, page, statusFilter); // Recarrega mantendo os filtros atuais
+        await Swal.fire({
+          title: 'Ativado!',
+          text: 'Acesso restaurado.',
+          icon: 'success',
+          confirmButtonColor: '#16a34a'
+        });
+        fetchUsers(inputValue, page, statusFilter);
       } catch (error) {
         console.error(error);
         Swal.fire('Erro', 'Erro ao reativar.', 'error');
@@ -131,7 +137,7 @@ export default function UsersClient() {
       accessor: "usu_situacao",
       render: (item) => (
         <span style={{
-          backgroundColor: item.usu_situacao ? '#dcfce7' : '#fee2e2', // Cinza (Ativo) ou Vermelho Claro (Inativo)
+          backgroundColor: item.usu_situacao ? '#dcfce7' : '#fee2e2',
           color: item.usu_situacao ? '#166534' : '#991b1b',
           padding: '4px 8px',
           borderRadius: '12px',

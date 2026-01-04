@@ -80,7 +80,7 @@ export default function AppointmentForm({
         if (userId) {
             try {
                 const response = await getUserVehicles(userId);
-                
+
                 console.log("Resposta da API de Veículos:", response); // Debug: Veja isso no console do navegador (F12)
 
                 // Lógica Inteligente para achar a lista:
@@ -88,11 +88,11 @@ export default function AppointmentForm({
                 // 2. Tem uma propriedade .data que é array? Use ela. (Padrão Axios/Laravel)
                 // 3. Tem uma propriedade .vehicles? Use ela.
                 // 4. Se não achar nada, retorna lista vazia para não quebrar.
-                const realList = Array.isArray(response) ? response 
-                               : (response.data && Array.isArray(response.data)) ? response.data
-                               : (response.vehicles && Array.isArray(response.vehicles)) ? response.vehicles
-                               : [];
-                
+                const realList = Array.isArray(response) ? response
+                    : (response.data && Array.isArray(response.data)) ? response.data
+                        : (response.vehicles && Array.isArray(response.vehicles)) ? response.vehicles
+                            : [];
+
                 setVehiclesList(realList);
             } catch (error) {
                 console.error("Erro ao buscar veículos:", error);
@@ -235,15 +235,23 @@ export default function AppointmentForm({
                         />
                     </div>
                 </div>
-                <div className={styles.inputGroup}>
-                    <label>Situação</label>
-                    <select name="agend_situacao" className={styles.input} value={formData.agend_situacao} onChange={handleChange} disabled={!isEditable}>
-                        <option value="1">Pendente</option>
-                        <option value="2">Em Andamento</option>
-                        <option value="3">Concluído</option>
-                        <option value="0">Cancelado</option>
-                    </select>
-                </div>
+                {mode !== 'create' && (
+                    <div className={styles.inputGroup}>
+                        <label>Situação</label>
+                        <select
+                            name="agend_situacao"
+                            className={styles.input}
+                            value={formData.agend_situacao}
+                            onChange={handleChange}
+                            disabled={!isEditable}
+                        >
+                            <option value="1">Pendente</option>
+                            <option value="2">Em Andamento</option>
+                            <option value="3">Concluído</option>
+                            <option value="0">Cancelado</option>
+                        </select>
+                    </div>
+                )}
             </div>
 
             {/* --- SEÇÃO 3: SERVIÇOS --- */}
