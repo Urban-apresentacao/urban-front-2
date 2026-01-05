@@ -1,12 +1,12 @@
 "use client";
 import { useState, useEffect } from "react";
 import { Edit, Check, X, EyeOff, Eye, Car, Plus, History } from "lucide-react";
-import { InputRegisterForm } from "../../ui/inputRegisterForm/inputRegisterForm";
-import { InputMaskRegister } from "../../ui/inputMaskRegister/inputMaskRegister";
-import { SelectRegister } from "../../ui/selectRegister/selectRegister";
+import { InputRegisterForm } from "../../../ui/inputRegisterForm/inputRegisterForm";
+import { InputMaskRegister } from "../../../ui/inputMaskRegister/inputMaskRegister";
+import { SelectRegister } from "../../../ui/selectRegister/selectRegister";
 import styles from "../userForm.module.css";
 import { validateCPF, validateEmail, getBirthDateError } from "@/utils/validators";
-import ModalVehicleLink from "../../modals/modalVehicleLink/modalVehicleLink";
+import ModalVehicleLink from "../../../modals/modalVehicleLink/modalVehicleLink";
 import { useVehicleUsers } from "@/hooks/useVehicleUsers";
 
 export default function UserFormAdmin({ onSuccess, onCancel, saveFunction, initialData, mode = 'edit' }) {

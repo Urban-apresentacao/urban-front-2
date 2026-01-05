@@ -2,20 +2,19 @@
 import { useState, useEffect } from "react";
 import { Edit, UserPlus, History } from "lucide-react";
 
-import { InputRegisterForm } from "../ui/inputRegisterForm/inputRegisterForm";
-import { InputMaskRegister } from "../ui/inputMaskRegister/inputMaskRegister";
-import { SelectRegister } from "../ui/selectRegister/selectRegister";
+import { InputRegisterForm } from "../../../ui/inputRegisterForm/inputRegisterForm";
+import { InputMaskRegister } from "../../../ui/inputMaskRegister/inputMaskRegister";
+import { SelectRegister } from "../../../ui/selectRegister/selectRegister";
 
 import { useCategories } from "@/hooks/useCategories";
 import { useBrands } from "@/hooks/useBrands";
 import { useModels } from "@/hooks/useModels";
 
-import ModalUserLink from "../modals/modalUserLink/modalUserLink";
+import ModalUserLink from "../../../modals/modalUserLink/modalUserLink";
 import { useVehicleUsers } from "@/hooks/useVehicleUsers";
 
-
-import styles from "./vehicleForm.module.css";
-import ModalVehicleHistory from "../modals/modalVehicleHistory/modalVehicleHistory";
+import styles from "../vehicleForm.module.css"; 
+import ModalVehicleHistory from "../../../modals/modalVehicleHistory/modalVehicleHistory";
 
 export default function VehicleForm({ onSuccess, onCancel, saveFunction, initialData, mode = 'edit' }) {
 

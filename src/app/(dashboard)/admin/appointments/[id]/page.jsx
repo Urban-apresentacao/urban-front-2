@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams, useParams } from "next/navigation";
-import AppointmentForm from "@/components/appointmentsForm/appointmentsForm";
+import AppointmentForm from "@/components/forms/appointmentsForm/appointmentsForm";
 import { getAppointmentById, updateAppointment } from "@/services/appointments.service";
 import Swal from "sweetalert2";
 

@@ -1,0 +1,62 @@
+/* Container Principal: Garante que ocupe a largura total sem centralizar forçado */
+.container {
+  width: 100%;
+  /* padding: 20px; */
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Header (Botão Voltar + Título) */
+.header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+/* Botão de Voltar (Resetando estilo de botão padrão) */
+.backButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #6b7280; /* Cinza médio */
+  padding: 8px;
+  border-radius: 50%; /* Opcional: Efeito redondo no hover */
+  transition: all 0.2s ease;
+}
+
+.backButton:hover {
+  color: #1f2937; /* Cinza escuro */
+  background-color: #f3f4f6; /* Fundo cinza claro no hover */
+}
+
+/* Título da Página */
+.title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0;
+}
+
+/* Área do Formulário */
+.formWrapper {
+  width: 100%;
+  /* Se quiser garantir que o fundo branco do form se destaque, 
+     pode adicionar background aqui também, mas o componente Form já tem. */
+}
+
+/* Loading State (Centralizado e Bonito) */
+.loadingState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 50vh;
+  color: #6b7280;
+  font-weight: 500;
+  gap: 10px;
+}

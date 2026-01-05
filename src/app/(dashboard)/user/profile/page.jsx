@@ -3,7 +3,7 @@
 import styles from './page.module.css'
 
 import { useProfile} from '@/hooks/useProfile'
-import UserFormUser from '@/components/userForm/userFormUser/userFormUser'
+import UserFormUser from '@/components/forms/userForm/userFormUser/userFormUser'
 import { Loader2 } from "lucide-react";
 
 export default function Profile() {

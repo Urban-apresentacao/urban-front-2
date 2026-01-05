@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import UserFormAdmin from "@/components/userForm/userFormAdmin/userFormAdmin";
+import UserFormAdmin from "@/components/forms/userForm/userFormAdmin/userFormAdmin";
 import { registerUser } from "@/services/register.service";
 import { ChevronLeft } from "lucide-react";
 import Link from "next/link";

@@ -2,7 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
-import UserFormAdmin from "@/components/userForm/userFormAdmin/userFormAdmin";
+import UserFormAdmin from "@/components/forms/userForm/userFormAdmin/userFormAdmin";
+import Link from "next/link";
+import { ChevronLeft } from "lucide-react";
 import { getUserById, updateUser } from "@/services/users.service";
 import Swal from "sweetalert2";
 import styles from "../register/page.module.css";
@@ -84,9 +86,14 @@ export default function EditUserPage() {
 
     return (
         <div className={styles?.container || ""}>
-            <h2 style={{ marginBottom: '20px', color: '#333' }}>
-                {mode === 'view' ? 'Visualizar Usuário' : 'Editar Usuário'}
-            </h2>
+            <div className={styles.header}>
+                <Link href="/admin/users" className={styles.backLink}>
+                    <ChevronLeft size={20} /> Voltar
+                </Link>
+                <h2 style={{ marginBottom: '20px', color: '#333' }}>
+                    {mode === 'view' ? 'Visualizar Usuário' : 'Editar Usuário'}
+                </h2>
+            </div>
 
             {userData && (
                 <UserFormAdmin

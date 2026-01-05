@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
-import VehicleForm from "@/components/vehicleForm/vehicleForm";
+import VehicleForm from "@/components/forms/vehicleForm/vehicleFormAdmin/vehicleForm";
 import { getVehicleById, updateVehicle } from "@/services/vehicles.service";
 import Swal from "sweetalert2";
 import Link from "next/link";

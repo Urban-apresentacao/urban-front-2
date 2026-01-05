@@ -78,6 +78,16 @@
   justify-content: center;
 }
 
+.btnActivate {
+    color: #16a34a;
+}
+
+.btnActivate:hover {
+    background-color: #bbf7d0; 
+    color: #15803d;
+    border-color: #86efac;
+}
+
 .btnEdit { color: #2563eb; }
 .btnEdit:hover { background-color: #eff6ff; }
 
