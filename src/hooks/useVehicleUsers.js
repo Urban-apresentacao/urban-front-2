@@ -4,7 +4,7 @@ import {
   updateVehicleUserLink, 
   deleteVehicleUserLink,
   getVehicleUsersHistory,
-  getUserVehicles // <--- Importante: Certifique-se de que isso existe no service
+  getUserVehicles 
 } from "@/services/vehicleUsers.service";
 import Swal from "sweetalert2";
 
@@ -12,10 +12,10 @@ export const useVehicleUsers = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   
-  // State para guardar o histórico (Quem usou este veículo?)
+  // State para guardar o histórico
   const [history, setHistory] = useState([]);
   
-  // State para guardar os veículos do usuário (Quais veículos este usuário tem?)
+  // State para guardar os veículos do usuário
   const [vehicles, setVehicles] = useState([]);
 
   // ----------------------------------------------------------------
@@ -25,10 +25,17 @@ export const useVehicleUsers = () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await getUserVehicles(usuId);
+      // 🔴 ALTERAÇÃO AQUI: Passamos os params para trazer TODOS (ativos e inativos)
+      // Certifique-se de que sua função 'getUserVehicles' no service aceita esse segundo argumento
+      const response = await getUserVehicles(usuId, {
+        params: { 
+            status: 'all', // Traz ativos e inativos
+            orderBy: 'veic_id',
+            orderDirection: 'DESC' 
+        }
+      });
       
       // Tratamento baseado no seu JSON: { status: "success", data: [...] }
-      // Garante que seja um array mesmo se vier null/undefined
       const lista = response.data || [];
       
       setVehicles(lista);
@@ -113,7 +120,6 @@ export const useVehicleUsers = () => {
     setError(null);
     try {
       await updateVehicleUserLink(id, { data_final: dataFinal });
-      // Opcional: Swal.fire("Encerrado", "Vínculo finalizado.", "success");
       return true;
     } catch (err) {
       const msg = err.response?.data?.message || err.message || "Erro ao finalizar vínculo.";
@@ -134,7 +140,7 @@ export const useVehicleUsers = () => {
     try {
       const confirm = await Swal.fire({
         title: 'Tem certeza?',
-        text: "Essa ação removerá o registro permanentemente. Para apenas encerrar o uso, prefira finalizar a data.",
+        text: "Essa ação removerá o registro permanentemente.",
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#d33',
@@ -160,19 +166,14 @@ export const useVehicleUsers = () => {
   }, []);
 
   return {
-    // Actions
     fetchUserVehicles,
     fetchHistory,
     linkUser,
     editLink,
     finalizeLink,
     removeLink,
-    
-    // Data States
-    vehicles, // Lista de veículos (cards)
-    history,  // Lista de histórico de usuários
-    
-    // UI States
+    vehicles,
+    history,
     loading,
     error
   };

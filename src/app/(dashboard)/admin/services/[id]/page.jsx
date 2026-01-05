@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
-import ServiceForm from "@/components/servicesForm/servicesForm.jsx";
+import ServiceForm from "@/components/forms/servicesForm/servicesForm.jsx";
 import { getServiceById, updateService } from "@/services/services.service";
 import Swal from "sweetalert2";
 import styles from "../../users/register/page.module.css"; // Reutilizando CSS

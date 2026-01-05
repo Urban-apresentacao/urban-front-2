@@ -1,71 +1,112 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation"; // Para redirecionar
-// import VehicleForm from "@/components/forms/VehicleForm"; // Importe o form que você criou
-// import { getVehicleById, updateVehicle } from "@/services/vehicle.service"; // Seus services
+import { useState, useEffect, use } from "react"; 
+import { useRouter } from "next/navigation"; 
 import Swal from "sweetalert2";
+import { ChevronLeft, Loader2 } from "lucide-react"; 
+
+import VehicleFormUser from "@/components/forms/vehicleForm/vehicleFormUser/vehicleForm"; 
+import { getVehicleById, updateVehicle } from "@/services/vehicles.service";
+
+// ✅ IMPORTANDO O CSS MODULE
+import styles from "./page.module.css";
 
 export default function EditVehiclePage({ params }) {
   const router = useRouter();
-  const { id } = params; // Pega o ID da URL (ex: user/vehicle/5)
-  
+  const { id } = use(params); 
+
   const [vehicleData, setVehicleData] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // 1. Busca os dados do veículo ao carregar a página
+  // 1. Busca os dados
   useEffect(() => {
     const fetchData = async () => {
+      if (!id) return;
+      
       try {
+        setLoading(true);
         const data = await getVehicleById(id);
-        
-        // Ajuste conforme o retorno da sua API (ex: data.data ou data direto)
-        // O Form espera um objeto simples
         setVehicleData(data.data || data); 
+
       } catch (error) {
-        console.error(error);
-        Swal.fire("Erro", "Não foi possível carregar o veículo.", "error");
-        router.push("/user/vehicle"); // Volta se der erro
+        console.error("Erro ao carregar veículo:", error);
+        Swal.fire({
+            title: "Erro", 
+            text: "Não foi possível carregar os dados.", 
+            icon: "error",
+            confirmButtonColor: "#ef4444"
+        });
+        router.push("/user/vehicles");
       } finally {
         setLoading(false);
       }
     };
 
-    if (id) fetchData();
+    fetchData();
   }, [id, router]);
 
-  // 2. Função de Salvar (passada para o Form)
+  // 2. Salvar
   const handleSave = async (formData) => {
     try {
       await updateVehicle(id, formData);
-      Swal.fire("Sucesso", "Veículo atualizado com sucesso!", "success");
-      return { success: true }; // O Form espera esse retorno
+      await Swal.fire({
+        title: "Sucesso", 
+        text: "Veículo atualizado!", 
+        icon: "success",
+        confirmButtonColor: "#16a34a"
+      });
+      return { success: true };
     } catch (error) {
-      const msg = error.response?.data?.message || "Erro ao salvar";
-      Swal.fire("Erro", msg, "error");
+      const msg = error.response?.data?.message || "Erro ao salvar.";
+      Swal.fire({ title: "Erro", text: msg, icon: "error", confirmButtonColor: "#ef4444" });
       return { success: false };
     }
   };
 
-  // 3. O que fazer após salvar ou cancelar
   const handleBack = () => {
-    router.push("/user/vehicle"); // Volta para a listagem
+    router.push("/user/vehicles");
   };
 
-  if (loading) return <div className="p-10 text-center">Carregando dados do veículo...</div>;
+  // Loading com estilo CSS
+  if (loading) {
+    return (
+        <div className={styles.loadingState}>
+            <Loader2 className="animate-spin" size={32} />
+            <p>Carregando dados do veículo...</p>
+        </div>
+    );
+  }
 
   return (
-    <div className="max-w-5xl mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-6 text-gray-800">Editar Veículo</h1>
+    // ✅ USANDO AS CLASSES DO CSS MODULE
+    <div className={styles.container}>
       
-      {/* Renderiza o seu formulário */}
-      {/* <VehicleForm 
-        mode="edit"
-        initialData={vehicleData}
-        saveFunction={handleSave}
-        onSuccess={handleBack}
-        onCancel={handleBack}
-      /> */}
+      <div className={styles.header}>
+        <button 
+            onClick={handleBack} 
+            className={styles.backButton}
+            title="Voltar"
+        >
+            <ChevronLeft size={28} />
+        </button>
+        <h1 className={styles.title}>
+            Editar Veículo
+        </h1>
+      </div>
+
+      <div className={styles.formWrapper}>
+          {vehicleData ? (
+            <VehicleFormUser 
+                mode="edit"
+                initialData={vehicleData}
+                saveFunction={handleSave}
+                onSuccess={handleBack}
+                onCancel={handleBack}
+            />
+          ) : (
+            <p>Veículo não encontrado.</p>
+          )}
+      </div>
     </div>
   );
 }

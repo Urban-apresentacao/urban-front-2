@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import ServiceForm from "@/components/servicesForm/servicesForm";
+import ServiceForm from "@/components/forms/servicesForm/servicesForm";
 import { createService } from "@/services/services.service";
 import { ChevronLeft } from "lucide-react";
 import Link from "next/link";

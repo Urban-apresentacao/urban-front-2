@@ -16,7 +16,7 @@ import {
     cancelAppointment 
 } from "@/services/appointments.service";
 
-import AppointmentForm from "@/components/appointmentsForm/appointmentsForm";
+import AppointmentForm from "@/components/forms/appointmentsForm/appointmentsForm";
 import ModalCalendar from "@/components/modals/modalCalendar/ModalCalendar";
 import Swal from "sweetalert2";
 import styles from "./ScheduleClient.module.css";

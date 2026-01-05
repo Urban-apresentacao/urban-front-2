@@ -1,34 +1,29 @@
 'use client';
 
 import React from 'react';
-import { useRouter } from 'next/navigation'; // Import necessário para navegação
-import { 
-  Truck, Car, Bike, Calendar, Fuel, Droplet, 
-  Edit2, Trash2, Info, CalendarClock 
+import {
+  Truck, Car, Bike, Calendar, Fuel, Droplet,
+  Edit2, Trash2, Info, CalendarClock, Power, RotateCcw
 } from 'lucide-react';
 import styles from './vehicleUserCard.module.css';
 
-const VehicleUserCard = ({ vehicle, onDelete }) => {
-  const router = useRouter();
+// Recebe as funções onEdit e onToggleStatus do componente Pai (Page)
+const VehicleUserCard = ({ vehicle, onEdit, onToggleStatus }) => {
 
-  // Desestruturando os dados, incluindo ID, observação e data inicial
+  // Desestruturando os dados
   const {
-    mar_nome, mod_nome, veic_placa, veic_ano, veic_cor, 
-    veic_combustivel, cat_id, ehproprietario, veic_situacao, 
-    veic_usu_id, veic_id, veic_observ, data_inicial
+    mar_nome, mod_nome, veic_placa, veic_ano, veic_cor,
+    veic_combustivel, cat_id, ehproprietario, veic_situacao,
+    veic_observ, data_inicial
   } = vehicle;
 
-  // Lógica de Navegação para a página de edição
-  const handleEditClick = () => {
-    router.push(`/user/vehicle/${veic_id}`);
-  };
-
-  // Lógica de Formatação de Data
+  // Formatação de Data
   const formatDate = (dateString) => {
     if (!dateString) return '-';
     return new Date(dateString).toLocaleDateString('pt-BR');
   };
 
+  // Ícone por categoria
   const getCategoryIcon = (id) => {
     const iconClass = styles.categoryIcon;
     switch (id) {
@@ -39,8 +34,10 @@ const VehicleUserCard = ({ vehicle, onDelete }) => {
     }
   };
 
+  const isInactive = veic_situacao === false || veic_situacao === '0' || veic_situacao === 0;
+
   return (
-    <div className={styles.card}>
+    <div className={`${styles.card} ${isInactive ? styles.inactiveCard : ''}`}>
       <div className={styles.header}>
         <div className={styles.mainInfo}>
           <div className={styles.iconWrapper}>
@@ -53,32 +50,34 @@ const VehicleUserCard = ({ vehicle, onDelete }) => {
             </span>
           </div>
         </div>
-        
-        {/* LÓGICA ATUALIZADA: Botões de Ação */}
+
+        {/* --- BARRA DE AÇÕES --- */}
         <div className={styles.actionsHeader}>
-          {/* Botão Editar: Navega para a página [id] */}
-          <button 
-            className={`${styles.iconButton} ${styles.btnEdit}`} 
-            onClick={handleEditClick}
+
+          {/* BOTÃO EDITAR */}
+          <button
+            className={`${styles.iconButton} ${styles.btnEdit}`}
+            onClick={onEdit}
             title="Editar Veículo"
           >
             <Edit2 size={18} />
           </button>
 
-          {/* Botão Excluir: Chama a função de deletar passada pelo pai */}
-          <button 
-            className={`${styles.iconButton} ${styles.btnDelete}`} 
-            onClick={() => onDelete(veic_usu_id)}
-            title="Encerrar Vínculo"
+        {/* BOTÃO ATIVAR / DESATIVAR */}
+          <button
+            className={`${styles.iconButton} ${isInactive ? styles.btnActivate : styles.btnDelete}`}
+            onClick={onToggleStatus}
+            title={isInactive ? "Restaurar Veículo" : "Desativar Veículo"}
           >
-            <Trash2 size={18} />
+            {isInactive ? <RotateCcw size={18} /> : <Trash2 size={18} />}
           </button>
+
         </div>
       </div>
-      
+
       {/* Badge da Placa */}
       <div style={{ marginTop: '8px', marginBottom: '8px' }}>
-         <span className={styles.plateBadge}>{veic_placa}</span>
+        <span className={styles.plateBadge}>{veic_placa}</span>
       </div>
 
       <hr className={styles.divider} />
@@ -98,7 +97,7 @@ const VehicleUserCard = ({ vehicle, onDelete }) => {
         </div>
       </div>
 
-      {/* LÓGICA NOVA: Exibe observação apenas se existir */}
+      {/* Observação */}
       {veic_observ && (
         <div className={styles.obsContainer}>
           <Info size={14} className={styles.obsIcon} />
@@ -109,12 +108,12 @@ const VehicleUserCard = ({ vehicle, onDelete }) => {
       {/* Footer com Data e Status */}
       <div className={styles.footer}>
         <div className={styles.dateInfo}>
-           <CalendarClock size={14} /> 
-           <span>Desde: {formatDate(data_inicial)}</span>
+          <CalendarClock size={14} />
+          <span>Desde: {formatDate(data_inicial)}</span>
         </div>
 
-        <span className={`${styles.statusBadge} ${veic_situacao ? styles.statusActive : styles.statusInactive}`}>
-          {veic_situacao ? 'Ativo' : 'Inativo'}
+        <span className={`${styles.statusBadge} ${!isInactive ? styles.statusActive : styles.statusInactive}`}>
+          {!isInactive ? 'Ativo' : 'Inativo'}
         </span>
       </div>
     </div>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import VehicleForm from "@/components/vehicleForm/vehicleForm";
+import VehicleForm from "@/components/forms/vehicleForm/vehicleFormAdmin/vehicleForm";
 import { createVehicle } from "@/services/vehicles.service"; // Importando o serviço
 import { ChevronLeft } from "lucide-react";
 import Link from "next/link";

@@ -1,14 +1,14 @@
 "use client";
 import { useState, useEffect } from "react";
 import { Edit, Plus, Settings, List } from "lucide-react";
-import { InputRegisterForm } from "../ui/inputRegisterForm/inputRegisterForm";
-import { InputMaskRegister } from "../ui/inputMaskRegister/inputMaskRegister";
-import { SelectRegister } from "../ui/selectRegister/selectRegister";
+import { InputRegisterForm } from "../../ui/inputRegisterForm/inputRegisterForm";
+import { InputMaskRegister } from "../../ui/inputMaskRegister/inputMaskRegister";
+import { SelectRegister } from "../../ui/selectRegister/selectRegister";
 import styles from "../userForm/userForm.module.css";
-import ManageCategoriesModal from "../modals/modalServicesCategories/ManageCategories";
+import ManageCategoriesModal from "../../modals/modalServicesCategories/ManageCategories";
 
 import { useServiceCategories } from "@/hooks/useServicesCategories";
-import CategoryModal from "../modals/modalServicesCategories/CategoryModal";
+import CategoryModal from "../../modals/modalServicesCategories/CategoryModal";
 
 // --- FUNÇÕES AUXILIARES DE MOEDA ---
 
