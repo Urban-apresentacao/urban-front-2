@@ -1,0 +1,157 @@
+.container {
+  min-height: 100vh;
+  background-color: #f9fafb;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  font-family: sans-serif;
+}
+
+.card {
+  background: white;
+  width: 100%;
+  max-width: 480px;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  text-align: center;
+  /* IMPORTANTE: Necessário para o selo se posicionar em relação ao card */
+  position: relative; 
+}
+
+.header {
+  background-color: #1f2937;
+  /* AUMENTADO: de 50px para 80px (Dá mais espaço para o título não bater no selo) */
+  padding: 30px 20px 80px 20px; 
+  color: white;
+}
+
+.brand {
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  opacity: 0.8;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.title {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.sealWrapper {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  
+  /* AUMENTADO: de 90px para 120px (Desce o selo para acompanhar o novo tamanho do header) */
+  top: 100px; 
+  
+  width: 100px;
+  height: 100px;
+  background-color: white;
+  border-radius: 16px; /* Ajustei para 16px para ficar mais harmonioso com o card */
+  
+  border: 5px solid #f9fafb; 
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  z-index: 10;
+}
+
+.sealImage {
+  width: 75%; /* Ajuste o tamanho do logo dentro do selo */
+  height: auto;
+  object-fit: contain;
+}
+/* ------------------- */
+
+.body {
+  /* AUMENTADO: de 60px para 90px (Empurra o conteúdo do carro para baixo para não ser coberto pelo selo) */
+  padding: 90px 20px 30px 20px;
+}
+
+/* Informações do Veículo */
+.vehicleInfo {
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.model {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 5px 0;
+}
+
+.plate {
+  background-color: #e5e7eb;
+  color: #374151;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+/* Barra de Progresso / Status */
+.statusContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+}
+
+.iconWrapper {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+  transition: all 0.3s ease;
+}
+
+/* Cores por status */
+.pending { background-color: #fef3c7; color: #d97706; }
+.active { background-color: #dbeafe; color: #2563eb; }
+.done { background-color: #dcfce7; color: #16a34a; }
+.canceled { background-color: #fee2e2; color: #dc2626; }
+
+/* Correção do texto */
+.statusText {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 5px;
+}
+
+.statusDesc {
+  color: #6b7280;
+  font-size: 0.9rem;
+  margin-top: 0;
+  line-height: 1.4;
+}
+
+/* Footer */
+.footer {
+  background-color: #f3f4f6;
+  padding: 15px;
+  font-size: 0.8rem;
+  color: #9ca3af;
+}
+
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  color: #6b7280;
+}
