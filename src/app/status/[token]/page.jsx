@@ -44,15 +44,15 @@ export default function TrackingPage({ params }) {
         };
       case '2': // Em andamento (assumindo que você usa 2 para 'em lavagem')
         return {
-          icon: <Sparkles size={40} />, // Brilho de limpeza
-          text: "Em Lavagem",
+          icon: <Sparkles size={40} />,
+          text: "Em Andamento",
           desc: "Nossa equipe está cuidando do seu veículo.",
           style: styles.active
         };
       case '3': // Concluído
         return {
           icon: <CheckCircle2 size={40} />,
-          text: "Pronto para Retirada",
+          text: "Serviço concluído!",
           desc: "Seu veículo já está limpo e te esperando!",
           style: styles.done
         };

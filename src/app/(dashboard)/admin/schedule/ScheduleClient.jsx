@@ -117,7 +117,7 @@ export default function ScheduleClient() {
         }
     };
 
-    // 4. Salvar Formulário (Create/Update)
+    // 4. Salvar Formulário (Create/Update) com Lógica de WhatsApp
     const handleSave = async (formData) => {
         try {
             // Converte lista de objetos de serviços para lista de IDs
@@ -126,21 +126,72 @@ export default function ScheduleClient() {
                 services: formData.services?.map(s => s.serv_id || s) || []
             };
 
+            let savedData = null;
+            let isUpdate = false;
+
             if (selectedEvent) {
-                await updateAppointment(selectedEvent.agend_id, payload);
-                Swal.fire({
-                    icon: 'success', title: 'Atualizado!', text: 'Agendamento atualizado com sucesso.',
-                    timer: 1500, showConfirmButton: false
-                });
+                // --- ATUALIZAÇÃO ---
+                isUpdate = true;
+                const response = await updateAppointment(selectedEvent.agend_id, payload);
+                // Mesclamos os dados antigos (que tem telefone e token) com os novos
+                savedData = { ...selectedEvent, ...response.data, ...formData }; 
             } else {
+                // --- CRIAÇÃO ---
                 await createAppointment(payload);
+            }
+
+            // Fecha o modal e recarrega a agenda
+            setIsModalOpen(false);
+            fetchSchedule();
+
+            // --- LÓGICA DE NOTIFICAÇÃO INTELIGENTE ---
+            // Só pergunta se for Edição e se o Status for "Em Andamento" (2) ou "Concluído" (3)
+            if (isUpdate && savedData && (formData.agend_situacao === "2" || formData.agend_situacao === "3")) {
+                
+                const result = await Swal.fire({
+                    title: 'Agendamento Salvo!',
+                    text: "Deseja notificar o cliente no WhatsApp sobre a mudança de status?",
+                    icon: 'success',
+                    showCancelButton: true,
+                    confirmButtonColor: '#25D366', // Cor do Zap
+                    cancelButtonColor: '#6b7280',
+                    confirmButtonText: 'Sim, enviar WhatsApp',
+                    cancelButtonText: 'Não, apenas fechar'
+                });
+
+                if (result.isConfirmed) {
+                    // Prepara os dados para envio
+                    const telefoneRaw = savedData.usu_telefone || "";
+                    const telefone = telefoneRaw.replace(/\D/g, "");
+                    const nomeCliente = savedData.usu_nome?.split(" ")[0] || "Cliente";
+                    const baseUrl = window.location.origin;
+                    
+                    if (telefone && savedData.tracking_token) {
+                        const linkRastreio = `${baseUrl}/status/${savedData.tracking_token}`;
+                        
+                        let statusTexto = "";
+                        if (formData.agend_situacao === "2") statusTexto = "*Em Andamento* 🚿";
+                        if (formData.agend_situacao === "3") statusTexto = "*Concluído* ✨";
+
+                        const mensagem = `Olá, ${nomeCliente}! 👋\n\nSeu serviço está ${statusTexto}!\n\nAcompanhe aqui:\n🔗 ${linkRastreio}`;
+                        
+                        const linkZap = `https://wa.me/55${telefone}?text=${encodeURIComponent(mensagem)}`;
+                        window.open(linkZap, "_blank");
+                    } else {
+                        Swal.fire("Aviso", "Não foi possível abrir o WhatsApp (falta telefone ou token).", "warning");
+                    }
+                }
+            } else {
+                // Feedback padrão se não for mudança de status crítica
                 Swal.fire({
-                    icon: 'success', title: 'Agendado!', text: 'Novo agendamento criado com sucesso.',
-                    timer: 1500, showConfirmButton: false
+                    icon: 'success',
+                    title: isUpdate ? 'Atualizado!' : 'Agendado!',
+                    text: isUpdate ? 'Agendamento atualizado com sucesso.' : 'Novo agendamento criado com sucesso.',
+                    timer: 1500,
+                    showConfirmButton: false
                 });
             }
-            setIsModalOpen(false);
-            fetchSchedule(); 
+
         } catch (error) {
             console.error(error);
             const errorMsg = error.response?.data?.message || 'Ocorreu um erro inesperado.';

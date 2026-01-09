@@ -1,9 +1,11 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Edit, Ban, Save, ArrowLeft, Calendar, Clock, User, Car } from "lucide-react";
+// 1. NOVOS ÍCONES ADICIONADOS AQUI (MessageCircle, Share2, Copy)
+import { Edit, Ban, Save, ArrowLeft, Calendar, Clock, User, Car, MessageCircle, Share2, Copy } from "lucide-react";
 import { getUsersList, getUserVehicles } from "@/services/users.service";
 import { getServicesList } from "@/services/services.service";
+import Swal from "sweetalert2"; // Certifique-se de ter instalado (npm install sweetalert2)
 import styles from "./appointmentsForm.module.css";
 
 export default function AppointmentForm({
@@ -53,11 +55,7 @@ export default function AppointmentForm({
                         agend_data: dataFormatada,
                         agend_horario: initialData.agend_horario || "",
                         agend_observ: initialData.agend_observ || "",
-
-                        // --- CORREÇÃO AQUI ---
-                        // Usamos '??' para que o zero (Cancelado) seja respeitado e não trocado por '1'
                         agend_situacao: String(initialData.agend_situacao ?? "1"),
-
                         services: initialData.servicos ? initialData.servicos.map(s => s.serv_id || s.agend_serv_id) : []
                     });
                 }
@@ -80,19 +78,10 @@ export default function AppointmentForm({
         if (userId) {
             try {
                 const response = await getUserVehicles(userId);
-
-                console.log("Resposta da API de Veículos:", response); // Debug: Veja isso no console do navegador (F12)
-
-                // Lógica Inteligente para achar a lista:
-                // 1. É um array direto? Use ele.
-                // 2. Tem uma propriedade .data que é array? Use ela. (Padrão Axios/Laravel)
-                // 3. Tem uma propriedade .vehicles? Use ela.
-                // 4. Se não achar nada, retorna lista vazia para não quebrar.
                 const realList = Array.isArray(response) ? response
                     : (response.data && Array.isArray(response.data)) ? response.data
                         : (response.vehicles && Array.isArray(response.vehicles)) ? response.vehicles
                             : [];
-
                 setVehiclesList(realList);
             } catch (error) {
                 console.error("Erro ao buscar veículos:", error);
@@ -117,6 +106,43 @@ export default function AppointmentForm({
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        // --- VALIDAÇÃO PREVENTIVA (FRONTEND) ---
+        
+        // 1. Verifica se selecionou o Cliente
+        if (!formData.usu_id) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Campo Obrigatório',
+                text: 'Por favor, selecione um Cliente.',
+                confirmButtonColor: '#f59e0b'
+            });
+            return; // Para tudo aqui
+        }
+
+        // 2. Verifica se selecionou o Veículo (AQUI QUE ESTAVA O ERRO)
+        if (!formData.veic_usu_id) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Campo Obrigatório',
+                text: 'Por favor, selecione o Veículo do cliente.',
+                confirmButtonColor: '#f59e0b'
+            });
+            return; // Para tudo aqui
+        }
+
+        // 3. (Opcional) Verifica se tem pelo menos 1 serviço
+        if (!formData.services || formData.services.length === 0) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Serviços Vazios',
+                text: 'Selecione pelo menos um serviço para o agendamento.',
+                confirmButtonColor: '#f59e0b'
+            });
+            return; 
+        }
+
+        // --- Se passou, envia pro servidor ---
         setLoading(true);
         try {
             await saveFunction(formData);
@@ -126,15 +152,79 @@ export default function AppointmentForm({
             setLoading(false);
         }
     };
+    // --- 2. NOVAS FUNÇÕES DE RASTREIO ---
+    
+    // Função para Enviar WhatsApp (Atualizada)
+    const handleSendWhatsApp = () => {
+        // Verifica se tem token
+        if (!initialData || !initialData.tracking_token) {
+            Swal.fire("Atenção", "Salve o agendamento primeiro para gerar o link de rastreio!", "warning");
+            return;
+        }
 
-    // Helper para cor do Badge e Select
+        // Limpa o telefone
+        const telefoneRaw = initialData.usu_telefone || ""; 
+        const telefone = telefoneRaw.replace(/\D/g, "");
+
+        if (!telefone) {
+            Swal.fire("Erro", "Cliente sem telefone cadastrado.", "error");
+            return;
+        }
+
+        const nomeCliente = initialData.usu_nome?.split(" ")[0] || "Cliente";
+        const baseUrl = window.location.origin; 
+        const linkRastreio = `${baseUrl}/status/${initialData.tracking_token}`;
+
+        // 1. Define o texto do status baseado no que está selecionado no formulário
+        let statusTexto = "";
+        switch (formData.agend_situacao) {
+            case "1":
+                statusTexto = "*Pendente* 🕒";
+                break;
+            case "2":
+                statusTexto = "*Em Andamento* 🚿";
+                break;
+            case "3":
+                statusTexto = "*Concluído* ✨";
+                break;
+            case "0":
+                statusTexto = "*Cancelado* ❌";
+                break;
+            default:
+                statusTexto = "atualizado";
+        }
+
+        // 2. Monta a mensagem personalizada
+        const mensagem = `Olá, ${nomeCliente}! 👋\n\nSeu serviço está ${statusTexto}!\n\nPara mais informações do agendamento acesse:\n🔗 ${linkRastreio}`;
+
+        // Abre o WhatsApp
+        const linkZap = `https://wa.me/55${telefone}?text=${encodeURIComponent(mensagem)}`;
+        window.open(linkZap, "_blank");
+    };
+
+    // Função para Copiar Link
+    const handleCopyLink = () => {
+        if (!initialData?.tracking_token) return;
+        const link = `${window.location.origin}/status/${initialData.tracking_token}`;
+        navigator.clipboard.writeText(link);
+        
+        Swal.fire({
+            icon: 'success',
+            title: 'Link copiado!',
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 1500
+        });
+    };
+    // ------------------------------------
+
     const getStatusStyle = (status) => {
-        // Garante comparação como String
         const s = String(status);
-        if (s === "1") return { backgroundColor: '#fef3c7', color: '#b45309' }; // Pendente
-        if (s === "2") return { backgroundColor: '#dbeafe', color: '#1e40af' }; // Em Andamento
-        if (s === "3") return { backgroundColor: '#dcfce7', color: '#15803d' }; // Concluído
-        if (s === "0") return { backgroundColor: '#fee2e2', color: '#b91c1c' }; // Cancelado
+        if (s === "1") return { backgroundColor: '#fef3c7', color: '#b45309' };
+        if (s === "2") return { backgroundColor: '#dbeafe', color: '#1e40af' };
+        if (s === "3") return { backgroundColor: '#dcfce7', color: '#15803d' };
+        if (s === "0") return { backgroundColor: '#fee2e2', color: '#b91c1c' };
         return { backgroundColor: '#f3f4f6', color: '#374151' };
     };
 
@@ -152,8 +242,6 @@ export default function AppointmentForm({
 
             <div className={styles.header}>
                 <h3>{mode === 'create' ? 'Novo Agendamento' : `Agendamento #${initialData?.agend_id || ''}`}</h3>
-
-                {/* Status Badge */}
                 {mode !== 'create' && (
                     <span className={styles.badge} style={getStatusStyle(formData.agend_situacao)}>
                         {getStatusLabel(formData.agend_situacao)}
@@ -169,11 +257,7 @@ export default function AppointmentForm({
                     {isEditable && mode === 'create' ? (
                         <div className={styles.inputIconWrapper}>
                             <User size={18} className={styles.inputIcon} />
-                            <select
-                                className={styles.input} style={{ paddingLeft: '40px' }}
-                                value={formData.usu_id} onChange={handleClientChange}
-                                disabled={!isEditable}
-                            >
+                            <select className={styles.input} style={{ paddingLeft: '40px' }} value={formData.usu_id} onChange={handleClientChange} disabled={!isEditable}>
                                 <option value="">Selecione o Cliente...</option>
                                 {clientsList.map(u => (<option key={u.usu_id} value={u.usu_id}>{u.usu_nome}</option>))}
                             </select>
@@ -188,17 +272,10 @@ export default function AppointmentForm({
                     {isEditable && mode === 'create' ? (
                         <div className={styles.inputIconWrapper}>
                             <Car size={18} className={styles.inputIcon} />
-                            <select
-                                name="veic_usu_id"
-                                className={styles.input} style={{ paddingLeft: '40px' }}
-                                value={formData.veic_usu_id} onChange={handleChange}
-                                disabled={!formData.usu_id || vehiclesList.length === 0}
-                            >
+                            <select name="veic_usu_id" className={styles.input} style={{ paddingLeft: '40px' }} value={formData.veic_usu_id} onChange={handleChange} disabled={!formData.usu_id || vehiclesList.length === 0}>
                                 <option value="">{vehiclesList.length === 0 ? "Selecione o Cliente primeiro" : "Selecione o Veículo..."}</option>
                                 {Array.isArray(vehiclesList) && vehiclesList.map(v => (
-                                    <option key={v.veic_usu_id} value={v.veic_usu_id}>
-                                        {v.mod_nome} - {v.veic_placa}
-                                    </option>
+                                    <option key={v.veic_usu_id} value={v.veic_usu_id}>{v.mod_nome} - {v.veic_placa}</option>
                                 ))}
                             </select>
                         </div>
@@ -221,30 +298,13 @@ export default function AppointmentForm({
                     <label>Horário</label>
                     <div className={styles.inputIconWrapper}>
                         <Clock size={18} className={styles.inputIcon} />
-                        <input
-                            type="time"
-                            name="agend_horario"
-                            className={styles.input}
-                            style={{ paddingLeft: '40px' }}
-                            value={formData.agend_horario}
-                            onChange={handleChange}
-                            disabled={!isEditable}
-                            required
-                            min="07:00"
-                            max="18:00"
-                        />
+                        <input type="time" name="agend_horario" className={styles.input} style={{ paddingLeft: '40px' }} value={formData.agend_horario} onChange={handleChange} disabled={!isEditable} required min="07:00" max="18:00" />
                     </div>
                 </div>
                 {mode !== 'create' && (
                     <div className={styles.inputGroup}>
                         <label>Situação</label>
-                        <select
-                            name="agend_situacao"
-                            className={styles.input}
-                            value={formData.agend_situacao}
-                            onChange={handleChange}
-                            disabled={!isEditable}
-                        >
+                        <select name="agend_situacao" className={styles.input} value={formData.agend_situacao} onChange={handleChange} disabled={!isEditable}>
                             <option value="1">Pendente</option>
                             <option value="2">Em Andamento</option>
                             <option value="3">Concluído</option>
@@ -298,27 +358,91 @@ export default function AppointmentForm({
                 <textarea name="agend_observ" className={styles.input} style={{ height: '80px', paddingTop: '10px' }} value={formData.agend_observ} onChange={handleChange} disabled={!isEditable} placeholder="Observações..." />
             </div>
 
-            {/* --- RODAPÉ DE AÇÕES --- */}
-            <div className={styles.actionsFooter}>
+            {/* --- 3. ÁREA DE RASTREIO E WHATSAPP (Aparece se já tiver token) --- */}
+            {mode !== 'create' && initialData?.tracking_token && (
+                <div style={{
+                    marginTop: '20px',
+                    padding: '16px',
+                    backgroundColor: '#f0fdf4',
+                    border: '1px solid #bbf7d0',
+                    borderRadius: '8px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '12px'
+                }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#166534', fontWeight: '700', fontSize: '0.95rem' }}>
+                        <Share2 size={18} />
+                        <span>Link de Acompanhamento</span>
+                    </div>
 
-                {/* LADO ESQUERDO: Botão Cancelar (Vermelho) */}
-                <div className={styles.leftAction}>
-                    {isEditable && mode !== 'create' && onCancelAppointment && formData.agend_situacao != "0" && (
+                    <div style={{ display: 'flex', gap: '10px' }}>
+                        {/* Botão WhatsApp */}
                         <button
                             type="button"
-                            onClick={onCancelAppointment}
-                            className={`${styles.btnBase} ${styles.btnDanger}`}
-                            title="Cancelar este agendamento"
+                            onClick={handleSendWhatsApp}
+                            style={{
+                                flex: 1,
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                gap: '8px',
+                                backgroundColor: '#25D366', // Verde Zap
+                                color: 'white',
+                                border: 'none',
+                                padding: '12px',
+                                borderRadius: '6px',
+                                fontWeight: '600',
+                                cursor: 'pointer',
+                                transition: 'filter 0.2s',
+                                fontSize: '0.9rem'
+                            }}
+                            onMouseOver={(e) => e.target.style.filter = 'brightness(0.9)'}
+                            onMouseOut={(e) => e.target.style.filter = 'brightness(1)'}
                         >
+                            <MessageCircle size={20} />
+                            Enviar Status p/ Cliente
+                        </button>
+
+                        {/* Botão Copiar */}
+                        <button
+                            type="button"
+                            onClick={handleCopyLink}
+                            title="Copiar Link"
+                            style={{
+                                width: '50px',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                backgroundColor: 'white',
+                                border: '1px solid #bbf7d0',
+                                color: '#166534',
+                                borderRadius: '6px',
+                                cursor: 'pointer'
+                            }}
+                        >
+                            <Copy size={20} />
+                        </button>
+                    </div>
+
+                    <p style={{ margin: 0, fontSize: '0.75rem', color: '#166534', opacity: 0.8, textAlign: 'center' }}>
+                        Envie este link para o cliente acompanhar o serviço em tempo real.
+                    </p>
+                </div>
+            )}
+            {/* ----------------------------------------------------------------- */}
+
+            {/* --- RODAPÉ DE AÇÕES --- */}
+            <div className={styles.actionsFooter}>
+                <div className={styles.leftAction}>
+                    {isEditable && mode !== 'create' && onCancelAppointment && formData.agend_situacao != "0" && (
+                        <button type="button" onClick={onCancelAppointment} className={`${styles.btnBase} ${styles.btnDanger}`} title="Cancelar este agendamento">
                             <Ban size={18} /> Cancelar Agendamento
                         </button>
                     )}
                 </div>
 
-                {/* LADO DIREITO: Voltar e Salvar */}
                 <div className={styles.rightActions}>
-                    <button
-                        type="button"
+                    <button type="button"
                         onClick={(e) => {
                             e.preventDefault();
                             if (mode === 'create') onCancel();
@@ -332,25 +456,16 @@ export default function AppointmentForm({
 
                     {!isEditable ? (
                         formData.agend_situacao != "0" && (
-                            <button
-                                type="button"
-                                onClick={(e) => { e.preventDefault(); setIsEditable(true); }}
-                                className={`${styles.btnBase} ${styles.btnEdit || styles.btnPrimary}`}
-                            >
+                            <button type="button" onClick={(e) => { e.preventDefault(); setIsEditable(true); }} className={`${styles.btnBase} ${styles.btnEdit || styles.btnPrimary}`}>
                                 <Edit size={18} /> Editar Agendamento
                             </button>
                         )
                     ) : (
-                        <button
-                            type="submit"
-                            className={`${styles.btnBase} ${styles.btnPrimary}`}
-                            disabled={loading}
-                        >
+                        <button type="submit" className={`${styles.btnBase} ${styles.btnPrimary}`} disabled={loading}>
                             <Save size={18} /> {loading ? "Salvando..." : "Salvar Alterações"}
                         </button>
                     )}
                 </div>
-
             </div>
         </form>
     );

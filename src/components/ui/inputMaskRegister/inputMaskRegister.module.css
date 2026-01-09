@@ -30,7 +30,7 @@
 
 .input:focus {
   border-color: var(--primary-red); 
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15); 
+  box-shadow: 0 0 0 3px rgba(235, 37, 37, 0.15); 
 }
 
 .input:disabled {

@@ -4,49 +4,39 @@
     column-gap: 1.5rem;
     row-gap: 2.5rem; 
     width: 100%;
-    background-color: #fff; /* Fundo branco card */
+    background-color: #fff;
     padding: 2rem;
     border-radius: 8px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1); /* Sombra suave */
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1); 
 }
 
-/* --- CLASSE NOVA: Agrupador de Input + Erro --- */
 .inputGroup {
-    position: relative; /* Essencial para o absolute do erro funcionar */
+    position: relative; 
     display: flex;
     flex-direction: column;
-    /* Se quiser que o label fique colado no input, use gap pequeno aqui */
     gap: 0.25rem; 
 }
 
-/* --- CLASSE NOVA: Texto de Erro Flutuante --- */
 .errorText {
-    color: #dc2626; /* Vermelho padrão de erro */
-    font-size: 0.75rem; /* 12px */
+    color: #dc2626;
+    font-size: 0.75rem;
     font-weight: 500;
-    
-    /* O Segredo do Layout: */
     position: absolute;
-    bottom: -22px; /* Joga o texto para fora do input (para baixo) */
+    bottom: -22px;
     left: 0;
-    
-    white-space: nowrap; /* Impede que o texto quebre linha e estrague o alinhamento */
-    pointer-events: none; /* Impede que o texto de erro bloqueie cliques */
+    white-space: nowrap; 
+    pointer-events: none; 
 }
 
-/* Ocupa a largura total (para Observações) */
 .fullWidth {
     grid-column: 1 / -1; 
 }
 
-/* --- Área dos Botões --- */
 .actions {
     grid-column: 1 / -1; 
     display: flex;
     justify-content: flex-end;
     gap: 1rem;
-    
-    /* Aumentei a margem superior para separar bem dos campos */
     margin-top: 1.5rem; 
     padding-top: 1.5rem;
     border-top: 1px solid #ebe5e5;

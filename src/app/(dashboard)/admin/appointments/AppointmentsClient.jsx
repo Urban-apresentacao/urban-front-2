@@ -2,13 +2,17 @@
 
 import { useAppointments } from "@/hooks/useAppointments";
 import { Table } from "@/components/ui/table/table";
-import Link from "next/link";
-// Adicionei Calendar e Plus aos imports
-import { Edit, Eye, Search, Ban, Calendar, Filter, Plus } from "lucide-react"; 
+// Ícones mantidos (Eye, Edit, Ban, etc) + MessageCircle para o Zap
+import { Edit, Eye, Search, Ban, Calendar, Filter, Plus, MessageCircle } from "lucide-react"; 
 import { useState, useEffect, useRef } from "react";
 import { Pagination } from "@/components/ui/pagination/pagination";
 import Swal from "sweetalert2";
-import { cancelAppointment } from "@/services/appointments.service";
+
+// Importações dos Serviços e Componentes do Modal
+import { cancelAppointment, createAppointment, updateAppointment, getAppointmentById } from "@/services/appointments.service";
+import AppointmentForm from "@/components/forms/appointmentsForm/appointmentsForm";
+import ModalCalendar from "@/components/modals/modalCalendar/ModalCalendar"; 
+
 import styles from "./AppointmentsClient.module.css";
 
 const STATUS_MAP = {
@@ -24,11 +28,12 @@ export default function AppointmentsClient() {
     sortColumn, sortDirection, handleSort
   } = useAppointments();
   
-  const [filters, setFilters] = useState({
-    search: "",
-    date: "",
-    status: ""
-  });
+  const [filters, setFilters] = useState({ search: "", date: "", status: "" });
+  
+  // Estados para o Modal
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedEvent, setSelectedEvent] = useState(null);
+  const [formMode, setFormMode] = useState('create'); 
 
   const isMounted = useRef(false);
 
@@ -45,17 +50,117 @@ export default function AppointmentsClient() {
     const delayDebounceFn = setTimeout(() => {
       fetchAppointments(filters, 1, sortColumn, sortDirection);
     }, 500);
-
     return () => clearTimeout(delayDebounceFn);
   }, [filters.search, filters.date, filters.status, sortColumn, sortDirection, fetchAppointments]);
 
-  const handlePageChange = (newPage) => {
-    fetchAppointments(filters, newPage, sortColumn, sortDirection);
-  };
+  const handlePageChange = (newPage) => fetchAppointments(filters, newPage, sortColumn, sortDirection);
 
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
     setFilters(prev => ({ ...prev, [name]: value }));
+  };
+
+  // --- AÇÕES DO MODAL ---
+
+  // 1. Abrir Modal de CRIAÇÃO
+  const handleOpenCreate = () => {
+    setSelectedEvent(null);
+    setFormMode('create');
+    setIsModalOpen(true);
+  };
+
+  // 2. Abrir Modal de EDIÇÃO/VISUALIZAÇÃO
+  const handleOpenEdit = async (id, mode = 'edit') => {
+    try {
+        const response = await getAppointmentById(id);
+        const fullData = response.data;
+        
+        if (fullData.veic_modelo && fullData.veic_placa) {
+             fullData.veiculoLabel = `${fullData.veic_modelo} - ${fullData.veic_placa}`;
+        }
+
+        setSelectedEvent(fullData);
+        setFormMode(mode);
+        setIsModalOpen(true);
+    } catch (error) {
+        console.error(error);
+        Swal.fire("Erro", "Não foi possível carregar os detalhes.", "error");
+    }
+  };
+
+  // 3. SALVAR (Com Lógica do WhatsApp)
+  const handleSave = async (formData) => {
+    try {
+        const payload = {
+            ...formData,
+            services: formData.services?.map(s => s.serv_id || s) || []
+        };
+
+        let savedData = null;
+        let isUpdate = false;
+
+        if (selectedEvent) {
+            // Edição
+            isUpdate = true;
+            const response = await updateAppointment(selectedEvent.agend_id, payload);
+            savedData = { ...selectedEvent, ...response.data, ...formData }; 
+        } else {
+            // Criação
+            await createAppointment(payload);
+        }
+
+        setIsModalOpen(false);
+        fetchAppointments(filters, page, sortColumn, sortDirection); 
+
+        // --- LÓGICA DO WHATSAPP ---
+        if (isUpdate && savedData && (formData.agend_situacao === "2" || formData.agend_situacao === "3")) {
+            const result = await Swal.fire({
+                title: 'Agendamento Salvo!',
+                text: "Deseja notificar o cliente no WhatsApp sobre a mudança de status?",
+                icon: 'success',
+                showCancelButton: true,
+                confirmButtonColor: '#25D366',
+                cancelButtonColor: '#6b7280',
+                confirmButtonText: 'Sim, enviar WhatsApp',
+                cancelButtonText: 'Não, apenas fechar'
+            });
+
+            if (result.isConfirmed) {
+                const telefoneRaw = savedData.usu_telefone || "";
+                const telefone = telefoneRaw.replace(/\D/g, "");
+                const nomeCliente = savedData.usu_nome?.split(" ")[0] || "Cliente";
+                const baseUrl = window.location.origin;
+                
+                if (telefone && savedData.tracking_token) {
+                    const linkRastreio = `${baseUrl}/status/${savedData.tracking_token}`;
+                    
+                    let statusTexto = "";
+                    if (formData.agend_situacao === "2") statusTexto = "*Em Andamento* 🚿";
+                    if (formData.agend_situacao === "3") statusTexto = "*Concluído* ✨";
+
+                    const mensagem = `Olá, ${nomeCliente}! 👋\n\nSeu serviço está ${statusTexto}!\n\nAcompanhe aqui:\n🔗 ${linkRastreio}`;
+                    
+                    const linkZap = `https://wa.me/55${telefone}?text=${encodeURIComponent(mensagem)}`;
+                    window.open(linkZap, "_blank");
+                } else {
+                    Swal.fire("Aviso", "Falta telefone ou token para abrir o WhatsApp.", "warning");
+                }
+            }
+        } else {
+            Swal.fire({
+                icon: 'success',
+                title: 'Salvo!',
+                text: 'Agendamento salvo com sucesso.',
+                timer: 1500,
+                showConfirmButton: false
+            });
+        }
+
+    } catch (error) {
+        console.error(error);
+        const errorMsg = error.response?.data?.message || 'Erro ao salvar.';
+        Swal.fire({ icon: 'error', title: 'Erro', text: errorMsg });
+    }
   };
 
   const handleCancel = async (id, cliente) => {
@@ -82,6 +187,28 @@ export default function AppointmentsClient() {
     }
   };
 
+  // --- FUNÇÃO PARA O BOTÃO AVULSO DO WHATSAPP (Caso precise clicar sem editar) ---
+  const handleSendWhatsAppDirect = (item) => {
+    if (!item.tracking_token) return;
+    const telefoneRaw = item.usu_telefone || ""; 
+    const telefone = telefoneRaw.replace(/\D/g, "");
+    if (!telefone) return Swal.fire("Erro", "Sem telefone.", "error");
+
+    const nomeCliente = item.usu_nome?.split(" ")[0] || "Cliente";
+    const baseUrl = window.location.origin; 
+    const linkRastreio = `${baseUrl}/status/${item.tracking_token}`;
+
+    let statusTexto = "";
+    if (String(item.agend_situacao) === "1") statusTexto = "*Pendente* 🕒";
+    if (String(item.agend_situacao) === "2") statusTexto = "*Em Andamento* 🚿";
+    if (String(item.agend_situacao) === "3") statusTexto = "*Concluído* ✨";
+
+    const mensagem = `Olá, ${nomeCliente}! 👋\n\nSeu serviço está ${statusTexto}!\n\nAcompanhe aqui:\n🔗 ${linkRastreio}`;
+    const linkZap = `https://wa.me/55${telefone}?text=${encodeURIComponent(mensagem)}`;
+    window.open(linkZap, "_blank");
+  };
+
+  // --- COLUNAS DA TABELA ---
   const columns = [
     { header: "ID", accessor: "agend_id" },
     { 
@@ -136,17 +263,45 @@ export default function AppointmentsClient() {
       header: "Ações",
       accessor: "actions",
       render: (item) => (
-        <div style={{ display: 'flex', gap: '10px' }}>
-          <Link href={`/admin/appointments/${item.agend_id}?mode=view`} title="Visualizar" style={{ color: '#2563eb' }}>
+        <div style={{ display: 'flex', gap: '8px' }}>
+          
+          {/* 1. WHATSAPP (Verde - Só Ícone)
+          {item.tracking_token && item.agend_situacao !== 0 && (
+             <button
+               onClick={() => handleSendWhatsAppDirect(item)}
+               title="Enviar WhatsApp"
+               style={{ display: 'flex', alignItems: 'center', color: '#16a34a', background: 'none', border: 'none', cursor: 'pointer' }}
+             >
+               <MessageCircle size={18} />
+             </button>
+          )} */}
+
+          {/* 2. VISUALIZAR (Azul - Só Ícone) */}
+          <button 
+            onClick={() => handleOpenEdit(item.agend_id, 'view')} 
+            title="Visualizar" 
+            style={{ display: 'flex', alignItems: 'center', color: '#2563eb', background: 'none', border: 'none', cursor: 'pointer' }}
+          >
             <Eye size={18} />
-          </Link>
+          </button>
           
           {item.agend_situacao !== 0 && (
             <>
-              <Link href={`/admin/appointments/${item.agend_id}?mode=edit`} title="Editar" style={{ color: '#2563eb' }}>
+              {/* 3. EDITAR (Azul - Só Ícone) */}
+              <button 
+                onClick={() => handleOpenEdit(item.agend_id, 'edit')} 
+                title="Editar" 
+                style={{ display: 'flex', alignItems: 'center', color: '#2563eb', background: 'none', border: 'none', cursor: 'pointer' }}
+              >
                 <Edit size={18} />
-              </Link>
-              <button onClick={() => handleCancel(item.agend_id, item.usu_nome)} title="Cancelar" style={{ color: '#ef4444', background: 'none', border: 'none', cursor: 'pointer' }}>
+              </button>
+
+              {/* 4. CANCELAR (Vermelho - Só Ícone) */}
+              <button 
+                onClick={() => handleCancel(item.agend_id, item.usu_nome)} 
+                title="Cancelar" 
+                style={{ display: 'flex', alignItems: 'center', color: '#ef4444', background: 'none', border: 'none', cursor: 'pointer' }}
+              >
                 <Ban size={18} />
               </button>
             </>
@@ -160,31 +315,15 @@ export default function AppointmentsClient() {
     <div className={styles.wrapper}>
       <div className={styles.actionsBar}>
         
-        {/* GRUPO DE FILTROS (Busca + Selects) */}
+        {/* GRUPO DE FILTROS */}
         <div className={styles.filtersGroup}>
-            
-            {/* 1. Busca Texto */}
             <div className={styles.searchWrapper}>
               <Search size={20} className={styles.searchIcon} />
-              <input
-                name="search"
-                type="text"
-                placeholder="Pesquisar agendamentos..."
-                className={styles.searchInput}
-                value={filters.search}
-                onChange={handleFilterChange}
-              />
+              <input name="search" type="text" placeholder="Pesquisar..." className={styles.searchInput} value={filters.search} onChange={handleFilterChange} />
             </div>
-
-            {/* 2. Filtro Status (Agora colado na busca) */}
             <div className={styles.selectWrapper}>
                 <Filter size={16} className={styles.filterIcon} />
-                <select 
-                    name="status" 
-                    className={styles.filterSelect}
-                    value={filters.status}
-                    onChange={handleFilterChange}
-                >
+                <select name="status" className={styles.filterSelect} value={filters.status} onChange={handleFilterChange}>
                     <option value="">Todos</option>
                     <option value="1">Pendente</option>
                     <option value="2">Em Andamento</option>
@@ -192,27 +331,17 @@ export default function AppointmentsClient() {
                     <option value="0">Cancelado</option>
                 </select>
             </div>
-
-            {/* 3. Filtro Data (Logo após status) */}
             <div className={styles.dateWrapper}>
                 <Calendar size={16} className={styles.filterIcon} />
-                <input 
-                    name="date"
-                    type="date" 
-                    className={styles.filterInput}
-                    value={filters.date}
-                    onChange={handleFilterChange}
-                    title="Filtrar por data"
-                />
+                <input name="date" type="date" className={styles.filterInput} value={filters.date} onChange={handleFilterChange} />
             </div>
-
         </div>
 
-        {/* BOTÃO DE NOVO AGENDAMENTO (Direita) */}
-        <Link href="/admin/schedule" className={styles.newButton}>
+        {/* BOTÃO NOVO */}
+        <button onClick={handleOpenCreate} className={styles.newButton}>
           <Plus size={20} />
           <span>Novo Agendamento</span>
-        </Link>
+        </button>
 
       </div>
 
@@ -223,6 +352,22 @@ export default function AppointmentsClient() {
       {!loading && appointments.length > 0 && (
         <Pagination currentPage={page} totalPages={totalPages} onPageChange={handlePageChange} />
       )}
+
+      {/* MODAL */}
+      <ModalCalendar 
+          isOpen={isModalOpen} 
+          onClose={() => setIsModalOpen(false)} 
+          title={selectedEvent ? `Agendamento #${selectedEvent.agend_id}` : "Novo Agendamento"}
+      >
+          <AppointmentForm 
+              initialData={selectedEvent} 
+              mode={formMode}
+              onCancel={() => setIsModalOpen(false)}
+              saveFunction={handleSave}
+              onCancelAppointment={() => handleCancel(selectedEvent?.agend_id, selectedEvent?.usu_nome)}
+          />
+      </ModalCalendar>
+
     </div>
   );
 }
