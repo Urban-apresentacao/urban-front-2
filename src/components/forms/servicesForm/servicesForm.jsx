@@ -192,7 +192,7 @@ export default function ServiceForm({ onSuccess, onCancel, saveFunction, initial
             <form onSubmit={handleSubmit} className={styles.form}>
 
                 {initialData && (
-                    <div className={styles.inputGroup} style={{ maxWidth: '100px' }}>
+                    <div className={styles.inputGroup}>
                         <InputRegisterForm label="ID" value={initialData.serv_id} disabled={true} />
                     </div>
                 )}

@@ -71,3 +71,22 @@
     50% { opacity: 0.4; }
     100% { opacity: 1; }
 }
+
+@media (max-width: 768px) {
+    .hiddenMobile {
+        display: none;
+    }
+    
+    /* Opcional: Ajuste para a tabela não estourar se tiver muita coluna */
+    .td {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 150px; /* Limita largura de colunas de texto */
+    }
+
+    /* Coluna de Ações não deve ser cortada */
+    .td:last-child {
+        overflow: visible; 
+    }
+}

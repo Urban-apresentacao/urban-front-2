@@ -219,7 +219,7 @@ export default function VehicleForm({ onSuccess, onCancel, saveFunction, initial
       <form onSubmit={handleSubmit} className={styles.form}>
 
         {initialData && (
-          <div className={styles.inputGroup} style={{ maxWidth: '100px' }}>
+          <div className={styles.inputGroup}>
             <InputRegisterForm label="ID" value={initialData.veic_id} disabled={true} />
           </div>
         )}

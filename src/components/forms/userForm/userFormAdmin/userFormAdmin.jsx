@@ -176,7 +176,7 @@ export default function UserFormAdmin({ onSuccess, onCancel, saveFunction, initi
     <form onSubmit={handleSubmit} className={styles.form}>
       
       {initialData && (
-        <div className={styles.inputGroup} style={{ maxWidth: '100px' }}>
+        <div className={styles.inputGroup}>
             <InputRegisterForm label="ID" value={initialData.usu_id} disabled={true} />
         </div>
       )}
@@ -334,11 +334,11 @@ export default function UserFormAdmin({ onSuccess, onCancel, saveFunction, initi
             
             {/* NOVO: BOTÃO DE VINCULAR VEÍCULO (Só aparece se o usuário já existir) */}
             {!!initialData && (
-                <div style={{ marginRight: 'auto' }}>
+                <div style={{ marginRight: 'auto', width: "100%" }}>
                     <button
                         type="button"
-                        className={styles.btnSave} // Pode criar um estilo btnLink se preferir
-                        style={{ backgroundColor: '#fff', color: '#eb2525ff', border: '1px solid #eb2525ff' }}
+                        className={styles.btnSave}
+                        style={{ backgroundColor: '#fff', color: '#eb2525ff', border: '1px solid #eb2525ff', flex: 1 }}
                         onClick={() => setShowLinkModal(true)}
                     >
                         <Car size={16} style={{ marginRight: 5 }} />

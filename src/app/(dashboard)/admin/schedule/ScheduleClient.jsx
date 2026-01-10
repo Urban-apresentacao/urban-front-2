@@ -298,6 +298,7 @@ export default function ScheduleClient() {
                     onSelectEvent={handleSelectEvent}
                     onSelectSlot={handleSelectSlot}
                     selectable
+                    longPressThreshold={0}
                     defaultView="month"
                     views={['month', 'week', 'day', 'agenda']}
                     min={minTime} // Começa a mostrar as 07:00

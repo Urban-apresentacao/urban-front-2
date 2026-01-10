@@ -3,6 +3,7 @@
 import { useUsers } from "@/hooks/useUsers";
 import { Table } from "@/components/ui/table/table";
 import Link from "next/link";
+import { ActionMenu } from "@/components/ui/actionMenu/ActionMenu"; 
 import { Edit, Plus, Eye, Search, Trash2, RotateCcw, Filter } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { Pagination } from "@/components/ui/pagination/pagination";
@@ -17,22 +18,19 @@ export default function UsersClient() {
   } = useUsers();
 
   const [inputValue, setInputValue] = useState("");
-  const [statusFilter, setStatusFilter] = useState("all"); // 'all', 'active', 'inactive'
+  const [statusFilter, setStatusFilter] = useState("all"); 
 
   const isMounted = useRef(false);
 
-  // 1. Busca Inicial (Ao abrir a tela)
   useEffect(() => {
     fetchUsers("", 1, "all");
   }, [fetchUsers]);
 
-  // 2. Efeito de Debounce (Busca + Filtro de Status)
   useEffect(() => {
     if (!isMounted.current) {
       isMounted.current = true;
       return;
     }
-
     const delayDebounceFn = setTimeout(() => {
       fetchUsers(inputValue, 1, statusFilter, sortColumn, sortDirection);
     }, [inputValue, statusFilter, sortColumn, sortDirection, fetchUsers]);
@@ -40,17 +38,14 @@ export default function UsersClient() {
     return () => clearTimeout(delayDebounceFn);
   }, [inputValue, statusFilter, fetchUsers]);
 
-  // Função de Paginação
   const handlePageChange = (newPage) => {
     fetchUsers(inputValue, newPage, statusFilter);
   };
 
-  // Função para mudar o Status no Select
   const handleStatusChange = (e) => {
     setStatusFilter(e.target.value);
   };
 
-  // --- AÇÃO: INATIVAR USUÁRIO ---
   const handleArchiveUser = async (id, nome) => {
     const result = await Swal.fire({
       title: 'Inativar Usuário?',
@@ -65,13 +60,8 @@ export default function UsersClient() {
 
     if (result.isConfirmed) {
       try {
-        await toggleUserStatus(id, false); // false = Inativo
-        await Swal.fire({
-          title: 'Inativado!',
-          text: 'Usuário bloqueado.',
-          icon: 'success',
-          confirmButtonColor: '#16a34a'
-        });
+        await toggleUserStatus(id, false);
+        await Swal.fire({ title: 'Inativado!', text: 'Usuário bloqueado.', icon: 'success', confirmButtonColor: '#16a34a' });
         fetchUsers(inputValue, page, statusFilter);
       } catch (error) {
         console.error(error);
@@ -80,7 +70,6 @@ export default function UsersClient() {
     }
   };
 
-  // --- AÇÃO: REATIVAR USUÁRIO ---
   const handleReactivateUser = async (id, nome) => {
     const result = await Swal.fire({
       title: 'Reativar Usuário?',
@@ -95,13 +84,8 @@ export default function UsersClient() {
 
     if (result.isConfirmed) {
       try {
-        await toggleUserStatus(id, true); // true = Ativo
-        await Swal.fire({
-          title: 'Ativado!',
-          text: 'Acesso restaurado.',
-          icon: 'success',
-          confirmButtonColor: '#16a34a'
-        });
+        await toggleUserStatus(id, true);
+        await Swal.fire({ title: 'Ativado!', text: 'Acesso restaurado.', icon: 'success', confirmButtonColor: '#16a34a' });
         fetchUsers(inputValue, page, statusFilter);
       } catch (error) {
         console.error(error);
@@ -153,41 +137,52 @@ export default function UsersClient() {
       header: "Ações",
       accessor: "actions",
       render: (user) => (
-        <div style={{ display: 'flex', gap: '8px' }}>
-          <Link
-            href={`/admin/users/${user.usu_id}?mode=view`}
-            style={{ display: 'flex', alignItems: 'center', gap: '5px', color: '#2563eb', textDecoration: 'none' }}
-            title="Visualizar"
-          >
-            <Eye size={16} />
-          </Link>
-          <Link
-            href={`/admin/users/${user.usu_id}?mode=edit`}
-            style={{ display: 'flex', alignItems: 'center', gap: '5px', color: '#2563eb', textDecoration: 'none' }}
-            title="Editar"
-          >
-            <Edit size={16} />
-          </Link>
+        <>
+          {/* AÇÕES DE DESKTOP */}
+          <div className={styles.desktopActions}>
+            <Link
+              href={`/admin/users/${user.usu_id}?mode=view`}
+              style={{ display: 'flex', alignItems: 'center', gap: '5px', color: '#2563eb', textDecoration: 'none' }}
+              title="Visualizar"
+            >
+              <Eye size={16} />
+            </Link>
+            <Link
+              href={`/admin/users/${user.usu_id}?mode=edit`}
+              style={{ display: 'flex', alignItems: 'center', gap: '5px', color: '#2563eb', textDecoration: 'none' }}
+              title="Editar"
+            >
+              <Edit size={16} />
+            </Link>
 
-          {/* Lógica do Botão Status (Lixeira vs Restaurar) */}
-          {user.usu_situacao ? (
-            <button
-              onClick={() => handleArchiveUser(user.usu_id, user.usu_nome)}
-              style={{ display: 'flex', alignItems: 'center', gap: '5px', color: '#ef4444', background: 'none', border: 'none', cursor: 'pointer' }}
-              title="Inativar Usuário"
-            >
-              <Trash2 size={16} />
-            </button>
-          ) : (
-            <button
-              onClick={() => handleReactivateUser(user.usu_id, user.usu_nome)}
-              style={{ display: 'flex', alignItems: 'center', gap: '5px', color: '#16a34a', background: 'none', border: 'none', cursor: 'pointer' }}
-              title="Reativar Acesso"
-            >
-              <RotateCcw size={16} />
-            </button>
-          )}
-        </div>
+            {user.usu_situacao ? (
+              <button
+                onClick={() => handleArchiveUser(user.usu_id, user.usu_nome)}
+                style={{ display: 'flex', alignItems: 'center', gap: '5px', color: '#ef4444', background: 'none', border: 'none', cursor: 'pointer' }}
+                title="Inativar Usuário"
+              >
+                <Trash2 size={16} />
+              </button>
+            ) : (
+              <button
+                onClick={() => handleReactivateUser(user.usu_id, user.usu_nome)}
+                style={{ display: 'flex', alignItems: 'center', gap: '5px', color: '#16a34a', background: 'none', border: 'none', cursor: 'pointer' }}
+                title="Reativar Acesso"
+              >
+                <RotateCcw size={16} />
+              </button>
+            )}
+          </div>
+
+          {/* AÇÕES DE MOBILE (Componente Novo) */}
+          <div className={styles.mobileActions}>
+            <ActionMenu 
+              user={user} 
+              onArchive={handleArchiveUser} 
+              onReactivate={handleReactivateUser} 
+            />
+          </div>
+        </>
       ),
     },
   ];
@@ -195,11 +190,7 @@ export default function UsersClient() {
   return (
     <div className={styles.wrapper}>
       <div className={styles.actionsBar}>
-
-        {/* GRUPO DE FILTROS (Busca + Select) */}
         <div className={styles.filtersGroup}>
-
-          {/* Input de Busca */}
           <div className={styles.searchWrapper}>
             <Search size={20} className={styles.searchIcon} />
             <input
@@ -211,7 +202,6 @@ export default function UsersClient() {
             />
           </div>
 
-          {/* Select de Status */}
           <div className={styles.selectWrapper}>
             <Filter size={16} className={styles.filterIcon} />
             <select
@@ -226,7 +216,6 @@ export default function UsersClient() {
           </div>
         </div>
 
-        {/* Botão Novo Usuário */}
         <Link href="/admin/users/register" className={styles.newButton}>
           <Plus size={20} />
           <span>Novo Usuário</span>
