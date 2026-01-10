@@ -117,7 +117,7 @@ export default function ScheduleClient() {
         }
     };
 
-    // 4. Salvar Formulário (Create/Update) com Lógica de WhatsApp
+    // 4. Salvar Formulário (Create/Update) com Lógica de WhatsApp e Tratamento de Erro Silencioso
     const handleSave = async (formData) => {
         try {
             // Converte lista de objetos de serviços para lista de IDs
@@ -133,7 +133,6 @@ export default function ScheduleClient() {
                 // --- ATUALIZAÇÃO ---
                 isUpdate = true;
                 const response = await updateAppointment(selectedEvent.agend_id, payload);
-                // Mesclamos os dados antigos (que tem telefone e token) com os novos
                 savedData = { ...selectedEvent, ...response.data, ...formData }; 
             } else {
                 // --- CRIAÇÃO ---
@@ -144,23 +143,20 @@ export default function ScheduleClient() {
             setIsModalOpen(false);
             fetchSchedule();
 
-            // --- LÓGICA DE NOTIFICAÇÃO INTELIGENTE ---
-            // Só pergunta se for Edição e se o Status for "Em Andamento" (2) ou "Concluído" (3)
+            // --- LÓGICA DE NOTIFICAÇÃO (WHATSAPP) ---
             if (isUpdate && savedData && (formData.agend_situacao === "2" || formData.agend_situacao === "3")) {
-                
                 const result = await Swal.fire({
                     title: 'Agendamento Salvo!',
                     text: "Deseja notificar o cliente no WhatsApp sobre a mudança de status?",
                     icon: 'success',
                     showCancelButton: true,
-                    confirmButtonColor: '#25D366', // Cor do Zap
+                    confirmButtonColor: '#25D366',
                     cancelButtonColor: '#6b7280',
                     confirmButtonText: 'Sim, enviar WhatsApp',
                     cancelButtonText: 'Não, apenas fechar'
                 });
 
                 if (result.isConfirmed) {
-                    // Prepara os dados para envio
                     const telefoneRaw = savedData.usu_telefone || "";
                     const telefone = telefoneRaw.replace(/\D/g, "");
                     const nomeCliente = savedData.usu_nome?.split(" ")[0] || "Cliente";
@@ -168,13 +164,11 @@ export default function ScheduleClient() {
                     
                     if (telefone && savedData.tracking_token) {
                         const linkRastreio = `${baseUrl}/status/${savedData.tracking_token}`;
-                        
                         let statusTexto = "";
                         if (formData.agend_situacao === "2") statusTexto = "*Em Andamento* 🚿";
                         if (formData.agend_situacao === "3") statusTexto = "*Concluído* ✨";
 
                         const mensagem = `Olá, ${nomeCliente}! 👋\n\nSeu serviço está ${statusTexto}!\n\nAcompanhe aqui:\n🔗 ${linkRastreio}`;
-                        
                         const linkZap = `https://wa.me/55${telefone}?text=${encodeURIComponent(mensagem)}`;
                         window.open(linkZap, "_blank");
                     } else {
@@ -182,7 +176,6 @@ export default function ScheduleClient() {
                     }
                 }
             } else {
-                // Feedback padrão se não for mudança de status crítica
                 Swal.fire({
                     icon: 'success',
                     title: isUpdate ? 'Atualizado!' : 'Agendado!',
@@ -193,15 +186,29 @@ export default function ScheduleClient() {
             }
 
         } catch (error) {
-            console.error(error);
+            // --- TRATAMENTO DE ERROS (CORRIGIDO) ---
+            const status = error.response?.status;
             const errorMsg = error.response?.data?.message || 'Ocorreu um erro inesperado.';
-            const isBusinessRule = error.response?.status === 400;
+            const isBusinessRule = status === 400; // Erro 400 = Conflito de Horário, Validação, etc.
 
+            if (isBusinessRule) {
+                // SE FOR REGRA DE NEGÓCIO: Apenas Swal Amarelo. NÃO logamos no console para evitar o overlay do Next.
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Atenção!',
+                    text: errorMsg,
+                    confirmButtonColor: '#f59e0b',
+                });
+                return; // Para a execução aqui.
+            }
+
+            // SE FOR OUTRO ERRO (500, Rede, etc): Logamos e mostramos Swal Vermelho.
+            console.error(error); 
             Swal.fire({
-                icon: isBusinessRule ? 'warning' : 'error',
-                title: isBusinessRule ? 'Atenção!' : 'Erro no Servidor',
+                icon: 'error',
+                title: 'Erro no Servidor',
                 text: errorMsg,
-                confirmButtonColor: isBusinessRule ? '#f59e0b' : '#ef4444',
+                confirmButtonColor: '#ef4444',
             });
         }
     };

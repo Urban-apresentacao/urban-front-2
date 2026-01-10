@@ -135,7 +135,7 @@ export default function RootLayout({ children }) {
 
   return (
     <html lang="pt-BR">
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>
+      <body className={`${geistSans.variable} ${geistMono.variable}`} suppressHydrationWarning={true}>
         {/* Injeção do Schema JSON-LD */}
         <script
           type="application/ld+json"

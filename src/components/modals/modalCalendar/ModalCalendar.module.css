@@ -1,12 +1,15 @@
 .overlay {
     position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
     background-color: rgba(0, 0, 0, 0.5);
     backdrop-filter: blur(4px);
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 1050; 
+    z-index: 1050;
 }
 
 .modal {
@@ -22,8 +25,15 @@
 }
 
 @keyframes slideUp {
-    from { transform: translateY(20px); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
 }
 
 .header {
@@ -34,10 +44,14 @@
     border-bottom: 1px solid #f6f3f3;
 }
 
-.header h3 {
+/* .header h3 {
     margin: 0;
     font-size: 1.25rem;
     color: #111827;
+} */
+
+.title {
+    visibility: hidden;
 }
 
 .closeBtn {
@@ -60,8 +74,8 @@
     overflow-y: auto;
 
     /* Para Firefox */
-    scrollbar-width: thin; 
-    scrollbar-color: #e1cbcb transparent; 
+    scrollbar-width: thin;
+    scrollbar-color: #e1cbcb transparent;
 }
 
 /* Para Chrome, Edge, Safari e Opera */
@@ -80,5 +94,11 @@
 }
 
 .body::-webkit-scrollbar-thumb:hover {
-    background-color: #af9c9c; 
+    background-color: #af9c9c;
+}
+
+@media (max-width: 640px) {
+    .body {
+        padding: .5rem;
+    }
 }

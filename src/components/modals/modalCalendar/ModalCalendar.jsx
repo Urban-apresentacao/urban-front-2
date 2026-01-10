@@ -9,7 +9,7 @@ export default function ModalCalendar({ isOpen, onClose, title, children }) {
         <div className={styles.overlay}>
             <div className={styles.modal}>
                 <div className={styles.header}>
-                    <h3>{title}</h3>
+                    <h3 className={styles.title}>{title}</h3>
                     <button onClick={onClose} className={styles.closeBtn}>
                         <X size={20} />
                     </button>

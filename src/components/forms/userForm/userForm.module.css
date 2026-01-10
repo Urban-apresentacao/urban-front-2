@@ -189,7 +189,7 @@
 @media (max-width: 768px) {
     .form {
         grid-template-columns: 1fr;
-        padding: 1.5rem;
+        padding: .5rem;
         row-gap: 2rem; 
     }
     

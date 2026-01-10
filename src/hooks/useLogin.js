@@ -1,12 +1,12 @@
 import { useState } from "react";
-import { useRouter } from "next/navigation"; // Importa o roteador do Next
+import { useRouter } from "next/navigation";
 import { login } from "@/services/auth.service";
 import Swal from "sweetalert2";
 import Cookies from "js-cookie";
 
 export function useLogin() {
   const [loading, setLoading] = useState(false);
-  const router = useRouter(); // Instancia o roteador
+  const router = useRouter(); 
 
   async function handleLogin(email, senha) {
     setLoading(true);
@@ -15,12 +15,10 @@ export function useLogin() {
       // O service retorna o corpo da resposta (response.data do axios)
       const response = await login(email, senha);
 
-      // Verificação de segurança
       if (response.status !== "success" || !response.token) {
         throw new Error("Erro no processamento do login.");
       }
 
-      // Desestrutura o retorno do Backend
       const { token, data: usuario } = response;
       const userRole = usuario.usu_acesso ? "admin" : "user";
 
@@ -28,14 +26,13 @@ export function useLogin() {
       Cookies.remove("logged");
 
       // 2. SALVAR COOKIES CORRETOS (Essencial para o api.js e middleware)
-      Cookies.set("token", token, { expires: 1, path: "/" }); // O api.js lê este aqui!
+      Cookies.set("token", token, { expires: 1, path: "/" }); 
       Cookies.set("role", userRole, { expires: 1, path: "/" });
 
       // 3. SALVAR LOCALSTORAGE
       // Salva o objeto do usuário (o backend já tirou a senha)
       localStorage.setItem("user", JSON.stringify(usuario));
 
-      // Feedback visual rápido
       const Toast = Swal.mixin({
         toast: true,
         position: "top-end",
@@ -55,38 +52,48 @@ export function useLogin() {
       // 4. REDIRECIONAR
       // Use router.push para uma transição suave (SPA)
       if (userRole === "admin") {
-        router.push("/admin"); // Ajuste conforme sua rota real
+        router.push("/admin"); 
       } else {
         router.push("/user");
       }
 
     } catch (error) {
-      console.error("ERRO LOGIN:", error);
-
-      // --- TRATAMENTO DE ERRO ---
       
-      const msg = error.response?.data?.message || "Erro ao conectar com o servidor.";
       const status = error.response?.status;
+      const msg = error.response?.data?.message || "Erro ao conectar com o servidor.";
 
-      let title = "Erro no Login";
-      let icon = "error";
-      let confirmColor = "#d33";
+      // --- TRATAMENTO LIMPO ---
+      // Se for 401 (Senha errada) ou 403 (Inativo), avisamos o usuário e paramos o código.
+      if (status === 401 || status === 403) {
+          
+          let title = "Credenciais Inválidas";
+          let icon = "error";
+          let confirmColor = "#d33";
 
-      // Tratamento específico para Usuário Inativo (Configuramos isso no Backend)
-      if (status === 403) {
-        title = "Acesso Negado";
-        icon = "warning";
-        confirmColor = "#f59e0b"; // Laranja
-      } 
-      else if (status === 401) {
-        title = "Credenciais Inválidas";
+          if (status === 403) {
+            title = "Acesso Negado";
+            icon = "warning";
+            confirmColor = "#f59e0b"; 
+          }
+
+          Swal.fire({
+            icon: icon,
+            title: title,
+            text: msg,
+            confirmButtonColor: confirmColor
+          });
+          
+          return;
       }
 
+      // --- ERROS CRÍTICOS (Esses a gente quer ver no console) ---
+      console.error("ERRO CRÍTICO LOGIN:", error);
+
       Swal.fire({
-        icon: icon,
-        title: title,
-        text: msg,
-        confirmButtonColor: confirmColor
+        icon: "error",
+        title: "Erro no Servidor",
+        text: "Ocorreu um erro inesperado. Tente novamente mais tarde.",
+        confirmButtonColor: "#d33"
       });
 
     } finally {

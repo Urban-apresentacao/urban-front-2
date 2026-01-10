@@ -1,0 +1,24 @@
+.container {
+  padding: 1.5rem;
+}
+
+.wrapper {
+  padding: 1.5rem; 
+  max-width: 56rem; 
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@media (max-width: 640px) {
+    .formCard {
+        padding: .5rem; 
+    }
+
+    .container{
+        padding: .5rem;
+    }
+    
+    .title {
+        font-size: 1.25rem;
+    }
+}

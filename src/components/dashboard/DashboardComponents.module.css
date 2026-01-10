@@ -1,3 +1,4 @@
+/* --- ESTILOS PADRÃO (Desktop) --- */
 .statCard {
     background: white;
     padding: 1.5rem;
@@ -7,6 +8,8 @@
     align-items: center;
     gap: 1rem;
     transition: transform 0.2s;
+    /* Adicionado para garantir que não estoure */
+    min-width: 0; 
 }
 
 .statCard:hover {
@@ -21,17 +24,22 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    /* Impede que o ícone seja esmagado */
+    flex-shrink: 0; 
 }
 
 .statInfo {
     display: flex;
     flex-direction: column;
     flex: 1;
+    /* Garante que o texto trunque se necessário */
+    min-width: 0; 
 }
 
 .statLabel {
     font-size: 0.875rem;
     color: #806b6b;
+    white-space: nowrap;
 }
 
 .valueRow {
@@ -45,6 +53,11 @@
     font-size: 1.5rem;
     font-weight: 700;
     color: #1f2937;
+    
+    /* Evita que números grandes quebrem o layout */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .sectionCard {
@@ -73,6 +86,7 @@
 .iconBlue {
     color: var(--primary-red);
     display: flex;
+    flex-shrink: 0;
 }
 
 .cardTitle {
@@ -83,4 +97,37 @@
 
 .cardContent {
     flex: 1;
+}
+
+/* --- RESPONSIVO (MOBILE) --- */
+@media (max-width: 768px) {
+    /* Compactar StatCard */
+    .statCard {
+        padding: 1rem; /* Menos espaçamento interno */
+        gap: 0.75rem;
+    }
+
+    .iconWrapper {
+        padding: 8px; /* Ícone menor */
+        border-radius: 8px;
+    }
+
+    .statValue {
+        font-size: 1.25rem; /* Fonte do número menor */
+    }
+
+    /* Compactar SectionCard */
+    .sectionCard {
+        padding: .5rem; /* Menos espaçamento interno */
+        height: auto; /* Deixa a altura automática para não forçar espaço vazio */
+    }
+
+    .cardHeader {
+        margin-bottom: 1rem; /* Menos espaço abaixo do título */
+        padding-bottom: 0.75rem;
+    }
+
+    .cardTitle {
+        font-size: 1rem; /* Título do card levemente menor */
+    }
 }

@@ -64,7 +64,7 @@ export default function Header() {
 
           <hr className={styles.mobileDivider} />
 
-          <a href="/login" className={`${styles.mobileLink} ${styles.mobileLogin}`}>
+          <a href="/auth/login" className={`${styles.mobileLink} ${styles.mobileLogin}`}>
             <User size={18} /> Área do Cliente
           </a>
 

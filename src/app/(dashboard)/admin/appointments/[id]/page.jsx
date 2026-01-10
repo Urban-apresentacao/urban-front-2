@@ -4,6 +4,7 @@ import { useRouter, useSearchParams, useParams } from "next/navigation";
 import AppointmentForm from "@/components/forms/appointmentsForm/appointmentsForm";
 import { getAppointmentById, updateAppointment } from "@/services/appointments.service";
 import Swal from "sweetalert2";
+import styles from './page.module.css'
 
 export default function AppointmentDetailsPage() {
     const { id } = useParams();
@@ -52,10 +53,10 @@ export default function AppointmentDetailsPage() {
         }
     };
 
-    if (loading) return <div className="p-6">Carregando dados...</div>;
+    if (loading) return <div className={styles.container}>Carregando dados...</div>;
 
     return (
-        <div className="p-6 max-w-4xl mx-auto">
+        <div className={styles.wrapper}>
             <AppointmentForm 
                 initialData={appointment}
                 mode={mode}

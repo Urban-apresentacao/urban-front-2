@@ -295,4 +295,8 @@ textarea.input {
     .btnBase {
         justify-content: center;
     }
+
+    .form {
+        padding: 1rem;
+    }
 }

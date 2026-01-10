@@ -5,15 +5,18 @@ import styles from './page.module.css'
 import InputLogin from '@/components/ui/inputLogin/inputLogin'
 import Link from 'next/link'
 import Image from 'next/image'
+import { useRouter } from "next/navigation";
 
 import { useState } from "react";
 import { useLogin } from '@/hooks/useLogin';
 
 export default function Login() {
 
+    const router = useRouter();
+
     const [email, setEmail] = useState("");
     const [senha, setSenha] = useState("");
-    const [showPassword, setShowPassword] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);    
 
     const { handleLogin, loading } = useLogin();
 
@@ -96,11 +99,19 @@ export default function Login() {
                         )}
                     </button>
 
-                    <button
+                    {/* <button
                         type="button"
-                        className={styles.backButton}
+                        
                         onClick={() => window.history.back()}
                         disabled={loading}
+                    >
+                        Voltar
+                    </button> */}
+                    <button
+                        onClick={() => router.push('/')}
+                        className={`${styles.backButton} ${styles.signupLink}`}
+                        disabled={loading}
+                        type="button"
                     >
                         Voltar
                     </button>
@@ -115,7 +126,7 @@ export default function Login() {
                 </div>
 
                 <footer className={styles.footer}>
-                    <span>© 2025 • Sistema AutoLimp</span>
+                    <span>© 2026 • Sistema AutoLimp</span>
                 </footer>
             </div>
         </div>

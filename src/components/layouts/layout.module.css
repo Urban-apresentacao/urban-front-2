@@ -45,6 +45,10 @@
 
 /* --- NOVO: Responsividade para Mobile (Telas menores que 768px) --- */
 @media (max-width: 768px) {
+
+    .content{
+        padding: 1rem;
+    }
     
     .sidebarWrapper {
         position: fixed; /* Solta a sidebar do fluxo normal */
