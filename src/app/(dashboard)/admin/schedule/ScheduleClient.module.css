@@ -109,10 +109,6 @@
     margin: 0;
 }
 
-.calendarContainer :global(.rbc-event){
-    border-radius: 0;
-}
-
 .calendarContainer :global(.rbc-time-content)::-webkit-scrollbar-thumb:hover {
     background-color: #dbd1d1; 
 }
@@ -175,4 +171,81 @@
     text-transform: capitalize; 
     background-color: #fbf9f9; 
     border-radius: 8px 0 0 8px;
+}
+
+.calendarContainer :global(.rbc-day-slot .rbc-event) {
+    width: 100% !important; 
+    left: 0 !important;      
+    right: 0 !important;     
+    margin-right: 0 !important;
+    
+    border-radius: 0 !important; 
+    border: none !important;     
+}
+
+.calendarContainer :global(.rbc-event-content) {
+   font-size: 0.95rem; 
+    white-space: normal; 
+    line-height: 1.2;
+    padding-top: 4px;
+}
+
+.calendarContainer :global(.rbc-timeslot-group) {
+    min-height: 90px !important;
+}
+
+/* --- RESPONSIVIDADE MOBILE --- */
+
+@media (max-width: 768px) {
+    
+    /* 1. Habilitar Scroll Horizontal na Agenda */
+    .calendarContainer {
+        overflow-x: auto !important; /* Permite rolar para o lado */
+        overflow-y: hidden; /* Evita scroll duplo vertical */
+        -webkit-overflow-scrolling: touch; /* Scroll suave no iPhone */
+    }
+
+    /* 2. Forçar largura mínima na visualização de Semana/Dia */
+    /* Isso impede que as colunas fiquem espremidas. 
+       O usuário terá que arrastar para o lado para ver Sábado/Domingo */
+    .calendarContainer :global(.rbc-time-view) {
+        min-width: 700px !important; /* Força o calendário a ser largo */
+    }
+
+    /* 3. Arrumar a Barra de Ferramentas (Botões) */
+    /* Faz os botões ficarem um embaixo do outro em vez de encavalados */
+    .calendarContainer :global(.rbc-toolbar) {
+        flex-direction: column;
+        gap: 10px;
+        align-items: stretch;
+        margin-bottom: 15px;
+        height: auto !important;
+    }
+
+    .calendarContainer :global(.rbc-toolbar-label) {
+        text-align: center;
+        margin: 5px 0;
+        font-size: 1.1rem;
+    }
+
+    .calendarContainer :global(.rbc-btn-group) {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+    }
+    
+    .calendarContainer :global(.rbc-btn-group button) {
+        flex: 1; /* Botões ocupam largura igual */
+        padding: 8px 4px; /* Botões mais fáceis de tocar */
+        font-size: 0.8rem;
+    }
+
+    /* 4. Esconder a barra de rolagem horizontal (opcional, estética) */
+    .calendarContainer::-webkit-scrollbar {
+        height: 4px;
+    }
+    .calendarContainer::-webkit-scrollbar-thumb {
+        background: #dbd1d1;
+        border-radius: 4px;
+    }
 }

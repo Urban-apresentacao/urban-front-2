@@ -3,13 +3,13 @@
 import styles from './table.module.css';
 import { ArrowUp, ArrowDown, ArrowUpDown } from 'lucide-react'; // Ícones de ordenação
 
-export function Table({ 
-    columns, 
-    data, 
-    isLoading, 
-    onSort, 
-    sortColumn, 
-    sortDirection 
+export function Table({
+  columns,
+  data,
+  isLoading,
+  onSort,
+  sortColumn,
+  sortDirection
 }) {
   const skeletonRows = Array.from({ length: 5 });
 
@@ -19,32 +19,32 @@ export function Table({
         <thead className={styles.thead}>
           <tr>
             {columns.map((col, index) => {
-                // Verifica se a coluna é ordenável (tem accessor e não é 'actions')
-                const isSortable = !!col.accessor && col.accessor !== 'actions';
-                const isActive = sortColumn === col.accessor;
+              // Verifica se a coluna é ordenável (tem accessor e não é 'actions')
+              const isSortable = !!col.accessor && col.accessor !== 'actions';
+              const isActive = sortColumn === col.accessor;
 
-                return (
-                  <th 
-                    key={index} 
-                    className={`${styles.th} ${isSortable ? styles.sortableTh : ''}`}
-                    onClick={() => isSortable && onSort && onSort(col.accessor)}
-                  >
-                    <div className={styles.thContent}>
-                        {col.header}
-                        
-                        {/* Ícone de Ordenação */}
-                        {isSortable && (
-                            <span className={styles.sortIcon}>
-                                {isActive ? (
-                                    sortDirection === 'ASC' ? <ArrowUp size={14} /> : <ArrowDown size={14} />
-                                ) : (
-                                    <ArrowUpDown size={14} style={{ opacity: 0.3 }} />
-                                )}
-                            </span>
+              return (
+                <th
+                  key={index}
+                  className={`${styles.th} ${isSortable ? styles.sortableTh : ''} ${col.className || ''}`}
+                  onClick={() => isSortable && onSort && onSort(col.accessor)}
+                >
+                  <div className={styles.thContent}>
+                    {col.header}
+
+                    {/* Ícone de Ordenação */}
+                    {isSortable && (
+                      <span className={styles.sortIcon}>
+                        {isActive ? (
+                          sortDirection === 'ASC' ? <ArrowUp size={14} /> : <ArrowDown size={14} />
+                        ) : (
+                          <ArrowUpDown size={14} style={{ opacity: 0.3 }} />
                         )}
-                    </div>
-                  </th>
-                );
+                      </span>
+                    )}
+                  </div>
+                </th>
+              );
             })}
           </tr>
         </thead>
@@ -65,7 +65,10 @@ export function Table({
                 data.map((row, rowIndex) => (
                   <tr key={rowIndex} className={`${styles.tr} ${styles.dataRow}`}>
                     {columns.map((col, colIndex) => (
-                      <td key={colIndex} className={styles.td}>
+                      <td
+                        key={colIndex}
+                        className={`${styles.td} ${col.className || ''}`}
+                      >
                         {col.render ? col.render(row) : row[col.accessor]}
                       </td>
                     ))}

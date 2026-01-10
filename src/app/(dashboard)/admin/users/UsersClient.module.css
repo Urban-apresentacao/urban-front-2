@@ -11,6 +11,14 @@
   justify-content: space-between;
   gap: 1rem;
   width: 100%;
+  flex-wrap: wrap;
+}
+
+.filtersGroup {
+  display: flex;
+  gap: 10px;
+  flex: 1;
+  min-width: 300px;
 }
 
 .searchWrapper {
@@ -51,66 +59,10 @@
   box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
 }
 
-.newButton {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  background-color: #16a34a;
-  color: #ffffff;
-  padding: 0 1.5rem;
-  height: 42px;
-  border-radius: 8px;
-  text-decoration: none;
-  font-weight: 600;
-  font-size: 0.875rem;
-  transition: background-color 0.2s;
-  white-space: nowrap;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-}
-
-.newButton:hover {
-  background-color: #15803d;
-}
-
-.tableContainer {
-  width: 100%;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-  background-color: #fff;
-  border-radius: 8px;
-  border: 1px solid #ebe5e5;
-  overflow: hidden;
-  scrollbar-width: thin;
-  scrollbar-color: #e1cbcb transparent;
-}
-
-.actionsBar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  width: 100%;
-  flex-wrap: wrap;
-}
-
-.filtersGroup {
-  display: flex;
-  gap: 10px;
-  flex: 1;
-  min-width: 300px;
-}
-
-.searchWrapper {
-  position: relative;
-  flex: 1;
-  min-width: 200px;
-}
-
 .selectWrapper {
   position: relative;
   width: 170px;
   flex-shrink: 0;
-  /* flex: 1; */
 }
 
 .filterIcon {
@@ -146,7 +98,48 @@
   box-shadow: 0 0 0 3px rgba(235, 37, 37, 0.1);
 }
 
-@media (max-width: 640px) {
+.newButton {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: #16a34a;
+  color: #ffffff;
+  padding: 0 1.5rem;
+  height: 42px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.875rem;
+  transition: background-color 0.2s;
+  white-space: nowrap;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.newButton:hover {
+  background-color: #15803d;
+}
+
+.tableContainer {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  background-color: #fff;
+  border-radius: 8px;
+  border: 1px solid #ebe5e5;
+}
+
+/* --- CONTROLE DE EXIBIÇÃO AÇÕES --- */
+.desktopActions {
+  display: flex; 
+  gap: 8px;
+}
+
+.mobileActions {
+  display: none; 
+}
+
+/* --- RESPONSIVIDADE --- */
+@media (max-width: 768px) {
   .actionsBar {
     flex-direction: column-reverse;
     align-items: stretch;
@@ -168,6 +161,22 @@
 
   .tableContainer th,
   .tableContainer td {
-    padding: 0.75rem;
+    padding: 0.75rem 0.5rem;
+  }
+
+  /* Troca os botões Desktop pelo Menu Mobile */
+  .desktopActions { display: none; }
+  .mobileActions { display: block; }
+
+  /* Oculta colunas: ID(1), Email(3), Acesso(5), Status(6) */
+  .tableContainer table thead th:nth-child(1),
+  .tableContainer table tbody td:nth-child(1),
+  .tableContainer table thead th:nth-child(3),
+  .tableContainer table tbody td:nth-child(3),
+  .tableContainer table thead th:nth-child(5),
+  .tableContainer table tbody td:nth-child(5),
+  .tableContainer table thead th:nth-child(6),
+  .tableContainer table tbody td:nth-child(6) {
+    display: none;
   }
 }
