@@ -120,6 +120,13 @@
   gap: 0.5rem;
 }
 
+.extraServices {
+    font-size: 1rem;
+    color: #806b6b;
+    /* margin-left: 6px; */
+    font-weight: 500;
+}
+
 .iconBlue { color: #eb2525; }
 
 .cardTitle {

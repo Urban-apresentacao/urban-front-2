@@ -46,11 +46,11 @@ export default function AdminDashboard() {
             <div className={styles.statsGrid}>
                 <StatCard title="Clientes Totais" value={data.cards.clientes_totais} icon={<Users size={24} />} />
                 <StatCard title="Veículos Hoje" value={data.cards.veiculos_hoje} icon={<CalendarDays size={24} />} />
-                
+
                 {/* StatCard com Ação (Olhinho) */}
-                <StatCard 
-                    title="Faturamento (Mês)" 
-                    value={showRevenue ? formatMoney(data.cards.faturamento_mes) : "R$ ****"} 
+                <StatCard
+                    title="Faturamento (Mês)"
+                    value={showRevenue ? formatMoney(data.cards.faturamento_mes) : "R$ ****"}
                     icon={<DollarSign size={24} />}
                     action={
                         <button onClick={() => setShowRevenue(!showRevenue)} className={styles.eyeBtn}>
@@ -64,30 +64,70 @@ export default function AdminDashboard() {
 
             {/* 2. GRID OPERACIONAL (Usando SectionCard) */}
             <div className={styles.contentGrid}>
-                
+
                 {/* Coluna 1: Em Andamento */}
-                <SectionCard title="Em Andamento (Prioritário)" icon={<Clock size={20} />}>
+                <SectionCard
+                    title="Em Andamento (Prioritário)"
+                    icon={<Clock size={20} />}
+                >
                     {data.em_andamento ? (
                         <div className={styles.activeService}>
                             <div className={styles.pulseContainer}>
                                 <div className={styles.pulseDot}></div>
                                 <div className={styles.pulseRing}></div>
                             </div>
-                            <h3 className={styles.serviceName}>
-                                {data.em_andamento.lista_servicos?.split('+')[0]} 
-                                {data.em_andamento.lista_servicos?.includes('+') && '...'}
-                            </h3>
+
+                            {(() => {
+                                const servicos =
+                                    data.em_andamento.lista_servicos?.split(
+                                        "+"
+                                    ) || [];
+
+                                const servicoPrincipal = servicos[0];
+                                const extras = servicos.length - 1;
+
+                                return (
+                                    <h3 className={styles.serviceName}>
+                                        {servicoPrincipal}
+                                        {extras > 0 && (
+                                            <span
+                                                className={
+                                                    styles.extraServices
+                                                }
+                                            >
+                                                {" "}
+                                                +{extras}
+                                            </span>
+                                        )}
+                                    </h3>
+                                );
+                            })()}
+
                             <p className={styles.clientName}>
-                                {data.em_andamento.usu_nome} ({data.em_andamento.mod_nome} - {data.em_andamento.veic_placa})
+                                {data.em_andamento.usu_nome} (
+                                {data.em_andamento.mod_nome} -{" "}
+                                {data.em_andamento.veic_placa})
                             </p>
+
                             <div className={styles.metaData}>
-                                <span>Início: {data.em_andamento.agend_horario.substring(0, 5)}</span>
+                                <span>
+                                    Início:{" "}
+                                    {data.em_andamento.agend_horario.substring(
+                                        0,
+                                        5
+                                    )}
+                                </span>
                                 <span className={styles.divider}>•</span>
-                                <span>Tel: {data.em_andamento.usu_telefone}</span>
+                                <span>
+                                    Tel:{" "}
+                                    {data.em_andamento.usu_telefone}
+                                </span>
                             </div>
                         </div>
                     ) : (
-                        <div className={styles.emptyState}><p>Nenhum serviço em andamento.</p></div>
+                        <div className={styles.emptyState}>
+                            <p>Nenhum serviço em andamento.</p>
+                        </div>
                     )}
                 </SectionCard>
 
