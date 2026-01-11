@@ -12,18 +12,28 @@ const WhatsAppIcon = () => (
 );
 
 export default function ServicesModal({ isOpen, onClose, selectedCategoryId }) {
-  const whatsappNumber = "5511999999999"; 
+  const whatsappNumber = "5518996223545"; 
 
   const openWhatsApp = (serviceName = null) => {
-    let message = "";
-    if (serviceName) {
-      message = `Olá! Vi no site sobre *${serviceName}* e gostaria de mais detalhes.`;
-    } else {
-      message = "Olá! Gostaria de agendar um serviço para meu carro.";
-    }
-    const url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
-    window.open(url, '_blank');
-  };
+  let message = "";
+
+  if (serviceName) {
+    message = `Olá! Vi no site sobre *${serviceName}* e gostaria de mais detalhes.`;
+  } else {
+    message = "Olá! Gostaria de agendar um serviço para meu carro.";
+  }
+
+  const mensagemCodificada = encodeURIComponent(message);
+
+  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+  const linkZap = isMobile
+    ? `https://api.whatsapp.com/send?phone=${whatsappNumber}&text=${mensagemCodificada}`
+    : `https://web.whatsapp.com/send?phone=${whatsappNumber}&text=${mensagemCodificada}`;
+
+  window.open(linkZap, "_blank");
+};
+
 
   useEffect(() => {
     const handleEsc = (e) => { if (e.key === 'Escape') onClose(); };

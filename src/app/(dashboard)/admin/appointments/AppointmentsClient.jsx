@@ -90,85 +90,89 @@ export default function AppointmentsClient() {
 
   // 3. SALVAR (Com Lógica do WhatsApp)
   const handleSave = async (formData) => {
-    try {
-      const payload = {
-        ...formData,
-        services: formData.services?.map(s => s.serv_id || s) || []
-      };
+  try {
+    const payload = {
+      ...formData,
+      services: formData.services?.map(s => s.serv_id || s) || []
+    };
 
-      let savedData = null;
-      let isUpdate = false;
+    let savedData = null;
+    let isUpdate = false;
 
-      if (selectedEvent) {
-        isUpdate = true;
-        const response = await updateAppointment(selectedEvent.agend_id, payload);
-        savedData = { ...selectedEvent, ...response.data, ...formData };
-      } else {
-        await createAppointment(payload);
-      }
-
-      setIsModalOpen(false);
-      fetchAppointments(filters, page, sortColumn, sortDirection);
-
-      if (isUpdate && savedData && (formData.agend_situacao === "2" || formData.agend_situacao === "3")) {
-        const result = await Swal.fire({
-          title: 'Agendamento Salvo!',
-          text: "Deseja notificar o cliente no WhatsApp sobre a mudança de status?",
-          icon: 'success',
-          showCancelButton: true,
-          confirmButtonColor: '#25D366',
-          cancelButtonColor: '#6b7280',
-          confirmButtonText: 'Sim, enviar WhatsApp',
-          cancelButtonText: 'Não, apenas fechar'
-        });
-
-        if (result.isConfirmed) {
-          const telefoneRaw = savedData.usu_telefone || "";
-          const telefone = telefoneRaw.replace(/\D/g, "");
-          const nomeCliente = savedData.usu_nome?.split(" ")[0] || "Cliente";
-          // const baseUrl = window.location.origin;
-          const baseUrl = "https://urban-front-2.vercel.app/";
-
-          if (telefone && savedData.tracking_token) {
-            const linkRastreio = `${baseUrl}/status/${savedData.tracking_token}`;
-
-            let statusTexto = "";
-            if (formData.agend_situacao === "2") statusTexto = "*Em Andamento* 🚿";
-            if (formData.agend_situacao === "3") statusTexto = "*Concluído* ✨";
-
-            // Formatação rigorosa para evitar quebra de link
-            const mensagem = `Olá, ${nomeCliente}!\n\n` +
-              `Seu serviço está ${statusTexto}!\n\n` +
-              `Acompanhe aqui:\n` +
-              `${linkRastreio}`;
-
-            const mensagemCodificada = encodeURIComponent(mensagem);
-            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-
-            const linkZap = isMobile
-              ? `https://api.whatsapp.com/send?phone=55${telefone}&text=${mensagemCodificada}`
-              : `https://web.whatsapp.com/send?phone=55${telefone}&text=${mensagemCodificada}`;
-
-            window.open(linkZap, "_blank");
-          } else {
-            Swal.fire("Aviso", "Falta telefone ou token para abrir o WhatsApp.", "warning");
-          }
-        }
-      } else {
-        Swal.fire({
-          icon: 'success',
-          title: 'Salvo!',
-          text: 'Agendamento salvo com sucesso.',
-          timer: 1500,
-          showConfirmButton: false
-        });
-      }
-    } catch (error) {
-      console.error(error);
-      const errorMsg = error.response?.data?.message || 'Erro ao salvar.';
-      Swal.fire({ icon: 'error', title: 'Erro', text: errorMsg });
+    if (selectedEvent) {
+      isUpdate = true;
+      const response = await updateAppointment(selectedEvent.agend_id, payload);
+      savedData = { ...selectedEvent, ...response.data, ...formData };
+    } else {
+      await createAppointment(payload);
     }
-  };
+
+    setIsModalOpen(false);
+    fetchAppointments(filters, page, sortColumn, sortDirection);
+
+    if (isUpdate && savedData && (formData.agend_situacao === "2" || formData.agend_situacao === "3")) {
+      const result = await Swal.fire({
+        title: 'Agendamento Salvo!',
+        text: "Deseja notificar o cliente no WhatsApp sobre a mudança de status?",
+        icon: 'success',
+        showCancelButton: true,
+        confirmButtonColor: '#25D366',
+        cancelButtonColor: '#6b7280',
+        confirmButtonText: 'Sim, enviar WhatsApp',
+        cancelButtonText: 'Não, apenas fechar'
+      });
+
+      if (result.isConfirmed) {
+        const telefoneRaw = savedData.usu_telefone || "";
+        const telefone = telefoneRaw.replace(/\D/g, "");
+        const nomeCliente = savedData.usu_nome?.split(" ")[0] || "Cliente";
+        const baseUrl = "https://urban-front-2.vercel.app/";
+
+        if (telefone && savedData.tracking_token) {
+          const linkRastreio = `${baseUrl}/status/${savedData.tracking_token}`;
+
+          let statusTexto = "";
+          if (formData.agend_situacao === "2") {
+            statusTexto = `*Em Andamento* \u{1F6BF}`; // 🚿
+          }
+          if (formData.agend_situacao === "3") {
+            statusTexto = `*Concluído* \u{2728}`; // ✨
+          }
+
+          const mensagem =
+            `Olá, ${nomeCliente}!\n\n` +
+            `Seu serviço está ${statusTexto}!\n\n` +
+            `Acompanhe aqui:\n` +
+            `${linkRastreio}`;
+
+          const mensagemCodificada = encodeURIComponent(mensagem);
+          const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+          const linkZap = isMobile
+            ? `https://api.whatsapp.com/send?phone=55${telefone}&text=${mensagemCodificada}`
+            : `https://web.whatsapp.com/send?phone=55${telefone}&text=${mensagemCodificada}`;
+
+          window.open(linkZap, "_blank");
+        } else {
+          Swal.fire("Aviso", "Falta telefone ou token para abrir o WhatsApp.", "warning");
+        }
+      }
+    } else {
+      Swal.fire({
+        icon: 'success',
+        title: 'Salvo!',
+        text: 'Agendamento salvo com sucesso.',
+        timer: 1500,
+        showConfirmButton: false
+      });
+    }
+  } catch (error) {
+    console.error(error);
+    const errorMsg = error.response?.data?.message || 'Erro ao salvar.';
+    Swal.fire({ icon: 'error', title: 'Erro', text: errorMsg });
+  }
+};
+
 
   const handleCancel = async (id, cliente) => {
     const result = await Swal.fire({

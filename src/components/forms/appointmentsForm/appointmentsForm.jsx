@@ -108,7 +108,7 @@ export default function AppointmentForm({
         e.preventDefault();
 
         // --- VALIDAÇÃO PREVENTIVA (FRONTEND) ---
-        
+
         // 1. Verifica se selecionou o Cliente
         if (!formData.usu_id) {
             Swal.fire({
@@ -139,7 +139,7 @@ export default function AppointmentForm({
                 text: 'Selecione pelo menos um serviço para o agendamento.',
                 confirmButtonColor: '#f59e0b'
             });
-            return; 
+            return;
         }
 
         // --- Se passou, envia pro servidor ---
@@ -153,7 +153,7 @@ export default function AppointmentForm({
         }
     };
     // --- 2. NOVAS FUNÇÕES DE RASTREIO ---
-    
+
     // Função para Enviar WhatsApp (Atualizada)
     const handleSendWhatsApp = () => {
         // Verifica se tem token
@@ -163,7 +163,7 @@ export default function AppointmentForm({
         }
 
         // Limpa o telefone
-        const telefoneRaw = initialData.usu_telefone || ""; 
+        const telefoneRaw = initialData.usu_telefone || "";
         const telefone = telefoneRaw.replace(/\D/g, "");
 
         if (!telefone) {
@@ -172,33 +172,45 @@ export default function AppointmentForm({
         }
 
         const nomeCliente = initialData.usu_nome?.split(" ")[0] || "Cliente";
-        const baseUrl = window.location.origin; 
+        const baseUrl = window.location.origin;
         const linkRastreio = `${baseUrl}/status/${initialData.tracking_token}`;
 
-        // 1. Define o texto do status baseado no que está selecionado no formulário
+        // Status com Unicode
         let statusTexto = "";
         switch (formData.agend_situacao) {
             case "1":
-                statusTexto = "*Pendente* 🕒";
+                statusTexto = `*Pendente* \u{1F552}`; // 🕒
                 break;
             case "2":
-                statusTexto = "*Em Andamento* 🚿";
+                statusTexto = `*Em Andamento* \u{1F6BF}`; // 🚿
                 break;
             case "3":
-                statusTexto = "*Concluído* ✨";
+                statusTexto = `*Concluído* \u{2728}`; // ✨
                 break;
             case "0":
-                statusTexto = "*Cancelado* ❌";
+                statusTexto = `*Cancelado* \u{274C}`; // ❌
                 break;
             default:
                 statusTexto = "atualizado";
         }
 
-        // 2. Monta a mensagem personalizada
-        const mensagem = `Olá, ${nomeCliente}! 👋\n\nSeu serviço está ${statusTexto}!\n\nPara mais informações do agendamento acesse:\n🔗 ${linkRastreio}`;
+        // Mensagem com Unicode
+        const mensagem =
+            `Olá, ${nomeCliente}! \u{1F44B}\n\n` + // 👋
+            `Seu serviço está ${statusTexto}!\n\n` +
+            `Para mais informações do agendamento acesse:\n` +
+            `${linkRastreio}`;
 
-        // Abre o WhatsApp
-        const linkZap = `https://wa.me/55${telefone}?text=${encodeURIComponent(mensagem)}`;
+        const mensagemCodificada = encodeURIComponent(mensagem);
+
+        // Detecta dispositivo
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+        // Link correto
+        const linkZap = isMobile
+            ? `https://api.whatsapp.com/send?phone=55${telefone}&text=${mensagemCodificada}`
+            : `https://web.whatsapp.com/send?phone=55${telefone}&text=${mensagemCodificada}`;
+
         window.open(linkZap, "_blank");
     };
 
@@ -207,7 +219,7 @@ export default function AppointmentForm({
         if (!initialData?.tracking_token) return;
         const link = `${window.location.origin}/status/${initialData.tracking_token}`;
         navigator.clipboard.writeText(link);
-        
+
         Swal.fire({
             icon: 'success',
             title: 'Link copiado!',

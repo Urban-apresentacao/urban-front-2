@@ -1,3 +1,5 @@
+"use client";
+
 import React from 'react';
 import { Instagram, MapPin, Phone, Mail } from 'lucide-react';
 import styles from './footer.module.css';
@@ -16,7 +18,20 @@ const WhatsAppIcon = ({ size = 20 }) => (
 
 export default function Footer() {
 
-  const whatsappNumber = "5514999999999";
+  const whatsappNumber = "5518996223545";
+
+  const openWhatsApp = () => {
+    const mensagem = "Olá! Gostaria de mais informações sobre os serviços!";
+    const mensagemCodificada = encodeURIComponent(mensagem);
+
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+    const linkZap = isMobile
+      ? `https://api.whatsapp.com/send?phone=${whatsappNumber}&text=${mensagemCodificada}`
+      : `https://web.whatsapp.com/send?phone=${whatsappNumber}&text=${mensagemCodificada}`;
+
+    window.open(linkZap, "_blank");
+  };
 
   return (
     <footer className={styles.footer}>
@@ -27,6 +42,7 @@ export default function Footer() {
           <p className={styles.text}>
             Especialistas em estética automotiva. Cuidamos do seu carro com excelência e produtos de alta qualidade.
           </p>
+
           <div className={styles.socials}>
             <a 
               href="https://www.instagram.com/autolimp.estetica.automotiva/" 
@@ -37,15 +53,15 @@ export default function Footer() {
               <Instagram size={20} />
             </a>
             
-            <a 
-              href={`https://wa.me/${whatsappNumber}`} 
-              target="_blank" 
-              rel="noopener noreferrer"
+            {/* WhatsApp com mensagem automática */}
+            <button
+              type="button"
+              onClick={openWhatsApp}
               className={`${styles.iconLink} ${styles.whatsapp}`}
               aria-label="Falar no WhatsApp"
             >
               <WhatsAppIcon size={20} />
-            </a>
+            </button>
           </div>
         </div>
 
@@ -56,7 +72,6 @@ export default function Footer() {
             <li><a href="#sobre">Sobre Nós</a></li>
             <li><a href="#home">Nossos Serviços</a></li>
             <li><a href="#loja">Loja</a></li>
-            {/* <li><a href="#contato">Agendar Visita</a></li> */}
           </ul>
         </div>
 
