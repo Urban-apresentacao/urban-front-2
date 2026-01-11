@@ -14,14 +14,14 @@ import { useBrands } from "@/hooks/useBrands";
 import { useModels } from "@/hooks/useModels";
 
 // CSS (Copie o css do admin e renomeie para vehicleFormUser.module.css ou use o mesmo)
-import styles from "../vehicleForm.module.css"; 
+import styles from "../vehicleForm.module.css";
 
-export default function VehicleFormUser({ 
-  onSuccess, 
-  onCancel, 
-  saveFunction, 
-  initialData, 
-  mode = 'edit' 
+export default function VehicleFormUser({
+  onSuccess,
+  onCancel,
+  saveFunction,
+  initialData,
+  mode = 'edit'
 }) {
 
   const [loading, setLoading] = useState(false);
@@ -84,12 +84,12 @@ export default function VehicleFormUser({
   const validateForm = () => {
     const newErrors = {};
     const currentYear = new Date().getFullYear();
-    
+
     if (!formData.cat_id) newErrors.cat_id = "Selecione uma categoria";
     if (!formData.mar_id) newErrors.mar_id = "Selecione uma marca";
     if (!formData.mod_id) newErrors.mod_id = "Selecione um modelo";
     if (!formData.veic_placa) newErrors.veic_placa = "Informe a placa";
-    
+
     if (!formData.veic_ano) {
       newErrors.veic_ano = "Informe o ano";
     } else {
@@ -117,7 +117,7 @@ export default function VehicleFormUser({
         veic_observ: formData.veic_observacao,
         // Mantemos a situação original do veículo (para não reativar um carro excluído sem querer)
         // Ou enviamos undefined se o backend não exigir no update
-        veic_situacao: initialData ? initialData.veic_situacao : true 
+        veic_situacao: initialData ? initialData.veic_situacao : true
       };
 
       const result = await saveFunction(payload);
@@ -137,18 +137,26 @@ export default function VehicleFormUser({
   };
 
   const combustivelOptions = [
-    { value: 'GASOLINA', label: 'Gasolina' }, { value: 'ETANOL', label: 'Etanol' },
-    { value: 'DIESEL', label: 'Diesel' }, { value: 'FLEX', label: 'Flex' },
-    { value: 'ELETRICO', label: 'Elétrico' }, { value: 'HIBRIDO', label: 'Híbrido' },
+    { value: 'GASOLINA', label: 'Gasolina' },
+    { value: 'ETANOL', label: 'Etanol' },
+    { value: 'DIESEL', label: 'Diesel' },
+    { value: 'FLEX', label: 'Flex' },
+    { value: 'ELETRICO', label: 'Elétrico' },
+    { value: 'HIBRIDO', label: 'Híbrido' },
     { value: 'GNV', label: 'GNV' }
   ];
 
   const colorsOptions = [
-    { value: 'Branco', label: 'Branco' }, { value: 'Preto', label: 'Preto' },
-    { value: 'Prata', label: 'Prata' }, { value: 'Cinza', label: 'Cinza' },
-    { value: 'Vermelho', label: 'Vermelho' }, { value: 'Azul', label: 'Azul' },
-    { value: 'Verde', label: 'Verde' }, { value: 'Amarelo', label: 'Amarelo' },
-    { value: 'Marrom', label: 'Marrom' }, { value: 'Bege', label: 'Bege' },
+    { value: 'Branco', label: 'Branco' },
+    { value: 'Preto', label: 'Preto' },
+    { value: 'Prata', label: 'Prata' },
+    { value: 'Cinza', label: 'Cinza' },
+    { value: 'Vermelho', label: 'Vermelho' },
+    { value: 'Azul', label: 'Azul' },
+    { value: 'Verde', label: 'Verde' },
+    { value: 'Amarelo', label: 'Amarelo' },
+    { value: 'Marrom', label: 'Marrom' },
+    { value: 'Bege', label: 'Bege' },
     { value: 'Personalizado', label: 'Personalizado' }
   ];
 
@@ -156,7 +164,7 @@ export default function VehicleFormUser({
 
   return (
     <form onSubmit={handleSubmit} className={styles.form}>
-      
+
       {/* NOTA: Removi o campo de ID visível. O usuário não precisa ver ID de banco de dados. 
       */}
 
