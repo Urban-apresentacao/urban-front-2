@@ -59,7 +59,6 @@ export default function Header() {
             <User size={18} /> Entrar
           </a>
 
-          {/* 🔥 AGENDAR → WHATSAPP */}
           <button
             type="button"
             onClick={openWhatsApp}
@@ -82,21 +81,24 @@ export default function Header() {
 
           <hr className={styles.mobileDivider} />
 
-          <a href="/auth/login" className={styles.mobileLink}>
-            <User size={18} /> Área do Cliente
+          <a
+            href="/auth/login"
+            className={`${styles.mobileLink} ${styles.mobileLogin}`}
+          >
+            <User size={18} /> Área Administrativa
           </a>
 
-          {/* 🔥 AGENDAR (MOBILE) → WHATSAPP */}
-          <button
-            type="button"
-            onClick={() => {
+          <a
+            href="#"
+            onClick={(e) => {
+              e.preventDefault();
               openWhatsApp();
               toggleMenu();
             }}
-            className={`${styles.mobileLink} ${styles.activeBtn}`}
+            className={`${styles.mobileLink} ${styles.activeBtn} ${styles.mobileSchedule}`}
           >
             Agendar pelo WhatsApp
-          </button>
+          </a>
         </nav>
       )}
     </header>

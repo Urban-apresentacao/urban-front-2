@@ -203,6 +203,10 @@
   color: #ffffff;
 }
 
+.mobileSchedule{
+  background-color: var(--primary-red) !important;
+}
+
 .mobileDivider {
   border: 0;
   height: 1px;
