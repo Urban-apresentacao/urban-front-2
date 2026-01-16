@@ -10,7 +10,8 @@ const menuItems = [
     { label: "Veículos", href: "/admin/vehicles", icon: Car },
     { label: "Serviços", href: "/admin/services", icon: Wrench },
     { label: "Agendamentos", href: "/admin/appointments", icon: CalendarCheck },
-    { label: "Calendário", href: "/admin/schedule", icon: CalendarDays }
+    { label: "Calendário", href: "/admin/schedule", icon: CalendarDays },
+    { label: "Serviços", href: "/admin/services2", icon: Wrench },
 ];
 
 export default function SidebarAdmin({ closeMobileMenu }) {
@@ -24,7 +25,7 @@ export default function SidebarAdmin({ closeMobileMenu }) {
                         label={item.label}
                         icon={item.icon}
                         href={item.href}
-                        onClick={closeMobileMenu} 
+                        onClick={closeMobileMenu}
                     />
                 ))}
             </nav>

@@ -7,6 +7,7 @@ export function InputRegisterForm({
   type = "text",
   className,
   children,
+  textarea, // 1. Desestruturamos aqui para NÃO passar para o HTML se for falso
   ...props
 }) {
   return (
@@ -21,11 +22,25 @@ export function InputRegisterForm({
       )}
 
       <div className={styles.inputWrapper}>
-        <input
-          type={type}
-          className={`${styles.input} ${className || ""}`}
-          {...props}
-        />
+        {/* 2. Lógica Condicional: Se for textarea, renderiza a tag apropriada */}
+        {textarea ? (
+          <textarea
+            className={`${styles.input} ${className || ""}`}
+            style={{ 
+                minHeight: "100px", 
+                paddingTop: "10px", 
+                resize: "vertical",
+                fontFamily: "inherit" 
+            }}
+            {...props}
+          />
+        ) : (
+          <input
+            type={type}
+            className={`${styles.input} ${className || ""}`}
+            {...props}
+          />
+        )}
 
         {/* Elementos adicionais (ex: botão olho) */}
         {children && (
